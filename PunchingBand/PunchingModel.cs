@@ -1,4 +1,5 @@
-﻿using Microsoft.Band;
+﻿using Windows.UI.Xaml.Documents;
+using Microsoft.Band;
 using Microsoft.Band.Sensors;
 using System;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace PunchingBand
         private long stepCount;
         private long? startStepCount;
         private bool worn;
+        private int score;
+        private TimeSpan timeLeft = TimeSpan.FromSeconds(30);
+        private bool running;
 
         private readonly Action<Action> invokeOnUiThread;
 
@@ -32,6 +36,22 @@ namespace PunchingBand
         public PunchingModel(Action<Action> invokeOnUiThread)
         {
             this.invokeOnUiThread = invokeOnUiThread;
+        }
+        public bool Running
+        {
+            get { return running; }
+            set { Set("Running", ref running, value); }
+        }
+
+        public int Score
+        {
+            get { return score; }
+            set { Set("Score", ref score, value); }
+        }
+        public TimeSpan TimeLeft
+        {
+            get { return timeLeft; }
+            set { Set("TimeLeft", ref timeLeft, value); }
         }
 
         public int PunchCount
@@ -87,6 +107,7 @@ namespace PunchingBand
             get { return status; }
             set { Set("Status", ref status, value); }
         }
+
 
         public async void Connect()
         {
@@ -180,13 +201,42 @@ namespace PunchingBand
 
         private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
         {
-            if (punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading))
+            if (Running && punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading))
             {
                 invokeOnUiThread(() =>
                 {
                     PunchCount++;
                     PunchStrength = punchDetector.LastPunchStrength;
+                    Score += (int)Math.Round(100.0*punchDetector.LastPunchStrength);
                 });
+            }
+        }
+
+        internal void StartGame()
+        {
+            Running = true;
+            Score = 0;
+            PunchCount = 0;
+            PunchStrength = 0.001;
+            gameStartTime = DateTime.UtcNow;
+        }
+
+        private DateTime gameStartTime;
+
+        public void Update()
+        {
+            if (Running)
+            {
+                var diff = TimeSpan.FromSeconds(30) - (DateTime.UtcNow - gameStartTime);
+                if (diff <= TimeSpan.Zero)
+                {
+                    TimeLeft = TimeSpan.Zero;
+                    Running = false;
+                }
+                else
+                {
+                    TimeLeft = diff;
+                }
             }
         }
     }

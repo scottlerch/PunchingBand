@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -12,10 +13,16 @@ namespace PunchingBand
     {
         private PunchingModel model;
         private MediaElement[] punchSounds;
+        private DispatcherTimer timer;
 
         public MainPage()
         {
             InitializeComponent();
+
+            timer = new DispatcherTimer();
+            timer.Tick += TimerOnTick;
+            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Start();
 
             model = new PunchingModel(InvokeOnUIThread);
             DataContext = model;
@@ -54,6 +61,16 @@ namespace PunchingBand
                 case "PunchStrength":
                     strengthMeterCover.Width = (1.0-model.PunchStrength)*(strengthMeter.Width - 10);
                     break;
+                case "Running":
+                    if (model.Running)
+                    {
+                        playButton.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        playButton.Visibility = Visibility.Visible;
+                    }
+                    break;
             }
         }
 
@@ -88,6 +105,16 @@ namespace PunchingBand
             // this event is handled for you.
 
             model.Connect();
+        }
+
+        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            model.StartGame();
+        }
+
+        private void TimerOnTick(object sender, object o)
+        {
+            model.Update();
         }
     }
 }

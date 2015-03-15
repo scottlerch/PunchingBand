@@ -39,5 +39,9 @@
                 <CompositeTransform ScaleX="-1"/>
             </Rectangle.RenderTransform>
         </Rectangle>
+        <Button x:Name="playButton" Content="Start!" HorizontalAlignment="Left" Margin="124,475,0,0" VerticalAlignment="Top" FontSize="24" Height="72" Width="156" Click="Button_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="147,137,0,0" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Top" FontSize="24"/>
+        <TextBlock HorizontalAlignment="Left" Margin="216,137,0,0" TextWrapping="Wrap" Text="{Binding Score}" VerticalAlignment="Top" FontSize="24"/>
+        <TextBlock HorizontalAlignment="Center" Margin="170,441,166,0" TextWrapping="Wrap" Text="{Binding TimeLeft, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:ss}.{0:ff}'}" VerticalAlignment="Top" FontSize="24"/>
     </Grid>
 </Page>
