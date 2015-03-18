@@ -11,7 +11,7 @@ namespace PunchingBand
         private const double maximumAcceleration = 8.0;
 
         private double lastX;
-        private double maxX;
+        private double maxX = double.MinValue;
 
         private bool readyForPunch = true;
 
@@ -35,7 +35,7 @@ namespace PunchingBand
 
                         readyForPunch = false;
                         lastPunchTime = DateTime.UtcNow;
-                        maxX = 0.0;
+                        maxX = double.MinValue;
 
                         punchDetected = true;
                     }
@@ -44,7 +44,7 @@ namespace PunchingBand
             else if (reading.AccelerationX < punchResetThreshold)
             {
                 readyForPunch = true;
-                maxX = 0.0;
+                maxX = double.MinValue;
             }
 
             lastX = reading.AccelerationX;

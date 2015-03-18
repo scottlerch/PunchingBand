@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
@@ -46,7 +47,7 @@ namespace PunchingBand
             }
             else
             {
-                Dispatcher.RunAsync(CoreDispatcherPriority.High, delegate() { action(); });
+                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, delegate() { action(); });
             }
         }
 
@@ -55,21 +56,18 @@ namespace PunchingBand
             switch (propertyChangedEventArgs.PropertyName)
             {
                 case "PunchCount":
-                    punchSounds[model.PunchCount % punchSounds.Length].Volume = model.PunchStrength;
-                    punchSounds[model.PunchCount % punchSounds.Length].Play();
                     break;
                 case "PunchStrength":
                     strengthMeterCover.Width = (1.0-model.PunchStrength)*(strengthMeter.Width - 10);
-                    break;
-                case "Running":
                     if (model.Running)
                     {
-                        playButton.Visibility = Visibility.Collapsed;
+                        var index = model.PunchCount%punchSounds.Length;
+                        punchSounds[index].Play();
+                        punchSounds[index].Volume = model.PunchStrength;
                     }
-                    else
-                    {
-                        playButton.Visibility = Visibility.Visible;
-                    }
+                    break;
+                case "Running":
+                    playButton.Visibility = model.Running ? Visibility.Collapsed : Visibility.Visible;
                     break;
             }
         }

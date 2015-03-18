@@ -203,11 +203,13 @@ namespace PunchingBand
         {
             if (Running && punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading))
             {
+                var capturedLastPunchStrength = punchDetector.LastPunchStrength;
+
                 invokeOnUiThread(() =>
                 {
                     PunchCount++;
-                    PunchStrength = punchDetector.LastPunchStrength;
-                    Score += (int)Math.Round(100.0*punchDetector.LastPunchStrength);
+                    PunchStrength = capturedLastPunchStrength;
+                    Score += (int)Math.Round(100.0 * capturedLastPunchStrength);
                 });
             }
         }
