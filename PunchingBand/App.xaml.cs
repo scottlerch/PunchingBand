@@ -21,6 +21,10 @@ namespace PunchingBand
     {
         public event ApplicationActivatedEventHandler Activated;
 
+        public PunchingModel PunchingModel { get; private set; }
+
+        private CoreDispatcher dispatcher;
+
         private TransitionCollection transitions;
 
         /// <summary>
@@ -31,11 +35,24 @@ namespace PunchingBand
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            this.PunchingModel = new PunchingModel(InvokeOnUIThread);
         }
 
         public new static App Current
         {
             get { return (App)Application.Current; }
+        }
+
+        private void InvokeOnUIThread(Action action)
+        {
+            if (dispatcher.HasThreadAccess)
+            {
+                action();
+            }
+            else
+            {
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, delegate() { action(); });
+            }
         }
 
         /// <summary>
@@ -98,6 +115,10 @@ namespace PunchingBand
                 }
             }
 
+            dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+
+            PunchingModel.Connect();
+
             // Ensure the current window is active
             Window.Current.Activate();
         }
@@ -123,6 +144,8 @@ namespace PunchingBand
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
+            PunchingModel.Disconnect();
+
             var deferral = e.SuspendingOperation.GetDeferral();
 
             // TODO: Save application state and stop any background activity
@@ -131,6 +154,8 @@ namespace PunchingBand
 
         protected override void OnActivated(IActivatedEventArgs e)
         {
+            PunchingModel.Connect();
+
             if (Activated != null)
             {
                 Activated(e);

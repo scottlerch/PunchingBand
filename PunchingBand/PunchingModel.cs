@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace PunchingBand
 {
-    internal class PunchingModel : ModelBase
+    public class PunchingModel : ModelBase
     {
         private IBandClient bandClient;
         private bool connected;
@@ -37,6 +37,7 @@ namespace PunchingBand
         {
             this.invokeOnUiThread = invokeOnUiThread;
         }
+
         public bool Running
         {
             get { return running; }
@@ -137,7 +138,10 @@ namespace PunchingBand
 
                     Connected = true;
 
-                    Status = "Band connected!";
+                    if (!Worn)
+                    {
+                        Status = "Band connected!  Waiting for worn indication...";
+                    }
                 }
                 else
                 {
@@ -166,6 +170,7 @@ namespace PunchingBand
             punchDetector.Reset();
 
             Connected = false;
+            Worn = false;
         }
 
         private void SkinTemperatureOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandSkinTemperatureReading> bandSensorReadingEventArgs)
@@ -196,7 +201,19 @@ namespace PunchingBand
 
         private void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
         {
-            invokeOnUiThread(() => Worn = bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn);
+            invokeOnUiThread(() =>
+            {
+                if (bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn)
+                {
+                    Worn = true;
+                    Status = string.Empty;
+                }
+                else
+                {
+                    Worn = false;
+                    Status = "Band is not being worn!";
+                }
+            });
         }
 
         private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
@@ -221,6 +238,11 @@ namespace PunchingBand
             PunchCount = 0;
             PunchStrength = 0.001;
             gameStartTime = DateTime.UtcNow;
+        }
+
+        internal void StopGame()
+        {
+            Running = false;
         }
 
         private DateTime gameStartTime;

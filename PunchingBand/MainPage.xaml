@@ -12,36 +12,45 @@
     <Page.Resources>
         <bindingConverters:StringFormatConverter x:Name="StringFormat"/>
     </Page.Resources>
-
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
     <Grid>
-        <MediaElement x:Name="punchSound1" AudioCategory="GameEffects" Source="Assets/punch.wav" AutoPlay="False" Visibility="Collapsed"/>
-        <MediaElement x:Name="punchSound2" AudioCategory="GameEffects" Source="Assets/punch.wav" AutoPlay="False" Visibility="Collapsed"/>
-        <MediaElement x:Name="punchSound3" AudioCategory="GameEffects" Source="Assets/punch.wav" AutoPlay="False" Visibility="Collapsed"/>
-        
-        <TextBlock HorizontalAlignment="Center" Margin="10,169,9,0" TextWrapping="Wrap" Text="{Binding PunchCount}" VerticalAlignment="Top" Height="207" Width="381" FontSize="200" TextAlignment="Center"/>
-        <TextBlock HorizontalAlignment="Left" Margin="75,379,0,0" TextWrapping="Wrap" Text="{Binding PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="22" Width="120"/>
-        <TextBlock HorizontalAlignment="Left" Margin="52,10,0,0" TextWrapping="Wrap" Text="{Binding HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Right" Margin="0,10,9,0" TextWrapping="Wrap" Text="°" VerticalAlignment="Top" FontSize="24"/>
+        <Pivot x:Uid="Pivot" Title="PUNCHING BAND" x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0,0,0,34">
+            <!--Pivot item one-->
+            <PivotItem
+                x:Uid="PivotItem1"
+                Margin="19,14.5,0,0"
+                Header="setup"
+                CommonNavigationTransitionInfo.IsStaggerElement="True">
+                <Grid>
+                    <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" Margin="72,151,0,0" VerticalAlignment="Top" OffContent="Left" OnContent="Right" Width="229" FontSize="12"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="72,63,0,0" TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Top" FontSize="16">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{ThemeResource TextBoxPlaceholderColor}"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding Worn}"/>
+
+                </Grid>
+            </PivotItem>
+            <!--Pivot item two-->
+            <PivotItem
+                x:Uid="PivotItem2"
+                Margin="19,14.5,0,0"
+                Header="history">
+                <Grid>
+
+                </Grid>
+            </PivotItem>
+        </Pivot>
         <TextBlock HorizontalAlignment="Left" Margin="10,606,0,0" TextWrapping="Wrap" Text="{Binding Status}" VerticalAlignment="Top" FontSize="20" Width="381"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="HR:" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Right" Margin="0,10,22,0" TextWrapping="Wrap" Text="{Binding SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24"/>
-        <Rectangle x:Name="strengthMeter" HorizontalAlignment="Left" Height="19" Margin="76,407,0,0" Stroke="Black" VerticalAlignment="Top" Width="249">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
-                    <GradientStop Color="Red" Offset="0"/>
-                    <GradientStop Color="Yellow" Offset="0.5"/>
-                    <GradientStop Color="Green" Offset="1"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle x:Name="strengthMeterCover" HorizontalAlignment="Right" Height="19" Margin="0,407,76,0" Stroke="Black" VerticalAlignment="Top" Width="1" Fill="Black" RenderTransformOrigin="0.5,0.5">
-            <Rectangle.RenderTransform>
-                <CompositeTransform ScaleX="-1"/>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-        <Button x:Name="playButton" Content="Start!" HorizontalAlignment="Left" Margin="124,475,0,0" VerticalAlignment="Top" FontSize="24" Height="72" Width="156" Click="Button_Click"/>
-        <TextBlock HorizontalAlignment="Left" Margin="147,137,0,0" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Left" Margin="216,137,0,0" TextWrapping="Wrap" Text="{Binding Score}" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Center" Margin="170,441,166,0" TextWrapping="Wrap" Text="{Binding TimeLeft, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:ss}.{0:ff}'}" VerticalAlignment="Top" FontSize="24"/>
     </Grid>
 </Page>

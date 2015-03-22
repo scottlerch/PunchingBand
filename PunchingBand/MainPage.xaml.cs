@@ -12,79 +12,13 @@ namespace PunchingBand
 {
     public sealed partial class MainPage : Page
     {
-        private PunchingModel model;
-        private MediaElement[] punchSounds;
-        private DispatcherTimer timer;
-
         public MainPage()
         {
             InitializeComponent();
-
-            timer = new DispatcherTimer();
-            timer.Tick += TimerOnTick;
-            timer.Interval = TimeSpan.FromMilliseconds(100);
-            timer.Start();
-
-            model = new PunchingModel(InvokeOnUIThread);
-            DataContext = model;
-
+    
             NavigationCacheMode = NavigationCacheMode.Required;
 
-            App.Current.Suspending += AppOnSuspending;
-            App.Current.Resuming += AppOnResuming;
-            App.Current.Activated += AppOnActivated;
-
-            punchSounds = new[] { punchSound1, punchSound2, punchSound3 };
-
-            model.PropertyChanged += ModelOnPropertyChanged;
-        }
-
-        private void InvokeOnUIThread(Action action)
-        {
-            if (Dispatcher.HasThreadAccess)
-            {
-                action();
-            }
-            else
-            {
-                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, delegate() { action(); });
-            }
-        }
-
-        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            switch (propertyChangedEventArgs.PropertyName)
-            {
-                case "PunchCount":
-                    break;
-                case "PunchStrength":
-                    strengthMeterCover.Width = (1.0-model.PunchStrength)*(strengthMeter.Width - 10);
-                    if (model.Running)
-                    {
-                        var index = model.PunchCount%punchSounds.Length;
-                        punchSounds[index].Play();
-                        punchSounds[index].Volume = model.PunchStrength;
-                    }
-                    break;
-                case "Running":
-                    playButton.Visibility = model.Running ? Visibility.Collapsed : Visibility.Visible;
-                    break;
-            }
-        }
-
-        private void AppOnActivated(IActivatedEventArgs activatedEventArgs)
-        {
-            model.Connect();
-        }
-
-        private void AppOnResuming(object sender, object o)
-        {
-            model.Connect();
-        }
-
-        private void AppOnSuspending(object sender, SuspendingEventArgs e)
-        {
-            model.Disconnect();
+            DataContext = App.Current.PunchingModel;
         }
 
         /// <summary>
@@ -102,17 +36,12 @@ namespace PunchingBand
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
 
-            model.Connect();
+            
         }
 
-        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            model.StartGame();
-        }
-
-        private void TimerOnTick(object sender, object o)
-        {
-            model.Update();
+            Frame.Navigate(typeof (GamePage));
         }
     }
 }
