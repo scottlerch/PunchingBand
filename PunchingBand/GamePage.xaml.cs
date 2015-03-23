@@ -30,6 +30,17 @@ namespace PunchingBand
             timer.Start();
 
             punchSound = new SoundEffect("Assets/punch.wav");
+
+            model.PunchStarted += ModelOnPunchStarted;
+        }
+
+        private void ModelOnPunchStarted(object sender, EventArgs eventArgs)
+        {
+            if (model.Running)
+            {
+                // TODO: predict punch strength for volume?
+                punchSound.Play(1.0);
+            }
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -42,7 +53,7 @@ namespace PunchingBand
                     strengthMeterCover.Width = (1.0 - model.PunchStrength) * (strengthMeter.Width - 10);
                     if (model.Running)
                     {
-                        punchSound.Play(model.PunchStrength);
+                        //punchSound.Play(model.PunchStrength);
                     }
                     break;
                 case "Running":

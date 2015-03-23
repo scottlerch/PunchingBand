@@ -17,6 +17,8 @@ namespace PunchingBand
 
         private DateTime lastPunchTime = DateTime.MinValue;
 
+        private bool punchStarted;
+
         public double LastPunchStrength { get; private set; }
 
         public bool IsPunchDetected(IBandAccelerometerReading reading, out double? punchStrength)
@@ -45,6 +47,7 @@ namespace PunchingBand
             }
             else if (reading.AccelerationX < punchResetThreshold)
             {
+                punchStarted = false;
                 readyForPunch = true;
                 maxX = double.MinValue;
             }
@@ -62,6 +65,20 @@ namespace PunchingBand
             readyForPunch = true;
 
             lastPunchTime = DateTime.MinValue;
+        }
+
+        internal bool IsDetectingPunch(IBandAccelerometerReading reading)
+        {
+            if (!punchStarted && readyForPunch)
+            {
+                if (reading.AccelerationX > punchThreshold && (DateTime.UtcNow - lastPunchTime) > fastestPunchInterval)
+                {
+                    punchStarted = true;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

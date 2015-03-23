@@ -16,6 +16,7 @@ namespace PunchingBand
 
         private int punchCount;
         private double punchStrength;
+        private double currentStrength;
         private int? heartRate;
         private bool heartRateLocked;
         private double? skinTemperature;
@@ -27,6 +28,8 @@ namespace PunchingBand
         private bool running;
 
         private readonly Action<Action> invokeOnUiThread;
+
+        public event EventHandler PunchStarted = delegate { }; 
 
         public PunchingModel()
         {
@@ -219,14 +222,24 @@ namespace PunchingBand
         private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
         {
             double? lastPunchStrength;
-            if (Running && punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading, out lastPunchStrength))
+            if (Running)
             {
-                invokeOnUiThread(() =>
+                if (punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading, out lastPunchStrength))
                 {
-                    PunchCount++;
-                    PunchStrength = lastPunchStrength.Value;
-                    Score += (int)Math.Round(100.0 * lastPunchStrength.Value);
-                });
+                    invokeOnUiThread(() =>
+                    {
+                        PunchCount++;
+                        PunchStrength = lastPunchStrength.Value;
+                        Score += (int) Math.Round(100.0*lastPunchStrength.Value);
+                    });
+                }
+                else if (punchDetector.IsDetectingPunch(bandSensorReadingEventArgs.SensorReading))
+                {
+                    invokeOnUiThread(() =>
+                    {
+                        PunchStarted(this, EventArgs.Empty);
+                    });
+                }
             }
         }
 

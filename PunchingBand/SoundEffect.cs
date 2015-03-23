@@ -36,8 +36,8 @@ namespace PunchingBand
 
         public void Play(double volume = 1.0)
         {
-            var sourceVoice = sourceVoices[index];
-            index = (index + 1)%sourceVoices.Length;
+            var sourceVoice = sourceVoices[index];           
+            index = (index + 1) % sourceVoices.Length;
 
             sourceVoice.Stop();
             sourceVoice.FlushSourceBuffers();
