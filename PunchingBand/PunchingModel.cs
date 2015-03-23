@@ -218,15 +218,14 @@ namespace PunchingBand
 
         private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
         {
-            if (Running && punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading))
+            double? lastPunchStrength;
+            if (Running && punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading, out lastPunchStrength))
             {
-                var capturedLastPunchStrength = punchDetector.LastPunchStrength;
-
                 invokeOnUiThread(() =>
                 {
                     PunchCount++;
-                    PunchStrength = capturedLastPunchStrength;
-                    Score += (int)Math.Round(100.0 * capturedLastPunchStrength);
+                    PunchStrength = lastPunchStrength.Value;
+                    Score += (int)Math.Round(100.0 * lastPunchStrength.Value);
                 });
             }
         }

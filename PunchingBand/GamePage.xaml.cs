@@ -1,10 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
 using Windows.Phone.UI.Input;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -13,9 +9,9 @@ namespace PunchingBand
 {
     public sealed partial class GamePage : Page
     {
-        private PunchingModel model;
-        private MediaElement[] punchSounds;
-        private DispatcherTimer timer;
+        private readonly PunchingModel model;
+        private readonly DispatcherTimer timer;
+        private readonly SoundEffect punchSound;
 
         public GamePage()
         {
@@ -26,14 +22,14 @@ namespace PunchingBand
 
             NavigationCacheMode = NavigationCacheMode.Required;
 
-            punchSounds = new[] { punchSound1, punchSound2, punchSound3 };
-
             model.PropertyChanged += ModelOnPropertyChanged;
 
             timer = new DispatcherTimer();
             timer.Tick += TimerOnTick;
             timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Start();
+
+            punchSound = new SoundEffect("Assets/punch.wav");
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -46,9 +42,7 @@ namespace PunchingBand
                     strengthMeterCover.Width = (1.0 - model.PunchStrength) * (strengthMeter.Width - 10);
                     if (model.Running)
                     {
-                        var index = model.PunchCount % punchSounds.Length;
-                        punchSounds[index].Play();
-                        punchSounds[index].Volume = model.PunchStrength;
+                        punchSound.Play(model.PunchStrength);
                     }
                     break;
                 case "Running":
@@ -83,7 +77,8 @@ namespace PunchingBand
         {
             model.StopGame();
 
-            Frame frame = Window.Current.Content as Frame;
+            var frame = Window.Current.Content as Frame;
+
             if (frame == null)
             {
                 return;

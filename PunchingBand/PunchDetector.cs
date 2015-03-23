@@ -19,8 +19,9 @@ namespace PunchingBand
 
         public double LastPunchStrength { get; private set; }
 
-        public bool IsPunchDetected(IBandAccelerometerReading reading)
+        public bool IsPunchDetected(IBandAccelerometerReading reading, out double? punchStrength)
         {
+            punchStrength = null;
             bool punchDetected = false;
 
             if (readyForPunch)
@@ -32,6 +33,7 @@ namespace PunchingBand
                     if (reading.AccelerationX >= maximumAcceleration || reading.AccelerationX - lastX < 0)
                     {
                         LastPunchStrength = (maxX - punchThreshold) / (maximumAcceleration - punchThreshold);
+                        punchStrength = LastPunchStrength;
 
                         readyForPunch = false;
                         lastPunchTime = DateTime.UtcNow;

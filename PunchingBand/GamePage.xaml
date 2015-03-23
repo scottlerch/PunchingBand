@@ -14,10 +14,6 @@
     </Page.Resources>
 
     <Grid>
-        <MediaElement x:Name="punchSound1" AudioCategory="GameEffects" Source="Assets/punch.wav" AutoPlay="False" Visibility="Collapsed"/>
-        <MediaElement x:Name="punchSound2" AudioCategory="GameEffects" Source="Assets/punch.wav" AutoPlay="False" Visibility="Collapsed"/>
-        <MediaElement x:Name="punchSound3" AudioCategory="GameEffects" Source="Assets/punch.wav" AutoPlay="False" Visibility="Collapsed"/>
-
         <TextBlock HorizontalAlignment="Center" Margin="10,169,9,0" TextWrapping="Wrap" Text="{Binding PunchCount}" VerticalAlignment="Top" Height="207" Width="381" FontSize="200" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="75,379,0,0" TextWrapping="Wrap" Text="{Binding PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="22" Width="120"/>
         <TextBlock HorizontalAlignment="Left" Margin="52,10,0,0" TextWrapping="Wrap" Text="{Binding HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="24"/>
