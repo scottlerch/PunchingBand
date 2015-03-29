@@ -3,7 +3,9 @@ using System.ComponentModel;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using SharpDX;
 
 namespace PunchingBand
 {
@@ -12,6 +14,8 @@ namespace PunchingBand
         private readonly PunchingModel model;
         private readonly DispatcherTimer timer;
         private readonly SoundEffect punchSound;
+        private readonly SoundEffect beepSound;
+        private readonly SoundEffect endBuzzer;
 
         public GamePage()
         {
@@ -22,16 +26,17 @@ namespace PunchingBand
 
             NavigationCacheMode = NavigationCacheMode.Required;
 
-            model.PropertyChanged += ModelOnPropertyChanged;
-
             timer = new DispatcherTimer();
             timer.Tick += TimerOnTick;
             timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Start();
 
             punchSound = new SoundEffect("Assets/punch.wav");
+            beepSound = new SoundEffect("Assets/countdownbeep.wav");
+            endBuzzer = new SoundEffect("Assets/endbuzzer.wav");
 
             model.PunchStarted += ModelOnPunchStarted;
+            model.PropertyChanged += ModelOnPropertyChanged;
         }
 
         private void ModelOnPunchStarted(object sender, EventArgs eventArgs)
@@ -53,11 +58,27 @@ namespace PunchingBand
                     strengthMeterCover.Width = (1.0 - model.PunchStrength) * (strengthMeter.Width - 10);
                     if (model.Running)
                     {
+                        // NOTE: already played in ModelOnPunchStarted
                         //punchSound.Play(model.PunchStrength);
                     }
                     break;
                 case "Running":
                     playButton.Visibility = model.Running ? Visibility.Collapsed : Visibility.Visible;
+                    if (!model.Running)
+                    {
+                        endBuzzer.Play();
+                    }
+                    break;
+                case "TimeLeftSeconds":
+                    if (model.TimeLeftSeconds <= 5 && model.TimeLeftSeconds > 0)
+                    {
+                        countDownText.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
+                        beepSound.Play(0.5);
+                    }
+                    else
+                    {
+                        countDownText.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+                    }
                     break;
             }
         }

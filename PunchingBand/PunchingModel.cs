@@ -13,10 +13,10 @@ namespace PunchingBand
         private string status = "Connecting...";
 
         private readonly PunchDetector punchDetector = new PunchDetector();
+        private readonly GameModel gameModel = new GameModel();
 
         private int punchCount;
         private double punchStrength;
-        private double currentStrength;
         private int? heartRate;
         private bool heartRateLocked;
         private double? skinTemperature;
@@ -25,6 +25,7 @@ namespace PunchingBand
         private bool worn;
         private int score;
         private TimeSpan timeLeft = TimeSpan.FromSeconds(30);
+        private int timeLeftSeconds = 30;
         private bool running;
 
         private readonly Action<Action> invokeOnUiThread;
@@ -39,6 +40,11 @@ namespace PunchingBand
         public PunchingModel(Action<Action> invokeOnUiThread)
         {
             this.invokeOnUiThread = invokeOnUiThread;
+        }
+
+        public GameModel GameModel
+        {
+            get { return gameModel; }
         }
 
         public bool Running
@@ -56,6 +62,12 @@ namespace PunchingBand
         {
             get { return timeLeft; }
             set { Set("TimeLeft", ref timeLeft, value); }
+        }
+
+        public int TimeLeftSeconds
+        {
+            get { return timeLeftSeconds; }
+            set { Set("TimeLeftSeconds", ref timeLeftSeconds, value); }
         }
 
         public int PunchCount
@@ -267,11 +279,13 @@ namespace PunchingBand
                 if (diff <= TimeSpan.Zero)
                 {
                     TimeLeft = TimeSpan.Zero;
+                    TimeLeftSeconds = 0;
                     Running = false;
                 }
                 else
                 {
                     TimeLeft = diff;
+                    TimeLeftSeconds = (int) Math.Ceiling(diff.TotalSeconds);
                 }
             }
         }

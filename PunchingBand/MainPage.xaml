@@ -31,7 +31,7 @@
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
                     <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" Margin="72,151,0,0" VerticalAlignment="Top" OffContent="Left" OnContent="Right" Width="229" FontSize="12"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameModel.GameDurations, Mode=OneWay}" SelectedItem="{Binding GameModel.Duration}"/>
                     <TextBlock HorizontalAlignment="Left" Margin="72,63,0,0" TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Top" FontSize="16">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{ThemeResource TextBoxPlaceholderColor}"/>

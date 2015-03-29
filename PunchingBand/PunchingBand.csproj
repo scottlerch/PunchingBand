@@ -84,6 +84,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="BindingConverters\StringFormatConverter.cs" />
+    <Compile Include="GameModel.cs" />
     <Compile Include="GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
@@ -103,6 +104,8 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\countdownbeep.wav" />
+    <Content Include="Assets\endbuzzer.wav" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\punch.wav" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
