@@ -72,6 +72,7 @@ namespace PunchingBand.Models
             get { return score; }
             set { Set("Score", ref score, value); }
         }
+
         public TimeSpan TimeLeft
         {
             get { return timeLeft; }

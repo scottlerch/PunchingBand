@@ -83,9 +83,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Gender.cs" />
     <Compile Include="Pages\BindingConverters\EnumTypeConverter.cs" />
     <Compile Include="Pages\BindingConverters\EnumerableEnumTypeConverter.cs" />
     <Compile Include="Pages\BindingConverters\StringFormatConverter.cs" />
+    <Compile Include="Pages\BindingConverters\WeightConverter.cs" />
     <Compile Include="Utilities\CalorieCalculator.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Pages\GamePage.xaml.cs">
@@ -103,6 +105,7 @@
     <Compile Include="Models\PunchingModel.cs" />
     <Compile Include="Models\RootModel.cs" />
     <Compile Include="Infrastructure\SoundEffect.cs" />
+    <Compile Include="WeightUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

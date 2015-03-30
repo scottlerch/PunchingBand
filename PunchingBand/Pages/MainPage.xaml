@@ -6,10 +6,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:PunchingBand.Models"
     xmlns:bindingConverters1="using:PunchingBand.Pages.BindingConverters"
+    xmlns:local="using:PunchingBand"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=models:RootModel, IsDesignTimeCreatable=True}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
+        <bindingConverters1:WeightConverter x:Key="WeightConverter"/>
         <bindingConverters1:EnumTypeConverter x:Key="EnumTypeConverter"/>
         <bindingConverters1:EnumerableEnumTypeConverter x:Key="EnumerableEnumTypeConverter"/>
         <bindingConverters1:StringFormatConverter x:Name="StringFormat"/>
@@ -34,10 +36,10 @@
                 <Grid>
                     <ComboBox HorizontalAlignment="Center" Margin="126,96,135,0" VerticalAlignment="Top" Width="120" FontFamily="Global User Interface" ItemsSource="{Binding UserModel.Genders, Converter={StaticResource EnumerableEnumTypeConverter}, Mode=OneWay}" SelectedItem="{Binding UserModel.Gender, Converter={StaticResource EnumTypeConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <DatePicker HorizontalAlignment="Center" Margin="126,198,146,0" VerticalAlignment="Top" Date="{Binding UserModel.BirthDate, Mode=TwoWay}"/>
-                    <TextBox HorizontalAlignment="Center" Margin="128,309,143,0" TextWrapping="Wrap" Text="{Binding UserModel.Weight, FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Top" Width="110"/>
+                    <TextBox HorizontalAlignment="Center" Margin="128,309,143,0" TextWrapping="Wrap" Text="{Binding UserModel.Weight, Converter={StaticResource WeightConverter}, ConverterParameter='Lbs', FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Top" Width="110"/>
                     <TextBlock HorizontalAlignment="Center" Margin="123,76,193,0" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
                     <TextBlock HorizontalAlignment="Center" Margin="128,178,164,0" TextWrapping="Wrap" Text="Birth Date" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
-                    <TextBlock HorizontalAlignment="Center" Margin="132,279,138,0" TextWrapping="Wrap" Text="Weight (kg)" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20" Width="111"/>
+                    <TextBlock HorizontalAlignment="Center" Margin="132,279,138,0" TextWrapping="Wrap" Text="Weight" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20" Width="111"/>
 
                 </Grid>
             </PivotItem>

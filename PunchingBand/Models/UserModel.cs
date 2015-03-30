@@ -3,12 +3,6 @@ using System.Collections.Generic;
 
 namespace PunchingBand.Models
 {
-    public enum Gender
-    {
-        Male,
-        Female,
-    }
-
     public class UserModel : ModelBase
     {
         private const double LengthOfYearInDays = 365.24218967;
