@@ -6,15 +6,22 @@ namespace PunchingBand
 {
     public class SoundEffect
     {
+        private static readonly XAudio2 xAudio;
+        private static readonly MasteringVoice masteringVoice;
+
         private readonly AudioBuffer buffer;
         private readonly SoundStream stream;
         private readonly SourceVoice[] sourceVoices;
         private int index;
 
+        static SoundEffect()
+        {
+            xAudio = new XAudio2();
+            masteringVoice = new MasteringVoice(xAudio);
+        }
+
         public SoundEffect(string path, int poolSize = 5)
         {
-            var xAudio = new XAudio2();
-            var masteringVoice = new MasteringVoice(xAudio);
             var nativeFileStream = new NativeFileStream(path, NativeFileMode.Open, NativeFileAccess.Read, NativeFileShare.Read);
 
             stream = new SoundStream(nativeFileStream);
