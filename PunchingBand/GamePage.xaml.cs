@@ -29,7 +29,7 @@ namespace PunchingBand
 
             timer = new DispatcherTimer();
             timer.Tick += TimerOnTick;
-            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Interval = TimeSpan.FromMilliseconds(17);
             timer.Start();
 
             punchSound = new SoundEffect("Assets/punch.wav");
@@ -67,14 +67,14 @@ namespace PunchingBand
                     playButton.Visibility = model.GameModel.Running ? Visibility.Collapsed : Visibility.Visible;
                     if (!model.GameModel.Running)
                     {
-                        endBuzzer.Play();
+                        endBuzzer.Play(0.4);
                     }
                     break;
                 case "TimeLeftSeconds":
                     if (model.GameModel.TimeLeftSeconds <= 5 && model.GameModel.TimeLeftSeconds > 0)
                     {
                         countDownText.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
-                        beepSound.Play(0.5);
+                        beepSound.Play(0.08);
                     }
                     else
                     {
