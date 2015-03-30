@@ -4,7 +4,7 @@ using Microsoft.Band.Sensors;
 using System;
 using System.Linq;
 
-namespace PunchingBand
+namespace PunchingBand.Models
 {
     public class PunchingModel : ModelBase
     {
@@ -13,24 +13,18 @@ namespace PunchingBand
         private string status = "Connecting...";
 
         private readonly PunchDetector punchDetector = new PunchDetector();
-        private readonly GameModel gameModel = new GameModel();
 
-        private int punchCount;
-        private double punchStrength;
         private int? heartRate;
         private bool heartRateLocked;
         private double? skinTemperature;
         private long stepCount;
         private long? startStepCount;
         private bool worn;
-        private int score;
-        private TimeSpan timeLeft = TimeSpan.FromSeconds(30);
-        private int timeLeftSeconds = 30;
-        private bool running;
 
         private readonly Action<Action> invokeOnUiThread;
 
-        public event EventHandler PunchStarted = delegate { }; 
+        public event EventHandler<PunchEventArgs> PunchStarted = delegate { };
+        public event EventHandler<PunchEventArgs> PunchEnded = delegate { };
 
         public PunchingModel()
         {
@@ -40,46 +34,6 @@ namespace PunchingBand
         public PunchingModel(Action<Action> invokeOnUiThread)
         {
             this.invokeOnUiThread = invokeOnUiThread;
-        }
-
-        public GameModel GameModel
-        {
-            get { return gameModel; }
-        }
-
-        public bool Running
-        {
-            get { return running; }
-            set { Set("Running", ref running, value); }
-        }
-
-        public int Score
-        {
-            get { return score; }
-            set { Set("Score", ref score, value); }
-        }
-        public TimeSpan TimeLeft
-        {
-            get { return timeLeft; }
-            set { Set("TimeLeft", ref timeLeft, value); }
-        }
-
-        public int TimeLeftSeconds
-        {
-            get { return timeLeftSeconds; }
-            set { Set("TimeLeftSeconds", ref timeLeftSeconds, value); }
-        }
-
-        public int PunchCount
-        {
-            get { return punchCount; }
-            set { Set("PunchCount", ref punchCount, value); }
-        }
-
-        public double PunchStrength
-        {
-            get { return punchStrength; }
-            set { Set("PunchStrength", ref punchStrength, value); }
         }
 
         public int? HeartRate
@@ -234,59 +188,20 @@ namespace PunchingBand
         private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
         {
             double? lastPunchStrength;
-            if (Running)
+
+            if (punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading, out lastPunchStrength))
             {
-                if (punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading, out lastPunchStrength))
+                invokeOnUiThread(() =>
                 {
-                    invokeOnUiThread(() =>
-                    {
-                        PunchCount++;
-                        PunchStrength = lastPunchStrength.Value;
-                        Score += (int) Math.Round(100.0*lastPunchStrength.Value);
-                    });
-                }
-                else if (punchDetector.IsDetectingPunch(bandSensorReadingEventArgs.SensorReading))
-                {
-                    invokeOnUiThread(() =>
-                    {
-                        PunchStarted(this, EventArgs.Empty);
-                    });
-                }
+                    PunchEnded(this, new PunchEventArgs(lastPunchStrength.Value));
+                });
             }
-        }
-
-        internal void StartGame()
-        {
-            Running = true;
-            Score = 0;
-            PunchCount = 0;
-            PunchStrength = 0.001;
-            gameStartTime = DateTime.UtcNow;
-        }
-
-        internal void StopGame()
-        {
-            Running = false;
-        }
-
-        private DateTime gameStartTime;
-
-        public void Update()
-        {
-            if (Running)
+            else if (punchDetector.IsDetectingPunch(bandSensorReadingEventArgs.SensorReading))
             {
-                var diff = TimeSpan.FromSeconds(30) - (DateTime.UtcNow - gameStartTime);
-                if (diff <= TimeSpan.Zero)
+                invokeOnUiThread(() =>
                 {
-                    TimeLeft = TimeSpan.Zero;
-                    TimeLeftSeconds = 0;
-                    Running = false;
-                }
-                else
-                {
-                    TimeLeft = diff;
-                    TimeLeftSeconds = (int) Math.Ceiling(diff.TotalSeconds);
-                }
+                    PunchStarted(this, new PunchEventArgs(0));
+                });
             }
         }
     }

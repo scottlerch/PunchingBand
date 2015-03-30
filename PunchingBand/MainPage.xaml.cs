@@ -18,7 +18,7 @@ namespace PunchingBand
     
             NavigationCacheMode = NavigationCacheMode.Required;
 
-            DataContext = App.Current.PunchingModel;
+            DataContext = App.Current.RootModel;
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
+using PunchingBand.Models;
 
 namespace PunchingBand
 {
@@ -21,7 +22,7 @@ namespace PunchingBand
     {
         public event ApplicationActivatedEventHandler Activated;
 
-        public PunchingModel PunchingModel { get; private set; }
+        public RootModel RootModel { get; private set; }
 
         private CoreDispatcher dispatcher;
 
@@ -35,7 +36,7 @@ namespace PunchingBand
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
-            this.PunchingModel = new PunchingModel(InvokeOnUIThread);
+            this.RootModel = new RootModel(InvokeOnUIThread);
         }
 
         public new static App Current
@@ -117,7 +118,7 @@ namespace PunchingBand
 
             dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
-            PunchingModel.Connect();
+            RootModel.PunchingModel.Connect();
 
             // Ensure the current window is active
             Window.Current.Activate();
@@ -144,7 +145,7 @@ namespace PunchingBand
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            PunchingModel.Disconnect();
+            RootModel.PunchingModel.Disconnect();
 
             var deferral = e.SuspendingOperation.GetDeferral();
 
@@ -154,7 +155,7 @@ namespace PunchingBand
 
         protected override void OnActivated(IActivatedEventArgs e)
         {
-            PunchingModel.Connect();
+            RootModel.PunchingModel.Connect();
 
             if (Activated != null)
             {

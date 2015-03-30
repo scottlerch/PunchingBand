@@ -1,4 +1,4 @@
-﻿namespace PunchingBand
+﻿namespace PunchingBand.Models
 {
     public abstract class ModelBase : ObservableObject
     {

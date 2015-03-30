@@ -6,8 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:bindingConverters="using:PunchingBand.BindingConverters"
+    xmlns:models="using:PunchingBand.Models"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=local:PunchingModel, IsDesignTimeCreatable=True}"
+    d:DataContext="{d:DesignInstance Type=models:RootModel, IsDesignTimeCreatable=True}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <bindingConverters:StringFormatConverter x:Name="StringFormat"/>
@@ -31,13 +32,13 @@
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
                     <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" Margin="72,151,0,0" VerticalAlignment="Top" OffContent="Left" OnContent="Right" Width="229" FontSize="12"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameModel.GameDurations, Mode=OneWay}" SelectedItem="{Binding GameModel.Duration}"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameModel.GameDurations, Mode=OneWay}" SelectedItem="{Binding GameModel.Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock HorizontalAlignment="Left" Margin="72,63,0,0" TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Top" FontSize="16">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{ThemeResource TextBoxPlaceholderColor}"/>
                         </TextBlock.Foreground>
                     </TextBlock>
-                    <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding Worn}"/>
+                    <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
 
                 </Grid>
             </PivotItem>
@@ -51,6 +52,6 @@
                 </Grid>
             </PivotItem>
         </Pivot>
-        <TextBlock HorizontalAlignment="Left" Margin="10,606,0,0" TextWrapping="Wrap" Text="{Binding Status}" VerticalAlignment="Top" FontSize="20" Width="381"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,606,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.Status}" VerticalAlignment="Top" FontSize="20" Width="381"/>
     </Grid>
 </Page>

@@ -5,13 +5,14 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using PunchingBand.Models;
 using SharpDX;
 
 namespace PunchingBand
 {
     public sealed partial class GamePage : Page
     {
-        private readonly PunchingModel model;
+        private readonly RootModel model;
         private readonly DispatcherTimer timer;
         private readonly SoundEffect punchSound;
         private readonly SoundEffect beepSound;
@@ -21,7 +22,7 @@ namespace PunchingBand
         {
             InitializeComponent();
 
-            model = App.Current.PunchingModel;
+            model = App.Current.RootModel;
             DataContext = model;
 
             NavigationCacheMode = NavigationCacheMode.Required;
@@ -35,42 +36,42 @@ namespace PunchingBand
             beepSound = new SoundEffect("Assets/countdownbeep.wav");
             endBuzzer = new SoundEffect("Assets/endbuzzer.wav");
 
-            model.PunchStarted += ModelOnPunchStarted;
-            model.PropertyChanged += ModelOnPropertyChanged;
+            model.PunchingModel.PunchStarted += PunchingModelOnPunchStarted;
+            model.GameModel.PropertyChanged += GameModelOnPropertyChanged;
         }
 
-        private void ModelOnPunchStarted(object sender, EventArgs eventArgs)
+        private void PunchingModelOnPunchStarted(object sender, EventArgs eventArgs)
         {
-            if (model.Running)
+            if (model.GameModel.Running)
             {
                 // TODO: predict punch strength for volume?
                 punchSound.Play(1.0);
             }
         }
 
-        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void GameModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             switch (propertyChangedEventArgs.PropertyName)
             {
                 case "PunchCount":
                     break;
                 case "PunchStrength":
-                    strengthMeterCover.Width = (1.0 - model.PunchStrength) * (strengthMeter.Width - 10);
-                    if (model.Running)
+                    strengthMeterCover.Width = (1.0 - model.GameModel.PunchStrength) * (strengthMeter.Width - 10);
+                    if (model.GameModel.Running)
                     {
                         // NOTE: already played in ModelOnPunchStarted
                         //punchSound.Play(model.PunchStrength);
                     }
                     break;
                 case "Running":
-                    playButton.Visibility = model.Running ? Visibility.Collapsed : Visibility.Visible;
-                    if (!model.Running)
+                    playButton.Visibility = model.GameModel.Running ? Visibility.Collapsed : Visibility.Visible;
+                    if (!model.GameModel.Running)
                     {
                         endBuzzer.Play();
                     }
                     break;
                 case "TimeLeftSeconds":
-                    if (model.TimeLeftSeconds <= 5 && model.TimeLeftSeconds > 0)
+                    if (model.GameModel.TimeLeftSeconds <= 5 && model.GameModel.TimeLeftSeconds > 0)
                     {
                         countDownText.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
                         beepSound.Play(0.5);
@@ -102,12 +103,12 @@ namespace PunchingBand
 
             // TODO: add 3, 2, 1 count down before game start
 
-            model.StartGame();
+            model.GameModel.StartGame();
         }
 
         private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
         {
-            model.StopGame();
+            model.GameModel.StopGame();
 
             var frame = Window.Current.Content as Frame;
 
@@ -125,12 +126,12 @@ namespace PunchingBand
 
         private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            model.StartGame();
+            model.GameModel.StartGame();
         }
 
         private void TimerOnTick(object sender, object o)
         {
-            model.Update();
+            model.GameModel.Update();
         }
     }
 }
