@@ -10,6 +10,8 @@
     d:DataContext="{d:DesignInstance Type=models:RootModel, IsDesignTimeCreatable=True}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
+        <bindingConverters1:EnumTypeConverter x:Key="EnumTypeConverter"/>
+        <bindingConverters1:EnumerableEnumTypeConverter x:Key="EnumerableEnumTypeConverter"/>
         <bindingConverters1:StringFormatConverter x:Name="StringFormat"/>
     </Page.Resources>
     <Page.Transitions>
@@ -30,20 +32,36 @@
                 Header="setup"
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
-                    <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" Margin="72,151,0,0" VerticalAlignment="Top" OffContent="Left" OnContent="Right" Width="229" FontSize="12"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameModel.GameDurations, Mode=OneWay}" SelectedItem="{Binding GameModel.Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="72,63,0,0" TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Top" FontSize="16">
-                        <TextBlock.Foreground>
-                            <SolidColorBrush Color="{ThemeResource TextBoxPlaceholderColor}"/>
-                        </TextBlock.Foreground>
-                    </TextBlock>
-                    <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
+                    <ComboBox HorizontalAlignment="Center" Margin="126,96,135,0" VerticalAlignment="Top" Width="120" FontFamily="Global User Interface" ItemsSource="{Binding UserModel.Genders, Converter={StaticResource EnumerableEnumTypeConverter}, Mode=OneWay}" SelectedItem="{Binding UserModel.Gender, Converter={StaticResource EnumTypeConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DatePicker HorizontalAlignment="Center" Margin="126,198,146,0" VerticalAlignment="Top" Date="{Binding UserModel.BirthDate, Mode=TwoWay}"/>
+                    <TextBox HorizontalAlignment="Center" Margin="128,309,143,0" TextWrapping="Wrap" Text="{Binding UserModel.Weight, FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Top" Width="110"/>
+                    <TextBlock HorizontalAlignment="Center" Margin="123,76,193,0" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
+                    <TextBlock HorizontalAlignment="Center" Margin="128,178,164,0" TextWrapping="Wrap" Text="Birth Date" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
+                    <TextBlock HorizontalAlignment="Center" Margin="132,279,138,0" TextWrapping="Wrap" Text="Weight (kg)" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20" Width="111"/>
 
                 </Grid>
             </PivotItem>
             <!--Pivot item two-->
             <PivotItem
                 x:Uid="PivotItem2"
+                Margin="19,14.5,0,0"
+                Header="game"
+                CommonNavigationTransitionInfo.IsStaggerElement="True">
+                <Grid>
+                    <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" Margin="72,151,0,0" VerticalAlignment="Top" OffContent="Left" OnContent="Right" Width="229" FontSize="12"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameModel.GameDurations, Mode=OneWay}" SelectedItem="{Binding GameModel.Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="72,63,0,0" TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Top" FontSize="16">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="#FF909090"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
+
+                </Grid>
+            </PivotItem>
+            <!--Pivot item three-->
+            <PivotItem
+                x:Uid="PivotItem3"
                 Margin="19,14.5,0,0"
                 Header="history">
                 <Grid>

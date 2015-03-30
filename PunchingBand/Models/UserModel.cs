@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PunchingBand.Models
 {
@@ -14,14 +15,23 @@ namespace PunchingBand.Models
 
         private Gender gender;
         private double weight;
-        private DateTime birthDate;
+        private DateTimeOffset birthDate;
 
         public UserModel()
         {
             // HACK: hard code user to me for now...
             gender = Gender.Male;
             weight = 74.8427;
-            birthDate = new DateTime(1982, 1, 15, 0, 0, 0, DateTimeKind.Utc);
+            birthDate = new DateTimeOffset(1982, 1, 15, 0, 0, 0, TimeSpan.Zero);
+        }
+
+        public IEnumerable<Gender> Genders
+        {
+            get
+            {
+                yield return Gender.Male;
+                yield return Gender.Female;
+            }
         }
 
         public Gender Gender
@@ -39,7 +49,7 @@ namespace PunchingBand.Models
             set { Set("Weight", ref weight, value); }
         }
 
-        public DateTime BirthDate
+        public DateTimeOffset BirthDate
         {
             get { return birthDate; }
             set
