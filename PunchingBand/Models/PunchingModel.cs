@@ -2,6 +2,7 @@
 using Microsoft.Band.Sensors;
 using System;
 using System.Linq;
+using PunchingBand.Utilities;
 
 namespace PunchingBand.Models
 {
@@ -164,7 +165,7 @@ namespace PunchingBand.Models
                 HeartRate = bandSensorReadingEventArgs.SensorReading.HeartRate;
                 HeartRateLocked = bandSensorReadingEventArgs.SensorReading.Quality == HeartRateQuality.Locked;
 
-                if (lastCaloriCountUpdate.HasValue)
+                if (lastCaloriCountUpdate.HasValue && heartRate.HasValue)
                 {
                     CalorieCount = CalorieCalculator.GetCalories(
                         userModel.Gender,
@@ -217,7 +218,10 @@ namespace PunchingBand.Models
             {
                 invokeOnUiThread(() =>
                 {
-                    PunchEnded(this, new PunchEventArgs(lastPunchStrength.Value));
+                    if (lastPunchStrength.HasValue)
+                    {
+                        PunchEnded(this, new PunchEventArgs(lastPunchStrength.Value));
+                    }
                 });
             }
             else if (punchDetector.IsDetectingPunch(bandSensorReadingEventArgs.SensorReading))

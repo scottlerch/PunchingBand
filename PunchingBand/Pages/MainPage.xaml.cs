@@ -1,16 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Globalization;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 
-namespace PunchingBand
+namespace PunchingBand.Pages
 {
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage
     {
         public MainPage()
         {
@@ -26,7 +19,7 @@ namespace PunchingBand
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
 
@@ -35,8 +28,6 @@ namespace PunchingBand
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
-
-            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

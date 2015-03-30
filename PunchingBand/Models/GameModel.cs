@@ -6,7 +6,6 @@ namespace PunchingBand.Models
 {
     public class GameModel : ModelBase
     {
-        private PunchingModel punchingModel;
         private TimeSpan duration;
         private int punchCount;
         private double punchStrength;
@@ -17,7 +16,6 @@ namespace PunchingBand.Models
 
         public GameModel(PunchingModel punchingModel)
         {
-            this.punchingModel = punchingModel;
             duration = GameDurations.First();
             timeLeft = duration;
             timeLeftSeconds = (int)duration.TotalSeconds;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace PunchingBand
+namespace PunchingBand.Infrastructure
 {
     public class ObservableObject : INotifyPropertyChanged
     {

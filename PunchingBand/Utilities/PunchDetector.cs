@@ -1,7 +1,7 @@
 ﻿using Microsoft.Band.Sensors;
 using System;
 
-namespace PunchingBand
+namespace PunchingBand.Utilities
 {
     internal class PunchDetector
     {

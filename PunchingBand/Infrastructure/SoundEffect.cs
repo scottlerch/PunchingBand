@@ -2,7 +2,7 @@
 using SharpDX.Multimedia;
 using SharpDX.XAudio2;
 
-namespace PunchingBand
+namespace PunchingBand.Infrastructure
 {
     public class SoundEffect
     {

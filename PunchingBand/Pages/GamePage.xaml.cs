@@ -5,15 +5,14 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using PunchingBand.Infrastructure;
 using PunchingBand.Models;
-using SharpDX;
 
-namespace PunchingBand
+namespace PunchingBand.Pages
 {
-    public sealed partial class GamePage : Page
+    public sealed partial class GamePage
     {
         private readonly RootModel model;
-        private readonly DispatcherTimer timer;
         private readonly SoundEffect punchSound;
         private readonly SoundEffect beepSound;
         private readonly SoundEffect endBuzzer;
@@ -27,7 +26,7 @@ namespace PunchingBand
 
             NavigationCacheMode = NavigationCacheMode.Required;
 
-            timer = new DispatcherTimer();
+            var timer = new DispatcherTimer();
             timer.Tick += TimerOnTick;
             timer.Interval = TimeSpan.FromMilliseconds(17);
             timer.Start();
@@ -89,7 +88,7 @@ namespace PunchingBand
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
 
@@ -99,7 +98,7 @@ namespace PunchingBand
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
 
-            Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
+            HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
 
             // TODO: add 3, 2, 1 count down before game start
 
@@ -124,7 +123,7 @@ namespace PunchingBand
             }
         }
 
-        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             model.GameModel.StartGame();
         }

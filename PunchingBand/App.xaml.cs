@@ -1,5 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using PunchingBand.Models;
+using PunchingBand.Pages;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
@@ -8,9 +9,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
-using PunchingBand.Models;
-
 namespace PunchingBand
 {
     public delegate void ApplicationActivatedEventHandler(IActivatedEventArgs e);
@@ -18,7 +16,7 @@ namespace PunchingBand
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    public sealed partial class App : Application
+    public sealed partial class App
     {
         public event ApplicationActivatedEventHandler Activated;
 
@@ -34,9 +32,9 @@ namespace PunchingBand
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += this.OnSuspending;
-            this.RootModel = new RootModel(InvokeOnUIThread);
+            InitializeComponent();
+            Suspending += OnSuspending;
+            RootModel = new RootModel(InvokeOnUIThread);
         }
 
         public new static App Current
@@ -52,7 +50,7 @@ namespace PunchingBand
             }
             else
             {
-                dispatcher.RunAsync(CoreDispatcherPriority.Normal, delegate() { action(); });
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action());
             }
         }
 
@@ -67,7 +65,7 @@ namespace PunchingBand
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
 
@@ -97,15 +95,15 @@ namespace PunchingBand
                 // Removes the turnstile navigation for startup.
                 if (rootFrame.ContentTransitions != null)
                 {
-                    this.transitions = new TransitionCollection();
+                    transitions = new TransitionCollection();
                     foreach (var c in rootFrame.ContentTransitions)
                     {
-                        this.transitions.Add(c);
+                        transitions.Add(c);
                     }
                 }
 
                 rootFrame.ContentTransitions = null;
-                rootFrame.Navigated += this.RootFrame_FirstNavigated;
+                rootFrame.Navigated += RootFrame_FirstNavigated;
 
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
@@ -132,8 +130,11 @@ namespace PunchingBand
         private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
         {
             var rootFrame = sender as Frame;
-            rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
-            rootFrame.Navigated -= this.RootFrame_FirstNavigated;
+            if (rootFrame != null)
+            {
+                rootFrame.ContentTransitions = transitions ?? new TransitionCollection { new NavigationThemeTransition() };
+                rootFrame.Navigated -= RootFrame_FirstNavigated;
+            }
         }
 
         /// <summary>

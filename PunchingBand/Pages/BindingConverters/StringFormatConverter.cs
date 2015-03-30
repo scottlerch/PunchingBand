@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 
-namespace PunchingBand.BindingConverters
+namespace PunchingBand.Pages.BindingConverters
 {
     public class StringFormatConverter : IValueConverter
     {

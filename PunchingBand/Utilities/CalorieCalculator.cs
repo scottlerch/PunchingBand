@@ -1,7 +1,7 @@
 ﻿using PunchingBand.Models;
 using System;
 
-namespace PunchingBand
+namespace PunchingBand.Utilities
 {
     public static class CalorieCalculator
     {
