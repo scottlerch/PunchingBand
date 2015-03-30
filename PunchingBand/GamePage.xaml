@@ -17,11 +17,11 @@
     <Grid>
         <TextBlock HorizontalAlignment="Center" Margin="10,169,9,0" TextWrapping="Wrap" Text="{Binding GameModel.PunchCount}" VerticalAlignment="Top" Height="207" Width="381" FontSize="200" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="75,379,0,0" TextWrapping="Wrap" Text="{Binding GameModel.PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="22" Width="120"/>
-        <TextBlock HorizontalAlignment="Left" Margin="52,10,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Right" Margin="0,10,9,0" TextWrapping="Wrap" Text="°" VerticalAlignment="Top" FontSize="24"/>
+        <TextBlock HorizontalAlignment="Left" Margin="51,40,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+        <TextBlock HorizontalAlignment="Right" Margin="0,10,9,0" TextWrapping="Wrap" Text="°" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,606,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.Status}" VerticalAlignment="Top" FontSize="20" Width="381"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="HR:" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Right" Margin="0,10,22,0" TextWrapping="Wrap" Text="{Binding PunchingModel.SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24"/>
+        <TextBlock HorizontalAlignment="Left" Margin="9,40,0,0" TextWrapping="Wrap" Text="HR:" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+        <TextBlock HorizontalAlignment="Left" Margin="329,10,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
         <Rectangle x:Name="strengthMeter" HorizontalAlignment="Left" Height="19" Margin="76,407,0,0" Stroke="Black" VerticalAlignment="Top" Width="249">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
@@ -36,9 +36,12 @@
                 <CompositeTransform ScaleX="-1"/>
             </Rectangle.RenderTransform>
         </Rectangle>
-        <Button x:Name="playButton" Content="RESTART" HorizontalAlignment="Left" Margin="124,475,0,0" VerticalAlignment="Top" FontSize="24" Height="72" Width="156" Click="Button_Click" FontFamily="Global User Interface"/>
-        <TextBlock HorizontalAlignment="Left" Margin="147,137,0,0" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Left" Margin="216,137,0,0" TextWrapping="Wrap" Text="{Binding GameModel.Score}" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock x:Name="countDownText" HorizontalAlignment="Center" Margin="170,441,166,0" TextWrapping="Wrap" Text="{Binding GameModel.TimeLeft, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:ss}.{0:ff}'}" VerticalAlignment="Top" FontSize="24"/>
+        <Button x:Name="playButton" Content="RESTART" HorizontalAlignment="Left" Margin="123,503,0,0" VerticalAlignment="Top" FontSize="24" Height="72" Width="156" Click="Button_Click" FontFamily="Global User Interface"/>
+        <TextBlock HorizontalAlignment="Left" Margin="70,103,0,0" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Top" FontSize="40" Foreground="#FFBDBDBD"/>
+        <TextBlock HorizontalAlignment="Left" Margin="164,104,0,0" TextWrapping="Wrap" Text="{Binding GameModel.Score, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0000000}'}" VerticalAlignment="Top" FontSize="40" FontFamily="Consolas"/>
+        <TextBlock x:Name="countDownText" HorizontalAlignment="Center" Margin="104,441,145,0" TextWrapping="Wrap" Text="{Binding GameModel.TimeLeft, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:ss}.{0:ff}'}" VerticalAlignment="Top" FontSize="36" Width="151" RenderTransformOrigin="0.232,0.528" TextAlignment="Center"/>
+        <TextBlock HorizontalAlignment="Left" Margin="9,11,0,0" TextWrapping="Wrap" Text="Calories:" VerticalAlignment="Top" FontSize="24" RenderTransformOrigin="0.488,1.805" Foreground="#FF909090"/>
+        <TextBlock HorizontalAlignment="Left" Margin="98,13,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.CalorieCount, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+        <TextBlock HorizontalAlignment="Left" Margin="233,451,0,0" TextWrapping="Wrap" Text="sec." VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
     </Grid>
 </Page>

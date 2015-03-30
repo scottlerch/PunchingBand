@@ -1,5 +1,4 @@
-﻿using Windows.UI.Xaml.Documents;
-using Microsoft.Band;
+﻿using Microsoft.Band;
 using Microsoft.Band.Sensors;
 using System;
 using System.Linq;
@@ -8,6 +7,7 @@ namespace PunchingBand.Models
 {
     public class PunchingModel : ModelBase
     {
+        private readonly UserModel userModel;
         private IBandClient bandClient;
         private bool connected;
         private string status = "Connecting...";
@@ -18,6 +18,8 @@ namespace PunchingBand.Models
         private bool heartRateLocked;
         private double? skinTemperature;
         private long stepCount;
+        private double calorieCount;
+        private DateTime? lastCaloriCountUpdate;
         private long? startStepCount;
         private bool worn;
 
@@ -28,11 +30,13 @@ namespace PunchingBand.Models
 
         public PunchingModel()
         {
+            userModel = new UserModel();
             invokeOnUiThread = action => action();
         }
 
-        public PunchingModel(Action<Action> invokeOnUiThread)
+        public PunchingModel(UserModel userModel, Action<Action> invokeOnUiThread)
         {
+            this.userModel = userModel;
             this.invokeOnUiThread = invokeOnUiThread;
         }
 
@@ -46,6 +50,12 @@ namespace PunchingBand.Models
         {
             get { return heartRateLocked; }
             set { Set("HeartRateLocked", ref heartRateLocked, value); }
+        }
+
+        public double CalorieCount
+        {
+            get { return calorieCount; }
+            private set { Set("CalorieCount", ref calorieCount, value); }
         }
 
         public double? SkinTemperature
@@ -109,7 +119,7 @@ namespace PunchingBand.Models
 
                     if (!Worn)
                     {
-                        Status = "Band connected!  Waiting for worn indication...";
+                        Status = "Band connected!  Please wear...";
                     }
                 }
                 else
@@ -153,6 +163,20 @@ namespace PunchingBand.Models
             {
                 HeartRate = bandSensorReadingEventArgs.SensorReading.HeartRate;
                 HeartRateLocked = bandSensorReadingEventArgs.SensorReading.Quality == HeartRateQuality.Locked;
+
+                if (lastCaloriCountUpdate.HasValue)
+                {
+                    CalorieCount = CalorieCalculator.GetCalories(
+                        userModel.Gender,
+                        heartRate.Value,
+                        userModel.Weight,
+                        userModel.Age,
+                        DateTime.UtcNow - lastCaloriCountUpdate.Value);
+                }
+                else
+                {
+                    lastCaloriCountUpdate = DateTime.UtcNow;
+                }
             });
         }
 
