@@ -84,6 +84,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Gender.cs" />
+    <Compile Include="Models\HistoryInfo.cs" />
+    <Compile Include="Models\HistoryModel.cs" />
     <Compile Include="Pages\BindingConverters\EnumTypeConverter.cs" />
     <Compile Include="Pages\BindingConverters\EnumerableEnumTypeConverter.cs" />
     <Compile Include="Pages\BindingConverters\StringFormatConverter.cs" />

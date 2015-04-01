@@ -13,8 +13,9 @@ namespace PunchingBand.Models
         private TimeSpan timeLeft;
         private int timeLeftSeconds;
         private bool running;
+        private readonly HistoryModel historyModel;
 
-        public GameModel(PunchingModel punchingModel)
+        public GameModel(PunchingModel punchingModel, HistoryModel historyModel)
         {
             duration = GameDurations.First();
             timeLeft = duration;
@@ -22,6 +23,8 @@ namespace PunchingBand.Models
 
             punchingModel.PunchStarted += PunchingModelOnPunchStarted;
             punchingModel.PunchEnded += PunchingModelOnPunchEnded;
+
+            this.historyModel = historyModel;
         }
 
         private void PunchingModelOnPunchEnded(object sender, PunchEventArgs punchEventArgs)
@@ -119,6 +122,8 @@ namespace PunchingBand.Models
                     TimeLeft = TimeSpan.Zero;
                     TimeLeftSeconds = 0;
                     Running = false;
+
+                    historyModel.Records.Add(new HistoryInfo { Duration = Duration, Score = Score });
                 }
                 else
                 {

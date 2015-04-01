@@ -67,7 +67,23 @@
                 Margin="19,14.5,0,0"
                 Header="history">
                 <Grid>
-
+                    <GridView HorizontalAlignment="Left" Height="440" Margin="23,17,0,0" VerticalAlignment="Top" Width="328" ItemsSource="{Binding HistoryModel.Records}">
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Score}" Style="{ThemeResource ListViewItemTextBlockStyle}" />
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                        <GridView.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Score" Style="{ThemeResource ListViewItemTextBlockStyle}" />
+                            </DataTemplate>
+                        </GridView.HeaderTemplate>
+                    </GridView>
                 </Grid>
             </PivotItem>
         </Pivot>
