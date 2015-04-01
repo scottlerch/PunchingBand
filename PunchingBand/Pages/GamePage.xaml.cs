@@ -45,6 +45,7 @@ namespace PunchingBand.Pages
             {
                 // TODO: predict punch strength for volume?
                 punchSound.Play(1.0);
+                punchCountStoryboard.Begin();
             }
         }
 
