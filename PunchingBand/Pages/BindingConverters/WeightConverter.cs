@@ -9,7 +9,7 @@ namespace PunchingBand.Pages.BindingConverters
         {
             if ((WeightUnit)Enum.Parse(typeof(WeightUnit), parameter as string) == WeightUnit.Lbs)
             {
-                value = (double) value*2.2;
+                value = Math.Round((double) value*2.2);
             }
 
             return value;
@@ -19,7 +19,7 @@ namespace PunchingBand.Pages.BindingConverters
         {
             if ((WeightUnit)Enum.Parse(typeof(WeightUnit), parameter as string) == WeightUnit.Lbs)
             {
-                value = (double) value/2.2;
+                value = Math.Round((double)value / 2.2);
             }
 
             return value;

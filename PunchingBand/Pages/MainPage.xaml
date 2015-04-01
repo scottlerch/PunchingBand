@@ -34,12 +34,12 @@
                 Header="setup"
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
-                    <ComboBox HorizontalAlignment="Center" Margin="126,96,135,0" VerticalAlignment="Top" Width="120" FontFamily="Global User Interface" ItemsSource="{Binding UserModel.Genders, Converter={StaticResource EnumerableEnumTypeConverter}, Mode=OneWay}" SelectedItem="{Binding UserModel.Gender, Converter={StaticResource EnumTypeConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DatePicker HorizontalAlignment="Center" Margin="126,198,146,0" VerticalAlignment="Top" Date="{Binding UserModel.BirthDate, Mode=TwoWay}"/>
-                    <TextBox HorizontalAlignment="Center" Margin="128,309,143,0" TextWrapping="Wrap" Text="{Binding UserModel.Weight, Converter={StaticResource WeightConverter}, ConverterParameter='Lbs', FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Top" Width="110"/>
-                    <TextBlock HorizontalAlignment="Center" Margin="123,76,193,0" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
-                    <TextBlock HorizontalAlignment="Center" Margin="128,178,164,0" TextWrapping="Wrap" Text="Birth Date" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
-                    <TextBlock HorizontalAlignment="Center" Margin="132,279,138,0" TextWrapping="Wrap" Text="Weight" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20" Width="111"/>
+                    <ComboBox HorizontalAlignment="Center" Margin="35,31,226,0" VerticalAlignment="Top" Width="120" FontFamily="Global User Interface" ItemsSource="{Binding UserModel.Genders, Converter={StaticResource EnumerableEnumTypeConverter}, Mode=OneWay}" SelectedItem="{Binding UserModel.Gender, Converter={StaticResource EnumTypeConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DatePicker HorizontalAlignment="Center" Margin="35,133,237,0" VerticalAlignment="Top" Date="{Binding UserModel.BirthDate, Mode=TwoWay}" FontFamily="Global User Interface"/>
+                    <TextBox HorizontalAlignment="Center" Margin="37,244,234,0" TextWrapping="Wrap" Text="{Binding UserModel.Weight, Converter={StaticResource WeightConverter}, ConverterParameter='Lbs', FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Top" Width="110" FontFamily="Global User Interface"/>
+                    <TextBlock HorizontalAlignment="Center" Margin="32,11,284,0" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
+                    <TextBlock HorizontalAlignment="Center" Margin="37,113,255,0" TextWrapping="Wrap" Text="Birth Date" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
+                    <TextBlock HorizontalAlignment="Center" Margin="41,214,229,0" TextWrapping="Wrap" Text="Weight" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20" Width="111"/>
 
                 </Grid>
             </PivotItem>
