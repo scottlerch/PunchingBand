@@ -87,6 +87,5 @@
                 </Grid>
             </PivotItem>
         </Pivot>
-        <TextBlock HorizontalAlignment="Left" Margin="10,606,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.Status}" VerticalAlignment="Top" FontSize="20" Width="381"/>
     </Grid>
 </Page>

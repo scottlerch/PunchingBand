@@ -1,6 +1,7 @@
 ﻿using PunchingBand.Models;
 using PunchingBand.Pages;
 using System;
+using System.ComponentModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
@@ -37,6 +38,24 @@ namespace PunchingBand
             RootModel = new RootModel(InvokeOnUIThread);
         }
 
+        private void UpdateStatus()
+        {
+            var statusText = RootModel.PunchingModel.Status;
+            var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+
+            if (string.IsNullOrWhiteSpace(statusText))
+            {
+                statusBar.HideAsync();
+            }
+            else
+            {
+                statusBar.ProgressIndicator.Text = statusText;
+                statusBar.ProgressIndicator.ProgressValue = null;
+                statusBar.ProgressIndicator.ShowAsync();
+                statusBar.ShowAsync();
+            }
+        }
+
         public new static App Current
         {
             get { return (App)Application.Current; }
@@ -68,6 +87,10 @@ namespace PunchingBand
                 DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+            UpdateStatus();
+
+            RootModel.PunchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -120,6 +143,14 @@ namespace PunchingBand
 
             // Ensure the current window is active
             Window.Current.Activate();
+        }
+
+        private void PunchingModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName == "Status")
+            {
+                InvokeOnUIThread(UpdateStatus);
+            }
         }
 
         /// <summary>
