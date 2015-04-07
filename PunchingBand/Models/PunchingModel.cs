@@ -130,7 +130,7 @@ namespace PunchingBand.Models
             }
             catch (Exception ex)
             {
-                Status = "Error connecting to Band: " + ex.Message;
+                Status = "Error connecting to Band!";
 
                 if (bandClient != null)
                 {

@@ -6,6 +6,7 @@ namespace PunchingBand.Models
 {
     public class GameModel : ModelBase
     {
+        private GameMode gameMode = GameMode.TimeTrial;
         private TimeSpan duration;
         private int punchCount;
         private double punchStrength;
@@ -50,6 +51,12 @@ namespace PunchingBand.Models
                 yield return TimeSpan.FromSeconds(30);
                 yield return TimeSpan.FromSeconds(60);
             }
+        }
+
+        public GameMode GameMode
+        {
+            get { return gameMode; }
+            set { Set("GameMode", ref gameMode, value); }
         }
 
         public TimeSpan Duration

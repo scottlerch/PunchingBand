@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace PunchingBand.Models
 {
@@ -10,6 +11,10 @@ namespace PunchingBand.Models
         private Gender gender;
         private double weight;
         private DateTimeOffset birthDate;
+        private FistSide defaultFistSide;
+        private TemperatureUnit temperatureUnit;
+        private WeightUnit weightUnit;
+        private BandPosition bandPosition;
 
         public UserModel()
         {
@@ -17,6 +22,18 @@ namespace PunchingBand.Models
             gender = Gender.Male;
             weight = 74.8427;
             birthDate = new DateTimeOffset(1982, 1, 15, 0, 0, 0, TimeSpan.Zero);
+            bandPosition = BandPosition.ButtonFacingIn;
+
+            if (RegionInfo.CurrentRegion.IsMetric)
+            {
+                temperatureUnit = TemperatureUnit.Celsius;
+                weightUnit = WeightUnit.Kg;
+            }
+            else
+            {
+                temperatureUnit = TemperatureUnit.Fahrenheit;
+                weightUnit = WeightUnit.Lbs; 
+            }
         }
 
         public IEnumerable<Gender> Genders
@@ -26,6 +43,30 @@ namespace PunchingBand.Models
                 yield return Gender.Male;
                 yield return Gender.Female;
             }
+        }
+
+        public BandPosition BandPosition
+        {
+            get { return bandPosition; }
+            set { Set("BandPosition", ref bandPosition, value); }
+        }
+
+        public FistSide DefaultFistSide
+        {
+            get { return defaultFistSide; }
+            set { Set("DefaultFistSide", ref defaultFistSide, value); }
+        }
+
+        public TemperatureUnit TemperatureUnit
+        {
+            get { return temperatureUnit; }
+            set { Set("TemperatureUnit", ref temperatureUnit, value); }
+        }
+
+        public WeightUnit WeightUnit
+        {
+            get { return weightUnit; }
+            set { Set("WeightUnit", ref weightUnit, value); }
         }
 
         public Gender Gender

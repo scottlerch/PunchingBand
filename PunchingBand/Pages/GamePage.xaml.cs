@@ -16,6 +16,7 @@ namespace PunchingBand.Pages
         private readonly SoundEffect punchSound;
         private readonly SoundEffect beepSound;
         private readonly SoundEffect endBuzzer;
+        private readonly SoundEffect fightBell;
 
         public GamePage()
         {
@@ -27,16 +28,23 @@ namespace PunchingBand.Pages
             NavigationCacheMode = NavigationCacheMode.Required;
 
             var timer = new DispatcherTimer();
-            timer.Tick += TimerOnTick;
+            timer.Tick += GameTimerOnTick;
             timer.Interval = TimeSpan.FromMilliseconds(17);
             timer.Start();
 
             punchSound = new SoundEffect("Assets/punch.wav");
             beepSound = new SoundEffect("Assets/countdownbeep.wav");
             endBuzzer = new SoundEffect("Assets/endbuzzer.wav");
+            fightBell = new SoundEffect("Assets/fightbell.wav");
 
             model.PunchingModel.PunchStarted += PunchingModelOnPunchStarted;
             model.GameModel.PropertyChanged += GameModelOnPropertyChanged;
+
+            countDownUserControl.CountDownFinished += CountDownUserControlOnCountDownFinished;
+            countDownUserControl.Loaded += CountDownUserControlOnLoaded;
+
+            countDownGrid.Visibility = Visibility.Visible;
+            gameGrid.Visibility = Visibility.Collapsed;
         }
 
         private void PunchingModelOnPunchStarted(object sender, EventArgs eventArgs)
@@ -67,11 +75,11 @@ namespace PunchingBand.Pages
                     playButton.Visibility = model.GameModel.Running ? Visibility.Collapsed : Visibility.Visible;
                     if (!model.GameModel.Running)
                     {
-                        endBuzzer.Play(0.4);
+                        endBuzzer.Play(0.3);
                     }
                     break;
                 case "TimeLeftSeconds":
-                    if (model.GameModel.TimeLeftSeconds <= 5 && model.GameModel.TimeLeftSeconds > 0)
+                    if (model.GameModel.TimeLeftSeconds <= 5)
                     {
                         countDownText.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
                         beepSound.Play(0.08);
@@ -99,11 +107,29 @@ namespace PunchingBand.Pages
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
 
-            HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
+            countDownGrid.Visibility = Visibility.Visible;
+            gameGrid.Visibility = Visibility.Collapsed;
 
-            // TODO: add 3, 2, 1 count down before game start
+            HardwareButtons.BackPressed += HardwareButtonsOnBackPressed; 
+        }
 
+        private void CountDownUserControlOnLoaded(object sender, RoutedEventArgs routedEventArgs)
+        {
+            countDownUserControl.Start();
+        }
+
+        private void CountDownUserControlOnCountDownFinished(object sender, EventArgs e)
+        {
+            countDownGrid.Visibility = Visibility.Collapsed;
+            gameGrid.Visibility = Visibility.Visible;
+
+            fightBell.Play(0.1);
             model.GameModel.StartGame();
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            HardwareButtons.BackPressed -= HardwareButtonsOnBackPressed;
         }
 
         private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
@@ -124,12 +150,15 @@ namespace PunchingBand.Pages
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void RestartButtonOnClick(object sender, RoutedEventArgs e)
         {
-            model.GameModel.StartGame();
+            countDownGrid.Visibility = Visibility.Visible;
+            gameGrid.Visibility = Visibility.Collapsed;
+
+            countDownUserControl.Start();
         }
 
-        private void TimerOnTick(object sender, object o)
+        private void GameTimerOnTick(object sender, object o)
         {
             model.GameModel.Update();
         }

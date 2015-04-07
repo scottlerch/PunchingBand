@@ -83,6 +83,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BandPosition.cs" />
+    <Compile Include="FistSide.cs" />
+    <Compile Include="GameMode.cs" />
     <Compile Include="Gender.cs" />
     <Compile Include="Models\HistoryInfo.cs" />
     <Compile Include="Models\HistoryModel.cs" />
@@ -90,6 +93,10 @@
     <Compile Include="Pages\BindingConverters\EnumerableEnumTypeConverter.cs" />
     <Compile Include="Pages\BindingConverters\StringFormatConverter.cs" />
     <Compile Include="Pages\BindingConverters\WeightConverter.cs" />
+    <Compile Include="Pages\UserControls\CountDownUserControl.xaml.cs">
+      <DependentUpon>CountDownUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TemperatureUnit.cs" />
     <Compile Include="Utilities\CalorieCalculator.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Pages\GamePage.xaml.cs">
@@ -117,6 +124,7 @@
   <ItemGroup>
     <Content Include="Assets\countdownbeep.wav" />
     <Content Include="Assets\endbuzzer.wav" />
+    <Content Include="Assets\fightbell.wav" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\punch.wav" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
@@ -137,6 +145,10 @@
     <Page Include="Pages\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\UserControls\CountDownUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -16,10 +16,13 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PunchingBand.App">
-      <m3:VisualElements DisplayName="Punching Band" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="PunchingBand" ForegroundText="light" BackgroundColor="transparent">
+      <m3:VisualElements DisplayName="Punching Band" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Punching Band is a fun fitness game where you can test your punching prowess with two game modes: Time Trial and Endurance.  In Time Trial you trade off speed and power to maximize your score in the time alotted.  In Endurance you punch for as long as you can maximizing your personal best whether it's for calories burned, punching punched, or number of total punches." ForegroundText="light" BackgroundColor="#56318e">
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
         </m3:DefaultTile>
-        <m3:SplashScreen Image="Assets\SplashScreen.png" />
+        <m3:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#56318e" />
+        <m3:InitialRotationPreference>
+          <m3:Rotation Preference="portrait" />
+        </m3:InitialRotationPreference>
       </m3:VisualElements>
     </Application>
   </Applications>
