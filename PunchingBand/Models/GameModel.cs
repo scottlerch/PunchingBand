@@ -1,20 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PunchingBand.Infrastructure;
 
 namespace PunchingBand.Models
 {
     public class GameModel : ModelBase
     {
+        private readonly HistoryModel historyModel;
+        private readonly PunchingModel punchingModel;
+
+        // Game setup
         private GameMode gameMode = GameMode.TimeTrial;
         private TimeSpan duration;
+        private FistSide fistSide;
+
+        // Game state
         private int punchCount;
-        private double punchStrength;
         private int score;
         private TimeSpan timeLeft;
         private int timeLeftSeconds;
         private bool running;
-        private readonly HistoryModel historyModel;
+
+        private Metric punchStrength;
+        private Metric caloriesBurned;
+        private Metric skinTemperature;
 
         public GameModel(PunchingModel punchingModel, HistoryModel historyModel)
         {
@@ -25,6 +35,7 @@ namespace PunchingBand.Models
             punchingModel.PunchStarted += PunchingModelOnPunchStarted;
             punchingModel.PunchEnded += PunchingModelOnPunchEnded;
 
+            this.punchingModel = punchingModel;
             this.historyModel = historyModel;
         }
 
@@ -33,8 +44,10 @@ namespace PunchingBand.Models
             if (Running)
             {
                 PunchCount++;
-                PunchStrength = punchEventArgs.Strength;
                 Score += (int) Math.Round(100.0*punchEventArgs.Strength);
+
+                punchStrength.Update(punchEventArgs.Strength);
+                RaisePropertyChanged("PunchStrength");
             }
         }
 
@@ -59,6 +72,12 @@ namespace PunchingBand.Models
             set { Set("GameMode", ref gameMode, value); }
         }
 
+        public FistSide FistSide
+        {
+            get { return fistSide; }
+            set { Set("FistSide", ref fistSide, value); }
+        }
+
         public TimeSpan Duration
         {
             get { return duration; }
@@ -67,8 +86,7 @@ namespace PunchingBand.Models
 
         public double PunchStrength
         {
-            get { return punchStrength; }
-            set { Set("PunchStrength", ref punchStrength, value); }
+            get { return punchStrength.Last; }
         }
 
         public bool Running
@@ -108,7 +126,11 @@ namespace PunchingBand.Models
             Running = true;
             Score = 0;
             PunchCount = 0;
-            PunchStrength = 0.001;
+
+            punchStrength = new Metric(0.001);
+            caloriesBurned = new Metric();
+            skinTemperature = new Metric();
+
             gameStartTime = DateTime.UtcNow;
         }
 
@@ -126,18 +148,39 @@ namespace PunchingBand.Models
                 var diff = Duration - (DateTime.UtcNow - gameStartTime);
                 if (diff <= TimeSpan.Zero)
                 {
-                    TimeLeft = TimeSpan.Zero;
-                    TimeLeftSeconds = 0;
-                    Running = false;
-
-                    historyModel.Records.Add(new HistoryInfo { Duration = Duration, Score = Score });
+                    EndGame();
                 }
                 else
                 {
                     TimeLeft = diff;
                     TimeLeftSeconds = (int)Math.Ceiling(diff.TotalSeconds);
+                    
+                    caloriesBurned.Update(punchingModel.CalorieCount);
+
+                    if (punchingModel.SkinTemperature.HasValue)
+                    {
+                        skinTemperature.Update(punchingModel.SkinTemperature.Value);
+                    }
                 }
             }
+        }
+
+        private void EndGame()
+        {
+            TimeLeft = TimeSpan.Zero;
+            TimeLeftSeconds = 0;
+            Running = false;
+
+            historyModel.Records.Add(new HistoryInfo
+            {
+                Timestamp = DateTime.UtcNow,
+                PunchStrenth = punchStrength,
+                CaloriesBurned = caloriesBurned,
+                SkinTemperature = skinTemperature,
+                Duration = Duration, 
+                Score = Score,
+                FistSide = FistSide,
+            });
         }
     }
 }
