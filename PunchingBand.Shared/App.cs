@@ -25,7 +25,9 @@ namespace PunchingBand
 
         private CoreDispatcher dispatcher;
 
+#if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
+#endif
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -41,6 +43,8 @@ namespace PunchingBand
         private void UpdateStatus()
         {
             var statusText = RootModel.PunchingModel.Status;
+
+#if WINDOWS_PHONE_APP
             var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
 
             if (string.IsNullOrWhiteSpace(statusText))
@@ -54,6 +58,7 @@ namespace PunchingBand
                 statusBar.ProgressIndicator.ShowAsync();
                 statusBar.ShowAsync();
             }
+#endif
         }
 
         public new static App Current
@@ -101,6 +106,11 @@ namespace PunchingBand
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
 
+#if WINDOWS_APP
+                // Set the default language
+                rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
+#endif
+
                 // TODO: change this value to a cache size that is appropriate for your application
                 rootFrame.CacheSize = 1;
 
@@ -115,6 +125,7 @@ namespace PunchingBand
 
             if (rootFrame.Content == null)
             {
+#if WINDOWS_PHONE_APP
                 // Removes the turnstile navigation for startup.
                 if (rootFrame.ContentTransitions != null)
                 {
@@ -127,6 +138,7 @@ namespace PunchingBand
 
                 rootFrame.ContentTransitions = null;
                 rootFrame.Navigated += RootFrame_FirstNavigated;
+#endif
 
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
@@ -153,6 +165,7 @@ namespace PunchingBand
             }
         }
 
+#if WINDOWS_PHONE_APP
         /// <summary>
         /// Restores the content transitions after the app has launched.
         /// </summary>
@@ -167,6 +180,7 @@ namespace PunchingBand
                 rootFrame.Navigated -= RootFrame_FirstNavigated;
             }
         }
+#endif
 
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved

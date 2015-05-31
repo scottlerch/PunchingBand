@@ -9,6 +9,9 @@
     <Import_RootNamespace>PunchingBand</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.cs">
+     <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)BandPosition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FistSide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameMode.cs" />
@@ -24,6 +27,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\PunchingModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RootModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UserModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\EnumerableEnumTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\EnumTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\FistSideConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\StringFormatConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\WeightConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\GamePage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\MainPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\CountDownUserControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TemperatureUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\CalorieCalculator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchDetector.cs" />
@@ -36,5 +47,11 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\endbuzzer.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\fightbell.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\punch.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
   </ItemGroup>
 </Project>

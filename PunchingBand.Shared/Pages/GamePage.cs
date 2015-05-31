@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+#if WINDOWS_PHONE_APP
 using Windows.Phone.UI.Input;
+#endif
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -110,7 +112,9 @@ namespace PunchingBand.Pages
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
 
+#if WINDOWS_PHONE_APP
             HardwareButtons.BackPressed += HardwareButtonsOnBackPressed; 
+#endif
         }
 
         private void CountDownUserControlOnLoaded(object sender, RoutedEventArgs routedEventArgs)
@@ -129,9 +133,12 @@ namespace PunchingBand.Pages
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+#if WINDOWS_PHONE_APP
             HardwareButtons.BackPressed -= HardwareButtonsOnBackPressed;
+#endif
         }
 
+#if WINDOWS_PHONE_APP
         private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
         {
             model.GameModel.StopGame();
@@ -149,6 +156,7 @@ namespace PunchingBand.Pages
                 backPressedEventArgs.Handled = true;
             }
         }
+#endif
 
         private void RestartButtonOnClick(object sender, RoutedEventArgs e)
         {

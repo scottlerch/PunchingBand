@@ -1,0 +1,72 @@
+﻿<Page
+    x:Class="PunchingBand.Pages.GamePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:PunchingBand.Models"
+    xmlns:bindingConverters1="using:PunchingBand.Pages.BindingConverters"
+    xmlns:userControls="using:PunchingBand.Pages.UserControls"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=models:RootModel, IsDesignTimeCreatable=True}"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <bindingConverters1:StringFormatConverter x:Name="StringFormat"/>
+        <Storyboard x:Name="punchCountStoryboard">
+            <DoubleAnimation
+                                Storyboard.TargetName="punchCountScaleTransform"
+                                Storyboard.TargetProperty="(ScaleTransform.ScaleX)"
+                                To="1.3" From="1.0" Duration="0:0:0.15" AutoReverse="True">
+                <DoubleAnimation.EasingFunction>
+                    <BounceEase Bounces="2" EasingMode="EaseOut" Bounciness="4" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation
+                                Storyboard.TargetName="punchCountScaleTransform"
+                                Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                                To="1.3" From="1.0" Duration="0:0:0.15" AutoReverse="True">
+                <DoubleAnimation.EasingFunction>
+                    <BounceEase Bounces="2" EasingMode="EaseOut" Bounciness="4" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+    </Page.Resources>
+    <Grid>
+        <Grid Visibility="Collapsed" x:Name="countDownGrid">
+            <userControls:CountDownUserControl x:Name="countDownUserControl"></userControls:CountDownUserControl>
+        </Grid>
+        <Grid x:Name="gameGrid">
+            <TextBlock HorizontalAlignment="Center" Margin="9,203,10,230" TextWrapping="Wrap" Text="{Binding GameModel.PunchCount}" VerticalAlignment="Center" Height="207" Width="381" FontSize="200" TextAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                <TextBlock.RenderTransform>
+                    <ScaleTransform x:Name="punchCountScaleTransform" ScaleX="1" ScaleY="1"  />
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            <TextBlock HorizontalAlignment="Left" Margin="75,441,0,0" TextWrapping="Wrap" Text="{Binding GameModel.PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="22" Width="120"/>
+            <TextBlock HorizontalAlignment="Left" Margin="51,40,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Right" Margin="0,10,9,0" TextWrapping="Wrap" Text="°" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Left" Margin="9,40,0,0" TextWrapping="Wrap" Text="HR:" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Left" Margin="329,10,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+            <Rectangle x:Name="strengthMeter" HorizontalAlignment="Center" Height="19" Margin="75,469,76,0" Stroke="Black" VerticalAlignment="Top" Width="249">
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
+                        <GradientStop Color="Red" Offset="0"/>
+                        <GradientStop Color="Yellow" Offset="0.5"/>
+                        <GradientStop Color="Green" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="strengthMeterCover" HorizontalAlignment="Right" Height="19" Margin="0,469,76,0" Stroke="Black" VerticalAlignment="Top" Width="1" Fill="Black" RenderTransformOrigin="0.5,0.5">
+                <Rectangle.RenderTransform>
+                    <CompositeTransform ScaleX="-1"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Button x:Name="playButton" Content="RESTART" HorizontalAlignment="Center" Margin="122,553,122,0" VerticalAlignment="Top" FontSize="24" Height="72" Width="156" Click="RestartButtonOnClick" FontFamily="Global User Interface"/>
+            <TextBlock HorizontalAlignment="Left" Margin="70,139,0,0" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Top" FontSize="40" Foreground="#FFBDBDBD"/>
+            <TextBlock HorizontalAlignment="Left" Margin="164,140,0,0" TextWrapping="Wrap" Text="{Binding GameModel.Score, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0000000}'}" VerticalAlignment="Top" FontSize="40" FontFamily="Consolas"/>
+            <TextBlock x:Name="countDownText" HorizontalAlignment="Center" Margin="104,503,145,0" TextWrapping="Wrap" Text="{Binding GameModel.TimeLeft, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:ss}.{0:ff}'}" VerticalAlignment="Top" FontSize="36" Width="151" RenderTransformOrigin="0.232,0.528" TextAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Left" Margin="9,11,0,0" TextWrapping="Wrap" Text="Calories:" VerticalAlignment="Top" FontSize="24" RenderTransformOrigin="0.488,1.805" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Left" Margin="98,13,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.CalorieCount, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Left" Margin="233,513,0,0" TextWrapping="Wrap" Text="sec." VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+        </Grid>
+    </Grid>
+</Page>

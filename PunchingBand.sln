@@ -7,7 +7,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PunchingBand.Shared", "Punc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PunchingBand.Windows", "PunchingBand.Windows\PunchingBand.Windows.csproj", "{C8E7C3FE-3071-42FE-8AFA-2BD93FD6A5D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PunchingBand.Phone", "PunchingBand.Phone\PunchingBand.Phone.csproj", "{885121F5-37B3-40A4-AF90-E9ACC1C988F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PunchingBand.WindowsPhone", "PunchingBand.WindowsPhone\PunchingBand.WindowsPhone.csproj", "{885121F5-37B3-40A4-AF90-E9ACC1C988F3}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
