@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>cdbed812-5c14-4072-952d-3ebe906d66d1</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PunchingBand</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BandPosition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FistSide.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Metric.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\ObservableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SoundEffect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\GameModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PunchEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PunchingModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RootModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\UserModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TemperatureUnit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\CalorieCalculator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchDetector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WeightUnit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\countdownbeep.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\endbuzzer.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\fightbell.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\punch.wav" />
+  </ItemGroup>
+</Project>
