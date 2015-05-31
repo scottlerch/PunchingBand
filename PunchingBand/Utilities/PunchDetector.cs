@@ -1,10 +1,21 @@
 ﻿using Microsoft.Band.Sensors;
 using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace PunchingBand.Utilities
 {
     internal class PunchDetector
     {
+        private class LogData
+        {
+            public IBandAccelerometerReading Reading { get; set; }
+
+            public PunchInfo PunchInfo { get; set; }
+        }
+
         private readonly TimeSpan fastestPunchInterval = TimeSpan.FromMilliseconds(200);
         private const double punchThreshold = 0.5;
         private const double punchResetThreshold = 0.1;
@@ -19,9 +30,36 @@ namespace PunchingBand.Utilities
 
         private bool punchStarted;
 
+        private BlockingCollection<LogData> logData;
+
         public double LastPunchStrength { get; private set; }
 
-        public bool IsPunchDetected(IBandAccelerometerReading reading, out double? punchStrength)
+        public PunchInfo GetPunchInfo(IBandAccelerometerReading reading)
+        {
+            var status = PunchStatus.Unknown;
+            double? punchStrength;
+
+            if (IsPunchDetected(reading, out punchStrength))
+            {
+                status = PunchStatus.Detected; 
+            }
+            else
+            {
+                if (IsDetectingPunch(reading))
+                {
+                    // We know a punch is occuring but don't know the final strength
+                    status = PunchStatus.Detecting;
+                }
+            }
+
+            var punchInfo = new PunchInfo(status, punchStrength);
+
+            Log(reading, punchInfo);
+
+            return punchInfo;
+        }
+
+        private bool IsPunchDetected(IBandAccelerometerReading reading, out double? punchStrength)
         {
             punchStrength = null;
             bool punchDetected = false;
@@ -67,7 +105,7 @@ namespace PunchingBand.Utilities
             lastPunchTime = DateTime.MinValue;
         }
 
-        internal bool IsDetectingPunch(IBandAccelerometerReading reading)
+        private bool IsDetectingPunch(IBandAccelerometerReading reading)
         {
             if (!punchStarted && readyForPunch)
             {
@@ -79,6 +117,44 @@ namespace PunchingBand.Utilities
             }
 
             return false;
+        }
+
+        private void Log(IBandAccelerometerReading reading, PunchInfo punchInfo)
+        {
+            if (logData != null)
+            {
+                logData.Add(new LogData
+                {
+                    Reading = reading,
+                    PunchInfo = punchInfo,
+                });
+            }
+        }
+
+        public void InitializeLogging()
+        {
+            logData = new BlockingCollection<LogData>();
+
+            Task.Run(async () =>
+            {
+                var local = ApplicationData.Current.LocalFolder;
+                var dataFolder = await local.CreateFolderAsync("LogData", CreationCollisionOption.OpenIfExists);
+                var file = await dataFolder.CreateFileAsync("PunchData.csv", CreationCollisionOption.ReplaceExisting);
+
+                using (var fileStream = await file.OpenStreamForWriteAsync())
+                {
+                    var streamWriter = new StreamWriter(fileStream) {AutoFlush = true};
+
+                    foreach (var data in logData.GetConsumingEnumerable())
+                    {
+                        streamWriter.WriteLine(
+                            "{0:yyyy-MM-dd HH:mm:ss.ffffff},{1},{2}",
+                            data.Reading.Timestamp,
+                            data.Reading.AccelerationX,
+                            data.PunchInfo.Status);
+                    }
+                }
+            });
         }
     }
 }

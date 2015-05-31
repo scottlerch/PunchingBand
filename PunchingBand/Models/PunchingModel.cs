@@ -39,6 +39,10 @@ namespace PunchingBand.Models
         {
             this.userModel = userModel;
             this.invokeOnUiThread = invokeOnUiThread;
+
+#if DEBUG
+            this.punchDetector.InitializeLogging();
+#endif
         }
 
         public int? HeartRate
@@ -108,7 +112,12 @@ namespace PunchingBand.Models
                     bandClient.SensorManager.HeartRate.ReadingChanged += HeartRateOnReadingChanged;
                     bandClient.SensorManager.SkinTemperature.ReadingChanged += SkinTemperatureOnReadingChanged;
 
-                    bandClient.SensorManager.Accelerometer.ReportingInterval = bandClient.SensorManager.Accelerometer.SupportedReportingIntervals.First();
+                    bandClient.SensorManager.Accelerometer.ReportingInterval = bandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
+
+                    if (bandClient.SensorManager.HeartRate.GetCurrentUserConsent() != UserConsent.Granted)
+                    {
+                        await bandClient.SensorManager.HeartRate.RequestUserConsentAsync();
+                    }
 
                     await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
                     await bandClient.SensorManager.Contact.StartReadingsAsync();
@@ -210,27 +219,37 @@ namespace PunchingBand.Models
             });
         }
 
+        private DateTimeOffset previousTimestamp = DateTimeOffset.MinValue;
+
         private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
         {
-            double? lastPunchStrength;
+            // HACK: due to bug in API throw out duplicate timestamps which have all zero values anyway
+            if (!worn || previousTimestamp == bandSensorReadingEventArgs.SensorReading.Timestamp)
+            {
+                return;
+            }
 
-            if (punchDetector.IsPunchDetected(bandSensorReadingEventArgs.SensorReading, out lastPunchStrength))
+            var punchInfo = punchDetector.GetPunchInfo(bandSensorReadingEventArgs.SensorReading);
+
+            if (punchInfo.Status == PunchStatus.Detected)
             {
                 invokeOnUiThread(() =>
                 {
-                    if (lastPunchStrength.HasValue)
+                    if (punchInfo.Strength.HasValue)
                     {
-                        PunchEnded(this, new PunchEventArgs(lastPunchStrength.Value));
+                        PunchEnded(this, new PunchEventArgs(punchInfo.Strength.Value));
                     }
                 });
             }
-            else if (punchDetector.IsDetectingPunch(bandSensorReadingEventArgs.SensorReading))
+            else if (punchInfo.Status == PunchStatus.Detecting)
             {
                 invokeOnUiThread(() =>
                 {
                     PunchStarted(this, new PunchEventArgs(0));
                 });
             }
+
+            previousTimestamp = bandSensorReadingEventArgs.SensorReading.Timestamp;
         }
     }
 }
