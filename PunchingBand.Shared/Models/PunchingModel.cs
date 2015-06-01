@@ -1,4 +1,5 @@
-﻿using Microsoft.Band;
+﻿using System.Threading.Tasks;
+using Microsoft.Band;
 using Microsoft.Band.Sensors;
 using System;
 using System.Linq;
@@ -93,60 +94,81 @@ namespace PunchingBand.Models
             set { Set("Status", ref status, value); }
         }
 
+        private bool connecting = false;
+        private readonly object syncRoot = new object();
 
         public async void Connect()
         {
-            if (Connected) return;
-
-            try
+            lock (syncRoot)
             {
-                var bands = await BandClientManager.Instance.GetBandsAsync();
-
-                if (bands.Length > 0)
+                if (connecting)
                 {
-                    bandClient = await BandClientManager.Instance.ConnectAsync(bands[0]);
+                    return;
+                }
 
-                    bandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
-                    bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
-                    bandClient.SensorManager.Pedometer.ReadingChanged += PedometerOnReadingChanged;
-                    bandClient.SensorManager.HeartRate.ReadingChanged += HeartRateOnReadingChanged;
-                    bandClient.SensorManager.SkinTemperature.ReadingChanged += SkinTemperatureOnReadingChanged;
+                connecting = true;
+            }
 
-                    bandClient.SensorManager.Accelerometer.ReportingInterval = bandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
+            while (!Connected)
+            {
+                try
+                {
+                    var bands = await BandClientManager.Instance.GetBandsAsync();
 
-                    if (bandClient.SensorManager.HeartRate.GetCurrentUserConsent() != UserConsent.Granted)
+                    if (bands.Length > 0)
                     {
-                        await bandClient.SensorManager.HeartRate.RequestUserConsentAsync();
+                        bandClient = await BandClientManager.Instance.ConnectAsync(bands[0]);
+
+                        bandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
+                        bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
+                        bandClient.SensorManager.Pedometer.ReadingChanged += PedometerOnReadingChanged;
+                        bandClient.SensorManager.HeartRate.ReadingChanged += HeartRateOnReadingChanged;
+                        bandClient.SensorManager.SkinTemperature.ReadingChanged += SkinTemperatureOnReadingChanged;
+
+                        bandClient.SensorManager.Accelerometer.ReportingInterval =
+                            bandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
+
+                        if (bandClient.SensorManager.HeartRate.GetCurrentUserConsent() != UserConsent.Granted)
+                        {
+                            await bandClient.SensorManager.HeartRate.RequestUserConsentAsync();
+                        }
+
+                        await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
+                        await bandClient.SensorManager.Contact.StartReadingsAsync();
+                        await bandClient.SensorManager.HeartRate.StartReadingsAsync();
+                        await bandClient.SensorManager.Pedometer.StartReadingsAsync();
+                        await bandClient.SensorManager.SkinTemperature.StartReadingsAsync();
+
+                        Connected = true;
+
+                        if (!Worn)
+                        {
+                            Status = "Band connected!  Please wear...";
+                        }
                     }
-
-                    await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
-                    await bandClient.SensorManager.Contact.StartReadingsAsync();
-                    await bandClient.SensorManager.HeartRate.StartReadingsAsync();
-                    await bandClient.SensorManager.Pedometer.StartReadingsAsync();
-                    await bandClient.SensorManager.SkinTemperature.StartReadingsAsync();
-
-                    Connected = true;
-
-                    if (!Worn)
+                    else
                     {
-                        Status = "Band connected!  Please wear...";
+                        Status = "No Band found!";
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Status = "No Band found!";
+                    Status = "Error connecting to Band!";
+
+                    if (bandClient != null)
+                    {
+                        bandClient.Dispose();
+                        bandClient = null;
+                    }
+                }
+
+                if (!Connected)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
                 }
             }
-            catch (Exception ex)
-            {
-                Status = "Error connecting to Band!";
 
-                if (bandClient != null)
-                {
-                    bandClient.Dispose();
-                    bandClient = null;
-                }
-            }
+            connecting = false;
         }
 
         public void Disconnect()

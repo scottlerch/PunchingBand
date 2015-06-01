@@ -47,12 +47,12 @@
                 </GridView.ItemsPanel>
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Score}" Style="{ThemeResource ListViewItemTextBlockStyle}" />
+                        <TextBlock Text="{Binding Score}" />
                     </DataTemplate>
                 </GridView.ItemTemplate>
                 <GridView.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="Score" Style="{ThemeResource ListViewItemTextBlockStyle}" />
+                        <TextBlock Text="Score" />
                     </DataTemplate>
                 </GridView.HeaderTemplate>
             </GridView>
