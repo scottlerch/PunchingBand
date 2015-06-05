@@ -4,6 +4,7 @@ using Microsoft.Band.Sensors;
 using System;
 using System.Linq;
 using PunchingBand.Utilities;
+using System.Reflection;
 
 namespace PunchingBand.Models
 {
@@ -118,6 +119,11 @@ namespace PunchingBand.Models
                     if (bands.Length > 0)
                     {
                         bandClient = await BandClientManager.Instance.ConnectAsync(bands[0]);
+
+                        Type.GetType("Microsoft.Band.BandClient, Microsoft.Band")
+                            .GetRuntimeFields()
+                            .First(field => field.Name == "currentAppId")
+                            .SetValue(bandClient, Guid.NewGuid());
 
                         bandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
                         bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
