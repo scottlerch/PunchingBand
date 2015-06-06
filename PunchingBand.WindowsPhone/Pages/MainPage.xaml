@@ -5,18 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:PunchingBand.Models"
-    xmlns:bindingConverters1="using:PunchingBand.Pages.BindingConverters"
-    xmlns:local="using:PunchingBand"
+    xmlns:userControls="using:PunchingBand.Pages.UserControls"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=models:RootModel, IsDesignTimeCreatable=True}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.Resources>
-        <bindingConverters1:FistSideConverter x:Key="FistSideConverter"/>
-        <bindingConverters1:WeightConverter x:Key="WeightConverter"/>
-        <bindingConverters1:EnumTypeConverter x:Key="EnumTypeConverter"/>
-        <bindingConverters1:EnumerableEnumTypeConverter x:Key="EnumerableEnumTypeConverter"/>
-        <bindingConverters1:StringFormatConverter x:Name="StringFormat"/>
-    </Page.Resources>
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
@@ -34,14 +26,7 @@
                 Margin="19,14.5,0,0"
                 Header="setup"
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
-                <Grid>
-                    <ComboBox HorizontalAlignment="Center" Margin="35,31,226,0" VerticalAlignment="Top" Width="120" FontFamily="Global User Interface" ItemsSource="{Binding UserModel.Genders, Converter={StaticResource EnumerableEnumTypeConverter}, Mode=OneWay}" SelectedItem="{Binding UserModel.Gender, Converter={StaticResource EnumTypeConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DatePicker HorizontalAlignment="Center" Margin="35,133,237,0" VerticalAlignment="Top" Date="{Binding UserModel.BirthDate, Mode=TwoWay}" FontFamily="Global User Interface"/>
-                    <TextBox InputScope="Number" HorizontalAlignment="Center" Margin="37,244,234,0" TextWrapping="Wrap" Text="{Binding UserModel.Weight, Converter={StaticResource WeightConverter}, ConverterParameter='Lbs', FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Top" Width="110" FontFamily="Global User Interface"/>
-                    <TextBlock HorizontalAlignment="Center" Margin="32,11,284,0" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
-                    <TextBlock HorizontalAlignment="Center" Margin="37,113,255,0" TextWrapping="Wrap" Text="Birth Date" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
-                    <TextBlock HorizontalAlignment="Center" Margin="41,214,229,0" TextWrapping="Wrap" Text="Weight" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20" Width="111"/>
-                </Grid>
+                <userControls:UserSetup DataContext="{Binding UserModel}" ></userControls:UserSetup>
             </PivotItem>
             <!--Pivot item two-->
             <PivotItem
@@ -50,13 +35,7 @@
                 Header="game"
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
-                    <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" Margin="72,151,0,0" VerticalAlignment="Top" OffContent="Left" OnContent="Right" Width="229" FontSize="12" IsOn="{Binding GameModel.FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameModel.GameDurations, Mode=OneWay}" SelectedItem="{Binding GameModel.Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="72,63,0,0" TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Top" FontSize="16">
-                        <TextBlock.Foreground>
-                            <SolidColorBrush Color="#FF909090"/>
-                        </TextBlock.Foreground>
-                    </TextBlock>
+                    <userControls:GameSetup DataContext="{Binding GameModel}"></userControls:GameSetup>
                     <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
                 </Grid>
             </PivotItem>
@@ -65,25 +44,7 @@
                 x:Uid="PivotItem3"
                 Margin="19,14.5,0,0"
                 Header="history">
-                <Grid>
-                    <GridView HorizontalAlignment="Left" Height="440" Margin="23,17,0,0" VerticalAlignment="Top" Width="328" ItemsSource="{Binding HistoryModel.Records}">
-                        <GridView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <ItemsStackPanel Orientation="Vertical" />
-                            </ItemsPanelTemplate>
-                        </GridView.ItemsPanel>
-                        <GridView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Score}" Style="{ThemeResource ListViewItemTextBlockStyle}" />
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                        <GridView.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Score" Style="{ThemeResource ListViewItemTextBlockStyle}" />
-                            </DataTemplate>
-                        </GridView.HeaderTemplate>
-                    </GridView>
-                </Grid>
+                <userControls:HistoryGrid DataContext="{Binding HistoryModel}"></userControls:HistoryGrid>
             </PivotItem>
         </Pivot>
     </Grid>

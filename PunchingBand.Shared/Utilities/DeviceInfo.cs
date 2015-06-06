@@ -12,9 +12,11 @@ namespace PunchingBand.Utilities
                 return dimension;
             }
 
+#if WINDOWS_PHONE_APP
+            return Math.Round(dimension * DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel);
+#else 
             double toReturn;
             var scale = DisplayInformation.GetForCurrentView().ResolutionScale;
-
             switch (scale)
             {
                 case ResolutionScale.Scale100Percent:
@@ -44,6 +46,7 @@ namespace PunchingBand.Utilities
             }
 
             return Math.Round(toReturn);
+#endif
         }
     }
 }

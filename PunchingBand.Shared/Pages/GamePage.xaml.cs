@@ -2,9 +2,9 @@
 using System.ComponentModel;
 #if WINDOWS_PHONE_APP
 using Windows.Phone.UI.Input;
+using Windows.UI.Xaml.Controls;
 #endif
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using PunchingBand.Infrastructure;

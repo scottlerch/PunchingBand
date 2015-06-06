@@ -4,62 +4,35 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:PunchingBand.Models"
-    xmlns:local="using:PunchingBand"
-    xmlns:bindingConverters="using:PunchingBand.Pages.BindingConverters"
+    xmlns:userControls="using:PunchingBand.Pages.UserControls"
+    xmlns:models1="using:PunchingBand.Models"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=models:RootModel, IsDesignTimeCreatable=True}"
+    d:DataContext="{d:DesignInstance Type=models1:RootModel, IsDesignTimeCreatable=True}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.Resources>
-        <bindingConverters:FistSideConverter x:Key="FistSideConverter"/>
-        <bindingConverters:WeightConverter x:Key="WeightConverter"/>
-        <bindingConverters:EnumTypeConverter x:Key="EnumTypeConverter"/>
-        <bindingConverters:EnumerableEnumTypeConverter x:Key="EnumerableEnumTypeConverter"/>
-        <bindingConverters:StringFormatConverter x:Name="StringFormat"/>
-    </Page.Resources>
     <Page.Transitions>
         <TransitionCollection>
         </TransitionCollection>
     </Page.Transitions>
-    <Grid>
-        <!--
-        <Grid>
-            <DatePicker HorizontalAlignment="Center" Margin="35,133,237,0" VerticalAlignment="Top" Date="{Binding UserModel.BirthDate, Mode=TwoWay}" FontFamily="Global User Interface"/>
-            <TextBox InputScope="Number" HorizontalAlignment="Center" Margin="37,244,234,0" TextWrapping="Wrap" Text="{Binding UserModel.Weight, Converter={StaticResource WeightConverter}, ConverterParameter='Lbs', FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Top" Width="110" FontFamily="Global User Interface"/>
-            <TextBlock HorizontalAlignment="Center" Margin="32,11,284,0" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
-            <TextBlock HorizontalAlignment="Center" Margin="37,113,255,0" TextWrapping="Wrap" Text="Birth Date" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20"/>
-            <TextBlock HorizontalAlignment="Center" Margin="41,214,229,0" TextWrapping="Wrap" Text="Weight" VerticalAlignment="Top" Foreground="#FF909090" FontSize="20" Width="111"/>
-        </Grid>
-        -->
-        <Grid>
-            <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" Margin="72,151,0,0" VerticalAlignment="Top" OffContent="Left" OnContent="Right" Width="229" FontSize="12" IsOn="{Binding GameModel.FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock HorizontalAlignment="Left" Margin="72,63,0,0" TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Top" FontSize="16">
-                <TextBlock.Foreground>
-                    <SolidColorBrush Color="#FF909090"/>
-                </TextBlock.Foreground>
-            </TextBlock>
-            <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
-        </Grid>
-        <!--
-        <Grid>
-            <GridView HorizontalAlignment="Left" Height="440" Margin="784,29,0,0" VerticalAlignment="Top" Width="328" ItemsSource="{Binding HistoryModel.Records}">
-                <GridView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <ItemsStackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </GridView.ItemsPanel>
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Score}" />
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-                <GridView.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Score" />
-                    </DataTemplate>
-                </GridView.HeaderTemplate>
-            </GridView>
-        </Grid>
-        -->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Hub Header="PUNCHING BAND">
+            <HubSection Header="setup">
+                <DataTemplate>
+                    <userControls:UserSetup DataContext="{Binding UserModel}"></userControls:UserSetup>
+                </DataTemplate>
+            </HubSection>
+            <HubSection Header="game">
+                <DataTemplate>
+                    <Grid>
+                        <userControls:GameSetup DataContext="{Binding GameModel}"></userControls:GameSetup>
+                        <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
+                    </Grid>
+                </DataTemplate>
+            </HubSection>
+            <HubSection Header="history">
+                <DataTemplate>
+                    <userControls:HistoryGrid DataContext="{Binding HistoryModel}"></userControls:HistoryGrid>
+                </DataTemplate>
+            </HubSection>
+        </Hub>
     </Grid>
 </Page>

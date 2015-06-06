@@ -33,7 +33,7 @@
     </Page.Resources>
     <Grid>
         <Grid Visibility="Collapsed" x:Name="countDownGrid">
-            <userControls:CountDownUserControl x:Name="countDownUserControl"></userControls:CountDownUserControl>
+            <userControls:CountDown x:Name="countDownUserControl"></userControls:CountDown>
         </Grid>
         <Grid x:Name="gameGrid">
             <TextBlock HorizontalAlignment="Center" Margin="9,203,10,230" TextWrapping="Wrap" Text="{Binding GameModel.PunchCount}" VerticalAlignment="Center" Height="207" Width="381" FontSize="200" TextAlignment="Center" RenderTransformOrigin="0.5,0.5">

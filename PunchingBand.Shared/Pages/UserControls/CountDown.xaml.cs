@@ -2,19 +2,18 @@
 using System;
 using System.ComponentModel;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace PunchingBand.Pages.UserControls
 {
-    public sealed partial class CountDownUserControl : UserControl, INotifyPropertyChanged
+    public sealed partial class CountDown : INotifyPropertyChanged
     {
-        private DispatcherTimer timer;
-        private SoundEffect beepSound;
+        private readonly DispatcherTimer timer;
+        private readonly SoundEffect beepSound;
         private int count = 3;
 
-        public CountDownUserControl()
+        public CountDown()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {

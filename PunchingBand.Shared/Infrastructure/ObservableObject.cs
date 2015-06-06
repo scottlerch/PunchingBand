@@ -12,13 +12,11 @@ namespace PunchingBand.Infrastructure
             {
                 return false;
             }
-            else
-            {
-                property = value;
-                RaisePropertyChanged(name);
 
-                return true;
-            }
+            property = value;
+            RaisePropertyChanged(name);
+
+            return true;
         }
 
         protected void RaisePropertyChanged(string name)

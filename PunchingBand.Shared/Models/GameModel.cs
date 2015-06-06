@@ -26,6 +26,18 @@ namespace PunchingBand.Models
         private Metric caloriesBurned;
         private Metric skinTemperature;
 
+        public GameModel()
+        {
+            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            {
+                throw new InvalidOperationException("Parameterless constructor can only be called by designer");
+            }
+
+            duration = GameDurations.First();
+            timeLeft = duration;
+            timeLeftSeconds = (int)duration.TotalSeconds;
+        }
+
         public GameModel(PunchingModel punchingModel, HistoryModel historyModel)
         {
             duration = GameDurations.First();

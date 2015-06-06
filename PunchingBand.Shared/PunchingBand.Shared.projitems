@@ -38,10 +38,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\MainPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\ResponsivePage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\CountDownUserControl.cs">
-      <DependentUpon>CountDownUserControl.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\CountDown.xaml.cs">
+      <DependentUpon>CountDown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\GameSetup.xaml.cs">
+      <DependentUpon>GameSetup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\HistoryGrid.xaml.cs">
+      <DependentUpon>HistoryGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\UserSetup.xaml.cs">
+      <DependentUpon>UserSetup.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)TemperatureUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\CalorieCalculator.cs" />
@@ -72,7 +80,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Pages\UserControls\CountDownUserControl.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Pages\UserControls\CountDown.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Pages\UserControls\GameSetup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Pages\UserControls\HistoryGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Pages\UserControls\UserSetup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,5 +1,4 @@
-﻿using PunchingBand.Models;
-using System;
+﻿using System;
 
 namespace PunchingBand.Utilities
 {

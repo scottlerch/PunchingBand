@@ -7,8 +7,12 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+#if WINDOWS_PHONE_APP
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+#else
+using Windows.UI.Notifications;
+#endif
 
 namespace PunchingBand
 {
@@ -58,6 +62,12 @@ namespace PunchingBand
                 statusBar.ProgressIndicator.ShowAsync();
                 statusBar.ShowAsync();
             }
+#else
+            var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText01);
+            var toastTextElements = toastXml.GetElementsByTagName("text");
+            toastTextElements[0].AppendChild(toastXml.CreateTextNode(statusText));
+            var toast = new ToastNotification(toastXml);
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
 #endif
         }
 
@@ -97,7 +107,7 @@ namespace PunchingBand
 
             RootModel.PunchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
 
-            Frame rootFrame = Window.Current.Content as Frame;
+            var rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active

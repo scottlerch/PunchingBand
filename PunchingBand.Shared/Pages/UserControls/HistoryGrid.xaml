@@ -1,0 +1,31 @@
+﻿<UserControl
+    x:Class="PunchingBand.Pages.UserControls.HistoryGrid"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:PunchingBand.Models"
+    d:DataContext="{d:DesignInstance Type=models:HistoryModel, IsDesignTimeCreatable=True}"
+    mc:Ignorable="d"
+    d:DesignHeight="464"
+    d:DesignWidth="400">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <GridView HorizontalAlignment="Left" Height="440" Margin="23,17,0,0" VerticalAlignment="Top" Width="328" ItemsSource="{Binding Records}">
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Score}" Style="{ThemeResource SubheaderTextBlockStyle}" />
+                </DataTemplate>
+            </GridView.ItemTemplate>
+            <GridView.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="Score" Style="{ThemeResource HeaderTextBlockStyle}" />
+                </DataTemplate>
+            </GridView.HeaderTemplate>
+        </GridView>
+    </Grid>
+</UserControl>

@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Band;
+﻿using Microsoft.Band;
 using Microsoft.Band.Sensors;
+using PunchingBand.Utilities;
 using System;
 using System.Linq;
-using PunchingBand.Utilities;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace PunchingBand.Models
 {
@@ -43,7 +43,7 @@ namespace PunchingBand.Models
             this.invokeOnUiThread = invokeOnUiThread;
 
 #if DEBUG
-            this.punchDetector.InitializeLogging();
+            punchDetector.InitializeLogging();
 #endif
         }
 
@@ -95,7 +95,7 @@ namespace PunchingBand.Models
             set { Set("Status", ref status, value); }
         }
 
-        private bool connecting = false;
+        private bool connecting;
         private readonly object syncRoot = new object();
 
         public async void Connect()
@@ -157,7 +157,7 @@ namespace PunchingBand.Models
                         Status = "No Band found!";
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Status = "Error connecting to Band!";
 

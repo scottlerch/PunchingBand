@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="PunchingBand.Pages.UserControls.CountDownUserControl"
+    x:Class="PunchingBand.Pages.UserControls.CountDown"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PunchingBand.Pages.UserControls"
@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     d:DesignHeight="400"
     d:DesignWidth="300"
-    d:DataContext="{d:DesignInstance Type=local:CountDownUserControl, IsDesignTimeCreatable=True}"
+    d:DataContext="{d:DesignInstance Type=local:CountDown, IsDesignTimeCreatable=True}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <UserControl.Resources>
         <Storyboard x:Name="CountDownStoryboard">
@@ -29,7 +29,7 @@
             </DoubleAnimation>
         </Storyboard>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBlock Name="CountDownTextBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Count}" VerticalAlignment="Center" FontSize="400" RenderTransformOrigin="0.5,0.5">
             <TextBlock.RenderTransform>
                 <ScaleTransform x:Name="countDownScaleTransform" ScaleX="1" ScaleY="1"  />
