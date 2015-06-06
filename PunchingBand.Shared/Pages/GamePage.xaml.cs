@@ -66,7 +66,6 @@ namespace PunchingBand.Pages
                 case "PunchCount":
                     break;
                 case "PunchStrength":
-                    strengthMeterCover.Width = (1.0 - model.GameModel.PunchStrength) * (strengthMeter.Width - 10);
                     if (model.GameModel.Running)
                     {
                         // NOTE: already played in ModelOnPunchStarted
