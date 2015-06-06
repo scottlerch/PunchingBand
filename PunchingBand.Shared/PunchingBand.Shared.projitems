@@ -32,15 +32,20 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\FistSideConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\StringFormatConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\WeightConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\GamePage.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Pages\MainPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\ResponsivePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\CountDownUserControl.cs">
       <DependentUpon>CountDownUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)TemperatureUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\CalorieCalculator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\DeviceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchStatus.cs" />
@@ -60,6 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Pages\GamePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Pages\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
