@@ -5,27 +5,40 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:PunchingBand.Models"
+    xmlns:bindingConverters="using:PunchingBand.Pages.BindingConverters"
     d:DataContext="{d:DesignInstance Type=models:HistoryModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d"
     d:DesignHeight="464"
     d:DesignWidth="400">
+    <UserControl.Resources>
+        <bindingConverters:StringFormatConverter x:Key="StringFormat"/>
+    </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <GridView HorizontalAlignment="Left" Height="440" Margin="23,17,0,0" VerticalAlignment="Top" Width="328" ItemsSource="{Binding Records}">
-            <GridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsStackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </GridView.ItemsPanel>
-            <GridView.ItemTemplate>
+        <ListView ItemsSource="{Binding SortedRecords}" HorizontalAlignment="Center" SelectionMode="None">
+            <ListView.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Score}" Style="{ThemeResource SubheaderTextBlockStyle}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Score" Grid.Column="0" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Text="Date" Grid.Column="1" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
+                    </Grid>
                 </DataTemplate>
-            </GridView.ItemTemplate>
-            <GridView.HeaderTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="Score" Style="{ThemeResource HeaderTextBlockStyle}" />
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Score}" Grid.Column="0" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Text="{Binding Timestamp, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:yyyy/MM/dd}'}" Grid.Column="1" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                    </Grid>
                 </DataTemplate>
-            </GridView.HeaderTemplate>
-        </GridView>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>
