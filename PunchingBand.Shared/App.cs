@@ -1,4 +1,5 @@
-﻿using PunchingBand.Models;
+﻿using System.Linq;
+using PunchingBand.Models;
 using PunchingBand.Pages;
 using System;
 using System.ComponentModel;
@@ -70,6 +71,10 @@ namespace PunchingBand
             ToastNotificationManager.CreateToastNotifier().Show(toast);
 #endif
         }
+
+#if WINDOWS_PHONE_APP
+        public FileOpenPickerContinuationEventArgs FilePickerContinuationArgs { get; set; }
+#endif
 
         public new static App Current
         {
@@ -211,6 +216,19 @@ namespace PunchingBand
 
         protected override void OnActivated(IActivatedEventArgs e)
         {
+#if WINDOWS_PHONE_APP
+            var filePickerContinuationArgs = e as FileOpenPickerContinuationEventArgs;
+            if (filePickerContinuationArgs != null)
+            {
+                FilePickerContinuationArgs = filePickerContinuationArgs;
+
+                // HACK: this doesn't belong here, should be on page that actually cares about it
+                if (FilePickerContinuationArgs != null && (string)FilePickerContinuationArgs.ContinuationData["Operation"] == "UpdateGameSong")
+                {
+                    RootModel.GameModel.Song = FilePickerContinuationArgs.Files.FirstOrDefault();
+                }
+            }
+#endif
             RootModel.PunchingModel.Connect();
 
             if (Activated != null)

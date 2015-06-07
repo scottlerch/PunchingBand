@@ -30,7 +30,6 @@ namespace PunchingBand.Pages
             // this event is handled for you.
         }
 
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(GamePage));

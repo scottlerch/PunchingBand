@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using PunchingBand.Infrastructure;
 using PunchingBand.Models;
+using Windows.Storage;
 
 namespace PunchingBand.Pages
 {
@@ -121,13 +122,20 @@ namespace PunchingBand.Pages
             countDownUserControl.Start();
         }
 
-        private void CountDownUserControlOnCountDownFinished(object sender, EventArgs e)
+        private async void CountDownUserControlOnCountDownFinished(object sender, EventArgs e)
         {
             countDownGrid.Visibility = Visibility.Collapsed;
             gameGrid.Visibility = Visibility.Visible;
 
             fightBell.Play(0.1);
             model.GameModel.StartGame();
+
+            if (model.GameModel.Song != null)
+            {
+                var stream = await model.GameModel.Song.OpenAsync(FileAccessMode.Read);
+                SongMedia.SetSource(stream, model.GameModel.Song.ContentType);
+                SongMedia.Play();
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -159,6 +167,11 @@ namespace PunchingBand.Pages
 
         private void RestartButtonOnClick(object sender, RoutedEventArgs e)
         {
+            if (SongMedia.CurrentState == MediaElementState.Playing)
+            {
+                SongMedia.Stop();
+            }
+
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
 

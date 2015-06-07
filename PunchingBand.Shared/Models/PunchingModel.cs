@@ -100,6 +100,10 @@ namespace PunchingBand.Models
 
         public async void Connect()
         {
+#if MOCK_BAND
+            Connected = true;
+            Worn = true;
+#else
             lock (syncRoot)
             {
                 if (connecting)
@@ -175,6 +179,7 @@ namespace PunchingBand.Models
             }
 
             connecting = false;
+#endif
         }
 
         public void Disconnect()

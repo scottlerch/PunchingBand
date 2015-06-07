@@ -12,13 +12,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)BandPosition.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)FistSide.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Gender.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Metric.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\NavigationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\ObservableDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\ObservableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SoundEffect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SuspensionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\BandPosition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\FistSide.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\GameMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\Gender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\TemperatureUnit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\WeightUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\GameModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryModel.cs" />
@@ -51,13 +57,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\UserSetup.xaml.cs">
       <DependentUpon>UserSetup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)TemperatureUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\CalorieCalculator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\DeviceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchStatus.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WeightUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Assets\countdownbeep.wav" />
@@ -93,6 +97,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)Pages\UserControls\UserSetup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

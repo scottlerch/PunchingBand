@@ -23,6 +23,8 @@
   <Capabilities>
     <Capability Name="privateNetworkClientServer" />
     <Capability Name="internetClientServer" />
+    <Capability Name="musicLibrary" />
+    <Capability Name="removableStorage" />
     <DeviceCapability Name="proximity" />
     <DeviceCapability Name="bluetooth.rfcomm" xmlns="http://schemas.microsoft.com/appx/2013/manifest">
       <Device Id="any">

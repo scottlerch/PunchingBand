@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Storage;
 using PunchingBand.Infrastructure;
 
 namespace PunchingBand.Models
@@ -25,6 +26,8 @@ namespace PunchingBand.Models
         private Metric punchStrength;
         private Metric caloriesBurned;
         private Metric skinTemperature;
+
+        private StorageFile song;
 
         public GameModel()
         {
@@ -76,6 +79,12 @@ namespace PunchingBand.Models
                 yield return TimeSpan.FromSeconds(30);
                 yield return TimeSpan.FromSeconds(60);
             }
+        }
+
+        public StorageFile Song
+        {
+            get { return song; }
+            set { Set("Song", ref song, value); }
         }
 
         public GameMode GameMode
