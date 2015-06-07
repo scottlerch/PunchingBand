@@ -63,6 +63,7 @@ namespace PunchingBand.Models
 
                 punchStrength.Update(punchEventArgs.Strength);
                 RaisePropertyChanged("PunchStrength");
+                RaisePropertyChanged("InversePunchStrength");
             }
         }
 
@@ -108,6 +109,11 @@ namespace PunchingBand.Models
         public double PunchStrength
         {
             get { return punchStrength.Last; }
+        }
+
+        public double InversePunchStrength
+        {
+            get { return 1.0 - punchStrength.Last; }
         }
 
         public bool Running

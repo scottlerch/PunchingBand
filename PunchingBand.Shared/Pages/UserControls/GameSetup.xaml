@@ -6,17 +6,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:PunchingBand.Models"
-    xmlns:bindingConverters1="using:PunchingBand.Pages.BindingConverters"
+    xmlns:bindingConverters="using:PunchingBand.Pages.BindingConverters"
     d:DataContext="{d:DesignInstance Type=models:GameModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d"
     d:DesignWidth="350" Height="350">
     <UserControl.Resources>
-        <bindingConverters1:FistSideConverter x:Key="FistSideConverter"/>
+        <bindingConverters:FistSideConverter x:Key="FistSideConverter"/>
+        <bindingConverters:EnumerableTimeSpanTypeConverter x:Key="EnumerableTimeSpanConverter"/>
+        <bindingConverters:TimeSpanTypeConverter x:Key="TimeSpanConverter"/>
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Punching Session Duration" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
-            <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=OneWay}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=OneWay, Converter={StaticResource EnumerableTimeSpanConverter}}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeSpanConverter}}"/>
             <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Music Selection" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
             <Button  Margin="0,0,0,30" x:Name="SongButton" HorizontalAlignment="Left" VerticalAlignment="Center" Width="229" HorizontalContentAlignment="Left" Tapped="Button_Tapped" Content="{Binding Song.DisplayName, FallbackValue=None, Mode=OneWay, TargetNullValue=None}"></Button>
             <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" VerticalAlignment="Center" OffContent="Left" OnContent="Right" Width="229" FontSize="12" IsOn="{Binding FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

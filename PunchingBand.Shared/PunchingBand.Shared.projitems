@@ -34,9 +34,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\RootModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UserModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\EnumerableEnumTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\EnumerableTimeSpanTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\EnumTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\FistSideConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\StringFormatConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\TimeSpanTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\WeightConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
