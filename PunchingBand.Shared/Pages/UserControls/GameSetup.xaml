@@ -9,18 +9,19 @@
     xmlns:bindingConverters1="using:PunchingBand.Pages.BindingConverters"
     d:DataContext="{d:DesignInstance Type=models:GameModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d"
-    d:DesignHeight="451.365"
-    d:DesignWidth="400">
+    d:DesignWidth="400" Height="250">
     <UserControl.Resources>
         <bindingConverters1:FistSideConverter x:Key="FistSideConverter"/>
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" Margin="72,151,0,0" VerticalAlignment="Top" OffContent="Left" OnContent="Right" Width="229" FontSize="12" IsOn="{Binding FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <ComboBox HorizontalAlignment="Left" Margin="70,82,0,0" VerticalAlignment="Top" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=OneWay}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock HorizontalAlignment="Left" Margin="72,63,0,0" TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Top" FontSize="16">
-            <TextBlock.Foreground>
-                <SolidColorBrush Color="#FF909090"/>
-            </TextBlock.Foreground>
-        </TextBlock>
+        <StackPanel Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" Text="Punching Session Duration" VerticalAlignment="Center" FontSize="16">
+                    <TextBlock.Foreground>
+                        <SolidColorBrush Color="#FF909090"/>
+                    </TextBlock.Foreground>
+                </TextBlock>
+            <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=OneWay}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" VerticalAlignment="Center" OffContent="Left" OnContent="Right" Width="229" FontSize="12" IsOn="{Binding FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

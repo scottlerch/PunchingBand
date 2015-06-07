@@ -35,8 +35,8 @@
                 Header="game"
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
-                    <userControls:GameSetup DataContext="{Binding GameModel}"></userControls:GameSetup>
-                    <Button Content="FIGHT!" HorizontalAlignment="Left" Margin="109,324,0,0" VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
+                    <userControls:GameSetup VerticalAlignment="Top" DataContext="{Binding GameModel}"></userControls:GameSetup>
+                    <Button Content="FIGHT!" Margin="0,0,0,70" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
                 </Grid>
             </PivotItem>
             <!--Pivot item three-->
