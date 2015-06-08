@@ -69,6 +69,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\countdownbeep.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\endbuzzer.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\fightbell.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\powerpunch.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\punch.wav" />
   </ItemGroup>
   <ItemGroup>

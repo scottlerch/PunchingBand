@@ -11,6 +11,8 @@ namespace PunchingBand.Models
         private readonly HistoryModel historyModel;
         private readonly PunchingModel punchingModel;
 
+        private readonly TimeSpan speedComboInterval = TimeSpan.FromMilliseconds(250);
+
         // Game setup
         private GameMode gameMode = GameMode.TimeTrial;
         private TimeSpan duration;
@@ -23,6 +25,13 @@ namespace PunchingBand.Models
         private int timeLeftSeconds;
         private bool running;
 
+        // Combo trackers
+        private int speedComboCount;
+        private int powerComboCount;
+        private DateTime lastPunchTime = DateTime.MinValue;
+        private double lastPunchStrength = 0.0;
+
+        // Game performance metrics
         private Metric punchStrength;
         private Metric caloriesBurned;
         private Metric skinTemperature;
@@ -59,12 +68,42 @@ namespace PunchingBand.Models
             if (Running)
             {
                 PunchCount++;
+
+                // TODO: incorporate combos into score?
                 Score += (int) Math.Round(100.0*punchEventArgs.Strength);
 
                 punchStrength.Update(punchEventArgs.Strength);
                 RaisePropertyChanged("PunchStrength");
                 RaisePropertyChanged("InversePunchStrength");
+
+                UpdateCombos(punchEventArgs);
             }
+        }
+
+        private void UpdateCombos(PunchEventArgs punchEventArgs)
+        {
+            var punchTime = DateTime.UtcNow;
+
+            if (punchTime - lastPunchTime < speedComboInterval)
+            {
+                SpeedComboCount++;
+            }
+            else
+            {
+                SpeedComboCount = 0;
+            }
+
+            if (punchEventArgs.Strength == 1.0 && lastPunchStrength == 1.0)
+            {
+                PowerComboCount++;
+            }
+            else
+            {
+                PowerComboCount = 0;
+            }
+
+            lastPunchStrength = punchEventArgs.Strength;
+            lastPunchTime = punchTime;
         }
 
         private void PunchingModelOnPunchStarted(object sender, PunchEventArgs punchEventArgs)
@@ -146,6 +185,18 @@ namespace PunchingBand.Models
             set { Set("PunchCount", ref punchCount, value); }
         }
 
+        public int SpeedComboCount
+        {
+            get { return speedComboCount; }
+            set { Set("SpeedComboCount", ref speedComboCount, value); }
+        }
+
+        public int PowerComboCount
+        {
+            get { return powerComboCount; }
+            set { Set("PowerComboCount", ref powerComboCount, value); }
+        }
+
         internal void StartGame()
         {
             TimeLeft = Duration;
@@ -153,6 +204,8 @@ namespace PunchingBand.Models
             Running = true;
             Score = 0;
             PunchCount = 0;
+            SpeedComboCount = 0;
+            PowerComboCount = 0;
 
             punchStrength = new Metric(0.001);
             caloriesBurned = new Metric();

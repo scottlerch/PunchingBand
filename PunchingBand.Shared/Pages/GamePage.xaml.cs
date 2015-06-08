@@ -16,6 +16,7 @@ namespace PunchingBand.Pages
     public sealed partial class GamePage
     {
         private readonly RootModel model;
+        private readonly SoundEffect powerPunchSound;
         private readonly SoundEffect punchSound;
         private readonly SoundEffect beepSound;
         private readonly SoundEffect endBuzzer;
@@ -36,6 +37,7 @@ namespace PunchingBand.Pages
             timer.Start();
 
             punchSound = new SoundEffect("Assets/punch.wav");
+            powerPunchSound = new SoundEffect("Assets/powerpunch.wav");
             beepSound = new SoundEffect("Assets/countdownbeep.wav");
             endBuzzer = new SoundEffect("Assets/endbuzzer.wav");
             fightBell = new SoundEffect("Assets/fightbell.wav");
@@ -71,6 +73,11 @@ namespace PunchingBand.Pages
                     {
                         // NOTE: already played in ModelOnPunchStarted
                         //punchSound.Play(model.PunchStrength);
+
+                        if (model.GameModel.PunchStrength == 1.0)
+                        {
+                            powerPunchSound.Play(1);
+                        }
                     }
                     break;
                 case "Running":
