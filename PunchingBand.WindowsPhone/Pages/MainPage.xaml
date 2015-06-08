@@ -26,7 +26,7 @@
                 Margin="19,14.5,0,0"
                 Header="setup"
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
-                <userControls:UserSetup DataContext="{Binding UserModel}" ></userControls:UserSetup>
+                <userControls:UserSetup Margin="20,0,0,0" HorizontalAlignment="Left" DataContext="{Binding UserModel}" ></userControls:UserSetup>
             </PivotItem>
             <!--Pivot item two-->
             <PivotItem
@@ -35,7 +35,7 @@
                 Header="game"
                 CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
-                    <userControls:GameSetup VerticalAlignment="Top" DataContext="{Binding GameModel}"></userControls:GameSetup>
+                    <userControls:GameSetup HorizontalAlignment="Center" VerticalAlignment="Top" DataContext="{Binding GameModel}"></userControls:GameSetup>
                     <Button Content="FIGHT!" Margin="0,0,0,30" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
                 </Grid>
             </PivotItem>
@@ -44,7 +44,7 @@
                 x:Uid="PivotItem3"
                 Margin="19,14.5,0,0"
                 Header="history">
-                <userControls:HistoryGrid DataContext="{Binding HistoryModel}"></userControls:HistoryGrid>
+                <userControls:HistoryGrid Margin="20,0,0,0" DataContext="{Binding HistoryModel}"></userControls:HistoryGrid>
             </PivotItem>
         </Pivot>
     </Grid>

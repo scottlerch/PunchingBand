@@ -16,7 +16,7 @@
         <bindingConverters:TimeSpanTypeConverter x:Key="TimeSpanConverter"/>
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel>
             <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Punching Session Duration" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
             <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=OneWay, Converter={StaticResource EnumerableTimeSpanConverter}}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeSpanConverter}}"/>
             <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Music Selection" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>

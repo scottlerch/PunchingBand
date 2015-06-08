@@ -16,7 +16,7 @@ namespace PunchingBand.Utilities
             public PunchInfo PunchInfo { get; set; }
         }
 
-        private readonly TimeSpan fastestPunchInterval = TimeSpan.FromMilliseconds(100);
+        private readonly TimeSpan fastestPunchInterval = TimeSpan.FromMilliseconds(200);
         private const double punchThreshold = 0.5;
         private const double punchResetThreshold = 0.1;
         private const double maximumAcceleration = 8.0;

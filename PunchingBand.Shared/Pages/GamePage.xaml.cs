@@ -74,7 +74,7 @@ namespace PunchingBand.Pages
                         // NOTE: already played in ModelOnPunchStarted
                         //punchSound.Play(model.PunchStrength);
 
-                        if (model.GameModel.PunchStrength == 1.0)
+                        if (1.0 - model.GameModel.PunchStrength < 0.001)
                         {
                             powerPunchSound.Play(1);
                         }

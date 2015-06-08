@@ -14,7 +14,7 @@
         <bindingConverters:StringFormatConverter x:Key="StringFormat"/>
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView ItemsSource="{Binding SortedRecords}" HorizontalAlignment="Center" SelectionMode="None" Margin="10">
+        <ListView ItemsSource="{Binding SortedRecords}" SelectionMode="None">
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <Grid>

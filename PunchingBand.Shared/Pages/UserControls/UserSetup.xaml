@@ -16,7 +16,7 @@
         <bindingConverters1:EnumerableEnumTypeConverter x:Key="EnumerableEnumTypeConverter"/>
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Center" Foreground="#FF909090" FontSize="20"/>
             <ComboBox Margin="0,0,0,30" HorizontalAlignment="Left" VerticalAlignment="Center" Width="120" FontFamily="Global User Interface" ItemsSource="{Binding Genders, Converter={StaticResource EnumerableEnumTypeConverter}, Mode=OneWay}" SelectedItem="{Binding Gender, Converter={StaticResource EnumTypeConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Birth Date" VerticalAlignment="Center" Foreground="#FF909090" FontSize="20" Width="{Binding Width, ElementName=BirthDatePicker}"/>

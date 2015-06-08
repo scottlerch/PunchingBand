@@ -37,7 +37,7 @@ namespace PunchingBand.Models
 
                 Set("Records", ref records, value);
 
-                SortedRecords = new ObservableCollection<HistoryInfo>(records.OrderBy(r => r.Score));
+                SortedRecords = new ObservableCollection<HistoryInfo>(records.OrderByDescending(r => r.Score));
                 records.CollectionChanged += RecordsOnCollectionChanged;
             }
         }
