@@ -29,6 +29,7 @@ namespace PunchingBand.Models
         private readonly Action<Action> invokeOnUiThread;
 
         public event EventHandler<PunchEventArgs> PunchStarted = delegate { };
+        public event EventHandler<PunchEventArgs> Punching = delegate { };
         public event EventHandler<PunchEventArgs> PunchEnded = delegate { };
 
         public PunchingModel()
@@ -264,7 +265,7 @@ namespace PunchingBand.Models
 
             var punchInfo = punchDetector.GetPunchInfo(bandSensorReadingEventArgs.SensorReading);
 
-            if (punchInfo.Status == PunchStatus.Detected)
+            if (punchInfo.Status == PunchStatus.Finish)
             {
                 invokeOnUiThread(() =>
                 {
@@ -274,11 +275,18 @@ namespace PunchingBand.Models
                     }
                 });
             }
-            else if (punchInfo.Status == PunchStatus.Detecting)
+            else if (punchInfo.Status == PunchStatus.Start)
             {
                 invokeOnUiThread(() =>
                 {
-                    PunchStarted(this, new PunchEventArgs(0));
+                    PunchStarted(this, new PunchEventArgs(punchInfo.Strength.Value));
+                });
+            }
+            else if (punchInfo.Status == PunchStatus.InProgress)
+            {
+                invokeOnUiThread(() =>
+                {
+                    Punching(this, new PunchEventArgs(punchInfo.Strength.Value));
                 });
             }
 

@@ -41,14 +41,18 @@ namespace PunchingBand.Utilities
 
             if (IsPunchDetected(reading, out punchStrength))
             {
-                status = PunchStatus.Detected; 
+                status = PunchStatus.Finish; 
             }
             else
             {
                 if (IsDetectingPunch(reading))
                 {
                     // We know a punch is occuring but don't know the final strength
-                    status = PunchStatus.Detecting;
+                    status = PunchStatus.Start;
+                }
+                else if (punchStarted && punchStrength.HasValue)
+                {
+                    status = PunchStatus.InProgress;
                 }
             }
 
@@ -69,11 +73,11 @@ namespace PunchingBand.Utilities
                 if (reading.AccelerationX > punchThreshold && (DateTime.UtcNow - lastPunchTime) > fastestPunchInterval)
                 {
                     maxX = Math.Max(maxX, reading.AccelerationX);
+                    punchStrength = (maxX - punchThreshold) / (maximumAcceleration - punchThreshold);
 
                     if (reading.AccelerationX >= maximumAcceleration || reading.AccelerationX - lastX < 0)
                     {
-                        LastPunchStrength = (maxX - punchThreshold) / (maximumAcceleration - punchThreshold);
-                        punchStrength = LastPunchStrength;
+                        LastPunchStrength = punchStrength.Value;
 
                         readyForPunch = false;
                         lastPunchTime = DateTime.UtcNow;

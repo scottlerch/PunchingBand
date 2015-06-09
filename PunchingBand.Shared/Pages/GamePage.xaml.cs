@@ -98,6 +98,12 @@ namespace PunchingBand.Pages
                         countDownText.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
                     }
                     break;
+                case "SpeedComboText":
+                    speedComboStoryboard.Begin();
+                    break;
+                case "PowerComboText":
+                    powerComboStoryboard.Begin();
+                    break;
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Storage;
 using PunchingBand.Infrastructure;
+using Windows.ApplicationModel;
 
 namespace PunchingBand.Models
 {
@@ -30,6 +31,7 @@ namespace PunchingBand.Models
         private int powerComboCount;
         private DateTime lastPunchTime = DateTime.MinValue;
         private double lastPunchStrength = 0.0;
+        private double currentPunchStrength = 0.0;
 
         // Game performance metrics
         private Metric punchStrength;
@@ -58,9 +60,16 @@ namespace PunchingBand.Models
 
             punchingModel.PunchStarted += PunchingModelOnPunchStarted;
             punchingModel.PunchEnded += PunchingModelOnPunchEnded;
+            punchingModel.Punching += PunchingModelOnPunching;
 
             this.punchingModel = punchingModel;
             this.historyModel = historyModel;
+        }
+
+        private void PunchingModelOnPunching(object sender, PunchEventArgs e)
+        {
+            currentPunchStrength = e.Strength;
+            //RaisePropertyChanged("PunchStrengthMeter");
         }
 
         private void PunchingModelOnPunchEnded(object sender, PunchEventArgs punchEventArgs)
@@ -68,15 +77,25 @@ namespace PunchingBand.Models
             if (Running)
             {
                 PunchCount++;
+                UpdateCombos(punchEventArgs);
 
-                // TODO: incorporate combos into score?
-                Score += (int) Math.Round(100.0*punchEventArgs.Strength);
+                var points = 100.0 * punchEventArgs.Strength;
+
+                if (powerComboCount > 1)
+                {
+                    points *= 2;
+                }
+
+                if (speedComboCount > 1)
+                {
+                    points *= 2;
+                }
+
+                Score += (int) Math.Round(points);
 
                 punchStrength.Update(punchEventArgs.Strength);
                 RaisePropertyChanged("PunchStrength");
-                RaisePropertyChanged("InversePunchStrength");
-
-                UpdateCombos(punchEventArgs);
+                RaisePropertyChanged("PunchStrengthMeter"); 
             }
         }
 
@@ -93,7 +112,7 @@ namespace PunchingBand.Models
                 SpeedComboCount = 0;
             }
 
-            if (punchEventArgs.Strength == 1.0 && lastPunchStrength == 1.0)
+            if (1.0 - punchEventArgs.Strength < 0.001 && 1.0 - punchStrength.Last < 0.001)
             {
                 PowerComboCount++;
             }
@@ -102,7 +121,6 @@ namespace PunchingBand.Models
                 PowerComboCount = 0;
             }
 
-            lastPunchStrength = punchEventArgs.Strength;
             lastPunchTime = punchTime;
         }
 
@@ -150,7 +168,7 @@ namespace PunchingBand.Models
             get { return punchStrength.Last; }
         }
 
-        public double InversePunchStrength
+        public double PunchStrengthMeter
         {
             get { return 1.0 - punchStrength.Last; }
         }
@@ -188,13 +206,57 @@ namespace PunchingBand.Models
         public int SpeedComboCount
         {
             get { return speedComboCount; }
-            set { Set("SpeedComboCount", ref speedComboCount, value); }
+            set
+            {
+                Set("SpeedComboCount", ref speedComboCount, value);
+                RaisePropertyChanged("SpeedComboText");
+            }
+        }
+
+        public string SpeedComboText
+        {
+            get
+            {
+                if (speedComboCount == 1 || DesignMode.DesignModeEnabled)
+                {
+                    return "speed";
+                }
+
+                if (speedComboCount == 0)
+                {
+                    return string.Empty;
+                }
+
+                return speedComboCount.ToString() + "x";
+            }
         }
 
         public int PowerComboCount
         {
             get { return powerComboCount; }
-            set { Set("PowerComboCount", ref powerComboCount, value); }
+            set
+            {
+                Set("powerComboCount", ref powerComboCount, value);
+                RaisePropertyChanged("PowerComboText");
+            }
+        }
+
+        public string PowerComboText
+        {
+            get
+            {
+                if (powerComboCount == 1 || DesignMode.DesignModeEnabled)
+                {
+                    return "power";
+                }
+
+                if (powerComboCount == 0)
+                {
+                    return string.Empty;
+                }
+
+                return powerComboCount.ToString() + "x";
+            }
         }
 
         internal void StartGame()

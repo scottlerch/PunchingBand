@@ -3,8 +3,9 @@
     internal enum PunchStatus
     {
         Unknown,
-        Detecting,
-        Detected,
+        Start,
+        InProgress,
+        Finish,
         Reset,
     }
 }
