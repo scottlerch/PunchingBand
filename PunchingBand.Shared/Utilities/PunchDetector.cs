@@ -11,7 +11,7 @@ namespace PunchingBand.Utilities
     {
         private class LogData
         {
-            public IBandAccelerometerReading Reading { get; set; }
+            public IBandAccelerometerReading AccelerometerReading { get; set; }
 
             public PunchInfo PunchInfo { get; set; }
         }
@@ -129,7 +129,7 @@ namespace PunchingBand.Utilities
             {
                 logData.Add(new LogData
                 {
-                    Reading = reading,
+                    AccelerometerReading = reading,
                     PunchInfo = punchInfo,
                 });
             }
@@ -152,9 +152,11 @@ namespace PunchingBand.Utilities
                     foreach (var data in logData.GetConsumingEnumerable())
                     {
                         streamWriter.WriteLine(
-                            "{0:yyyy-MM-dd HH:mm:ss.ffffff},{1},{2}",
-                            data.Reading.Timestamp,
-                            data.Reading.AccelerationX,
+                            "{0:HH:mm:ss.ffffff},{1},{2},{3},{4}",
+                            data.AccelerometerReading.Timestamp,
+                            data.AccelerometerReading.AccelerationX,
+                            data.AccelerometerReading.AccelerationY,
+                            data.AccelerometerReading.AccelerationZ,
                             data.PunchInfo.Status);
                     }
                 }
