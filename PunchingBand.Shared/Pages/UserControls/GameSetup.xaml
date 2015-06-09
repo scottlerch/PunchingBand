@@ -17,11 +17,12 @@
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
-            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Punching Session Duration" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
+            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Session Duration" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
             <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=OneWay, Converter={StaticResource EnumerableTimeSpanConverter}}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeSpanConverter}}"/>
-            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Music Selection" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
+            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Music Selection" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
             <Button  Margin="0,0,0,30" x:Name="SongButton" HorizontalAlignment="Left" VerticalAlignment="Center" Width="229" HorizontalContentAlignment="Left" Tapped="Button_Tapped" Content="{Binding Song.DisplayName, FallbackValue=None, Mode=OneWay, TargetNullValue=None}"></Button>
-            <ToggleSwitch Header="Primary Fist" HorizontalAlignment="Left" VerticalAlignment="Center" OffContent="Left" OnContent="Right" Width="229" FontSize="12" IsOn="{Binding FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Primary Fist" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
+            <ToggleSwitch HorizontalAlignment="Left" VerticalAlignment="Center" OffContent="Left" OnContent="Right" Width="229" FontSize="12" IsOn="{Binding FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
     </Grid>
 </UserControl>

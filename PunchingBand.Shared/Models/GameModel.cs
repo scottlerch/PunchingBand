@@ -42,7 +42,7 @@ namespace PunchingBand.Models
 
         public GameModel()
         {
-            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            if (!DesignMode.DesignModeEnabled)
             {
                 throw new InvalidOperationException("Parameterless constructor can only be called by designer");
             }

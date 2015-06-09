@@ -15,19 +15,19 @@
     </Page.Transitions>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Hub Header="PUNCHING BAND">
-            <HubSection Header="setup">
-                <DataTemplate>
-                    <userControls:UserSetup DataContext="{Binding UserModel}"></userControls:UserSetup>
-                </DataTemplate>
-            </HubSection>
             <HubSection Header="game">
                 <DataTemplate>
                     <Grid>
-                        <StackPanel VerticalAlignment="Top">
+                        <StackPanel>
                             <userControls:GameSetup DataContext="{Binding GameModel}" VerticalAlignment="Top" ></userControls:GameSetup>
                             <Button Content="FIGHT!" HorizontalAlignment="Center"  VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
                         </StackPanel>
                     </Grid>
+                </DataTemplate>
+            </HubSection>
+            <HubSection Header="setup">
+                <DataTemplate>
+                    <userControls:UserSetup DataContext="{Binding UserModel}"></userControls:UserSetup>
                 </DataTemplate>
             </HubSection>
             <HubSection Header="history">

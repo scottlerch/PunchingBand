@@ -2,9 +2,9 @@
 using System.ComponentModel;
 #if WINDOWS_PHONE_APP
 using Windows.Phone.UI.Input;
-using Windows.UI.Xaml.Controls;
 #endif
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using PunchingBand.Infrastructure;
@@ -50,6 +50,10 @@ namespace PunchingBand.Pages
 
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
+
+#if WINDOWS_PHONE_APP
+            backButton.Visibility = Visibility.Collapsed;
+#endif
         }
 
         private void PunchingModelOnPunchStarted(object sender, EventArgs eventArgs)
@@ -194,6 +198,23 @@ namespace PunchingBand.Pages
         private void GameTimerOnTick(object sender, object o)
         {
             model.GameModel.Update();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            model.GameModel.StopGame();
+
+            var frame = Window.Current.Content as Frame;
+
+            if (frame == null)
+            {
+                return;
+            }
+
+            if (frame.CanGoBack)
+            {
+                frame.GoBack();
+            }
         }
     }
 }

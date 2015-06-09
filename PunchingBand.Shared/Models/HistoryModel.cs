@@ -44,7 +44,7 @@ namespace PunchingBand.Models
 
         private void RecordsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            SortedRecords = new ObservableCollection<HistoryInfo>(records.OrderBy(r => r.Score));
+            SortedRecords = new ObservableCollection<HistoryInfo>(records.OrderByDescending(r => r.Score));
         }
 
         public ObservableCollection<HistoryInfo> SortedRecords

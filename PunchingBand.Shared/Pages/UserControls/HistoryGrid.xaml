@@ -22,8 +22,8 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Score" Grid.Column="0" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="Date" Grid.Column="1" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Text="Score" Grid.Column="0" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Text="Date" Grid.Column="1" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
                     </Grid>
                 </DataTemplate>
             </ListView.HeaderTemplate>
