@@ -126,7 +126,7 @@
                     <ScaleTransform x:Name="speedComboScaleTransform" ScaleX="1" ScaleY="1"  />
                 </TextBlock.RenderTransform>
             </TextBlock>
-            <Button x:Name="backButton" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Margin="20" Style="{StaticResource NavigationBackButtonNormalStyle}" Click="BackButton_Click"></Button>
+            <Button x:Name="backButton" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Margin="20" Style="{StaticResource CustomBackButtonStyle}" Click="BackButton_Click"></Button>
          </Grid>
     </Grid>
 </Page>
