@@ -16,9 +16,9 @@ namespace PunchingBand.Utilities
             public PunchInfo PunchInfo { get; set; }
         }
 
-        private readonly TimeSpan fastestPunchInterval = TimeSpan.FromMilliseconds(200);
+        private readonly TimeSpan punchCoolOffInterval = TimeSpan.FromMilliseconds(100);
         private const double punchThreshold = 0.5;
-        private const double punchResetThreshold = 0.1;
+        private const double punchResetThreshold = 0.0;
         private const double maximumAcceleration = 8.0;
 
         private double lastX;
@@ -26,7 +26,7 @@ namespace PunchingBand.Utilities
 
         private bool readyForPunch = true;
 
-        private DateTime lastPunchTime = DateTime.MinValue;
+        private DateTime nextPunchTime = DateTime.MinValue;
 
         private bool punchStarted;
 
@@ -70,7 +70,7 @@ namespace PunchingBand.Utilities
 
             if (readyForPunch)
             {
-                if (reading.AccelerationX > punchThreshold && (DateTime.UtcNow - lastPunchTime) > fastestPunchInterval)
+                if (reading.AccelerationX > punchThreshold)
                 {
                     maxX = Math.Max(maxX, reading.AccelerationX);
                     punchStrength = (maxX - punchThreshold) / (maximumAcceleration - punchThreshold);
@@ -84,10 +84,12 @@ namespace PunchingBand.Utilities
                         maxX = double.MinValue;
 
                         punchDetected = true;
+
+                        nextPunchTime = DateTime.UtcNow + punchCoolOffInterval;
                     }
                 }
             }
-            else if (reading.AccelerationX < punchResetThreshold)
+            else if (DateTime.UtcNow > nextPunchTime && reading.AccelerationX < punchResetThreshold)
             {
                 punchStarted = false;
                 readyForPunch = true;
@@ -105,19 +107,14 @@ namespace PunchingBand.Utilities
             maxX = 0;
 
             readyForPunch = true;
-
-            lastPunchTime = DateTime.MinValue;
         }
 
         private bool IsDetectingPunch(IBandAccelerometerReading reading)
         {
-            if (!punchStarted && readyForPunch)
+            if (!punchStarted && readyForPunch && reading.AccelerationX > punchThreshold)
             {
-                if (reading.AccelerationX > punchThreshold && (DateTime.UtcNow - lastPunchTime) > fastestPunchInterval)
-                {
-                    punchStarted = true;
-                    return true;
-                }
+                punchStarted = true;
+                return true;
             }
 
             return false;

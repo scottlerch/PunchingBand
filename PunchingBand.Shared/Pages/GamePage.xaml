@@ -116,12 +116,12 @@
             <TextBlock HorizontalAlignment="Left" Margin="9,11,0,0" TextWrapping="Wrap" Text="Calories:" VerticalAlignment="Top" FontSize="24" RenderTransformOrigin="0.488,1.805" Foreground="#FF909090"/>
             <TextBlock HorizontalAlignment="Left" Margin="98,13,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.CalorieCount, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
             <TextBlock HorizontalAlignment="Center" Margin="110,280,0,0" TextWrapping="Wrap" Text="sec." VerticalAlignment="Center" FontSize="24" Foreground="#FF909090"/>
-            <TextBlock x:Name="powerComboTextBlock" HorizontalAlignment="Center" Margin="0,0,300,270" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding GameModel.PowerComboText}" Width="150" FontSize="24" Foreground="Gold" FontWeight="Bold" RenderTransformOrigin="1,1">
+            <TextBlock x:Name="powerComboTextBlock" HorizontalAlignment="Center" Margin="0,0,290,270" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding GameModel.PowerComboText}" Width="150" FontSize="24" Foreground="Gold" FontWeight="Bold" RenderTransformOrigin="1,1">
                 <TextBlock.RenderTransform>
                     <ScaleTransform x:Name="powerComboScaleTransform" ScaleX="1" ScaleY="1"  />
                 </TextBlock.RenderTransform>
             </TextBlock>
-            <TextBlock x:Name="speedComboTextBlock" HorizontalAlignment="Center" Margin="300,0,0,270" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding GameModel.SpeedComboText}" Width="150" FontSize="24" Foreground="SkyBlue" FontWeight="Bold" RenderTransformOrigin="0,1">
+            <TextBlock x:Name="speedComboTextBlock" HorizontalAlignment="Center" Margin="290,0,0,270" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding GameModel.SpeedComboText}" Width="150" FontSize="24" Foreground="SkyBlue" FontWeight="Bold" RenderTransformOrigin="0,1">
                 <TextBlock.RenderTransform>
                     <ScaleTransform x:Name="speedComboScaleTransform" ScaleX="1" ScaleY="1"  />
                 </TextBlock.RenderTransform>
