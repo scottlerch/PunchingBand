@@ -31,7 +31,7 @@ namespace PunchingBand.Models
         private int powerComboCount;
         private DateTime lastPunchTime = DateTime.MinValue;
         private double lastPunchStrength = 0.0;
-        private double currentPunchStrength = 0.0;
+        //private double currentPunchStrength = 0.0;
 
         // Game performance metrics
         private Metric punchStrength;
@@ -68,7 +68,7 @@ namespace PunchingBand.Models
 
         private void PunchingModelOnPunching(object sender, PunchEventArgs e)
         {
-            currentPunchStrength = e.Strength;
+            //currentPunchStrength = e.Strength;
             //RaisePropertyChanged("PunchStrengthMeter");
         }
 
@@ -273,6 +273,9 @@ namespace PunchingBand.Models
             caloriesBurned = new Metric();
             skinTemperature = new Metric();
 
+            RaisePropertyChanged("PunchStrength");
+            RaisePropertyChanged("PunchStrengthMeter"); 
+
             gameStartTime = DateTime.UtcNow;
         }
 
@@ -322,6 +325,8 @@ namespace PunchingBand.Models
                 Duration = Duration, 
                 Score = Score,
                 FistSide = FistSide,
+                GameMode = gameMode,
+                PunchCount = punchCount,
             });
         }
     }

@@ -80,7 +80,6 @@ namespace PunchingBand.Utilities
                         LastPunchStrength = punchStrength.Value;
 
                         readyForPunch = false;
-                        lastPunchTime = DateTime.UtcNow;
                         maxX = double.MinValue;
 
                         punchDetected = true;
