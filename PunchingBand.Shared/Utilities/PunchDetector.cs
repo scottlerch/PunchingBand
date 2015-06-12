@@ -7,7 +7,7 @@ using Windows.Storage;
 
 namespace PunchingBand.Utilities
 {
-    internal class PunchDetector
+    internal sealed class PunchDetector : IDisposable
     {
         private class LogData
         {
@@ -31,8 +31,16 @@ namespace PunchingBand.Utilities
         private bool punchStarted;
 
         private BlockingCollection<LogData> logData;
+        private Task logTask;
 
         public double LastPunchStrength { get; private set; }
+
+        private FistSide fistSide;
+
+        public PunchDetector(FistSide fistSide)
+        {
+            this.fistSide = fistSide;
+        }
 
         public PunchInfo GetPunchInfo(IBandAccelerometerReading reading)
         {
@@ -56,7 +64,7 @@ namespace PunchingBand.Utilities
                 }
             }
 
-            var punchInfo = new PunchInfo(status, punchStrength);
+            var punchInfo = new PunchInfo(fistSide, status, punchStrength);
 
             Log(reading, punchInfo);
 
@@ -135,11 +143,11 @@ namespace PunchingBand.Utilities
         {
             logData = new BlockingCollection<LogData>();
 
-            Task.Run(async () =>
+            logTask = Task.Run(async () =>
             {
                 var local = ApplicationData.Current.LocalFolder;
                 var dataFolder = await local.CreateFolderAsync("LogData", CreationCollisionOption.OpenIfExists);
-                var file = await dataFolder.CreateFileAsync("PunchData.csv", CreationCollisionOption.ReplaceExisting);
+                var file = await dataFolder.CreateFileAsync(string.Format("PunchData{0}.csv", fistSide), CreationCollisionOption.ReplaceExisting);
 
                 using (var fileStream = await file.OpenStreamForWriteAsync())
                 {
@@ -157,6 +165,16 @@ namespace PunchingBand.Utilities
                     }
                 }
             });
+        }
+
+        public void Dispose()
+        {
+            if (logData != null)
+            {
+                logData.CompleteAdding();
+                logTask.Wait();
+                logData.Dispose();
+            }
         }
     }
 }

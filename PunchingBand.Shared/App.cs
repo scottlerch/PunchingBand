@@ -8,6 +8,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using System.Threading.Tasks;
 #if WINDOWS_PHONE_APP
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -45,7 +46,7 @@ namespace PunchingBand
             RootModel = new RootModel(InvokeOnUIThread);
         }
 
-        private void UpdateStatus()
+        private async void UpdateStatus()
         {
             var statusText = RootModel.PunchingModel.Status;
 
@@ -54,14 +55,14 @@ namespace PunchingBand
 
             if (string.IsNullOrWhiteSpace(statusText))
             {
-                statusBar.HideAsync();
+                await statusBar.HideAsync();
             }
             else
             {
                 statusBar.ProgressIndicator.Text = statusText;
                 statusBar.ProgressIndicator.ProgressValue = null;
-                statusBar.ProgressIndicator.ShowAsync();
-                statusBar.ShowAsync();
+                await statusBar.ProgressIndicator.ShowAsync();
+                await statusBar.ShowAsync();
             }
 #else
             var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText01);
@@ -69,6 +70,7 @@ namespace PunchingBand
             toastTextElements[0].AppendChild(toastXml.CreateTextNode(statusText));
             var toast = new ToastNotification(toastXml);
             ToastNotificationManager.CreateToastNotifier().Show(toast);
+            await Task.Yield();
 #endif
         }
 
@@ -89,7 +91,7 @@ namespace PunchingBand
             }
             else
             {
-                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action());
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(action)).AsTask().Wait();
             }
         }
 
@@ -99,7 +101,7 @@ namespace PunchingBand
         /// search results, and so forth.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
@@ -166,10 +168,10 @@ namespace PunchingBand
 
             dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
-            RootModel.PunchingModel.Connect();
-
             // Ensure the current window is active
             Window.Current.Activate();
+
+            await RootModel.PunchingModel.Connect();
         }
 
         private void PunchingModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -214,7 +216,7 @@ namespace PunchingBand
             deferral.Complete();
         }
 
-        protected override void OnActivated(IActivatedEventArgs e)
+        protected async override void OnActivated(IActivatedEventArgs e)
         {
 #if WINDOWS_PHONE_APP
             var filePickerContinuationArgs = e as FileOpenPickerContinuationEventArgs;
@@ -229,12 +231,12 @@ namespace PunchingBand
                 }
             }
 #endif
-            RootModel.PunchingModel.Connect();
-
             if (Activated != null)
             {
                 Activated(e);
             }
+
+            await RootModel.PunchingModel.Connect();
         }
     }
 }

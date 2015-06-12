@@ -2,12 +2,15 @@
 {
     internal class PunchInfo
     {
+        public FistSide FistSide { get; private set; }
+
         public PunchStatus Status { get; private set; }
 
         public double? Strength { get; private set; }
 
-        public PunchInfo(PunchStatus status, double? strength)
+        public PunchInfo(FistSide fistSide, PunchStatus status, double? strength)
         {
+            FistSide = fistSide;
             Status = status;
 
             // HACK: make sure strength in range from 0 to 1 incase punch algorithm messes up

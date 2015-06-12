@@ -33,6 +33,8 @@ namespace PunchingBand.Pages.UserControls
             // TODO: implement rest of continuation pattern: https://msdn.microsoft.com/en-us/library/windows/apps/dn642086(v=vs.105).aspx
             filePicker.ContinuationData["Operation"] = "UpdateGameSong";
             filePicker.PickSingleFileAndContinue();
+
+            await Task.Yield();
 #endif
         }
 

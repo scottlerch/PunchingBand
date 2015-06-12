@@ -2,6 +2,7 @@
 using Microsoft.Band.Sensors;
 using PunchingBand.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,11 +12,13 @@ namespace PunchingBand.Models
     public class PunchingModel : ModelBase
     {
         private readonly UserModel userModel;
-        private IBandClient bandClient;
+
+        private IBandClient[] bandClients;
+        private Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector> punchDetectors;
+        private Dictionary<IBandSensor<IBandAccelerometerReading>, DateTimeOffset> previousTimestamps;
+
         private bool connected;
         private string status = "Connecting...";
-
-        private readonly PunchDetector punchDetector = new PunchDetector();
 
         private int? heartRate;
         private bool heartRateLocked;
@@ -42,10 +45,6 @@ namespace PunchingBand.Models
         {
             this.userModel = userModel;
             this.invokeOnUiThread = invokeOnUiThread;
-
-#if DEBUG
-            punchDetector.InitializeLogging();
-#endif
         }
 
         public int? HeartRate
@@ -96,104 +95,138 @@ namespace PunchingBand.Models
             set { Set("Status", ref status, value); }
         }
 
-        private bool connecting;
-        private readonly object syncRoot = new object();
-
-        public async void Connect()
+        public async Task Connect()
         {
 #if MOCK_BAND
             Connected = true;
             Worn = true;
 #else
-            lock (syncRoot)
+            while (true)
             {
-                if (connecting)
-                {
-                    return;
-                }
-
-                connecting = true;
-            }
-
-            while (!Connected)
-            {
-                try
-                {
-                    var bands = await BandClientManager.Instance.GetBandsAsync();
-
-                    if (bands.Length > 0)
-                    {
-                        bandClient = await BandClientManager.Instance.ConnectAsync(bands[0]);
-
-                        Type.GetType("Microsoft.Band.BandClient, Microsoft.Band")
-                            .GetRuntimeFields()
-                            .First(field => field.Name == "currentAppId")
-                            .SetValue(bandClient, Guid.NewGuid());
-
-                        bandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
-                        bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
-                        bandClient.SensorManager.Pedometer.ReadingChanged += PedometerOnReadingChanged;
-                        bandClient.SensorManager.HeartRate.ReadingChanged += HeartRateOnReadingChanged;
-                        bandClient.SensorManager.SkinTemperature.ReadingChanged += SkinTemperatureOnReadingChanged;
-
-                        bandClient.SensorManager.Accelerometer.ReportingInterval =
-                            bandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
-
-                        if (bandClient.SensorManager.HeartRate.GetCurrentUserConsent() != UserConsent.Granted)
-                        {
-                            await bandClient.SensorManager.HeartRate.RequestUserConsentAsync();
-                        }
-
-                        await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
-                        await bandClient.SensorManager.Contact.StartReadingsAsync();
-                        await bandClient.SensorManager.HeartRate.StartReadingsAsync();
-                        await bandClient.SensorManager.Pedometer.StartReadingsAsync();
-                        await bandClient.SensorManager.SkinTemperature.StartReadingsAsync();
-
-                        Connected = true;
-
-                        if (!Worn)
-                        {
-                            Status = "Band connected!  Please wear...";
-                        }
-                    }
-                    else
-                    {
-                        Status = "No Band found!";
-                    }
-                }
-                catch (Exception)
-                {
-                    Status = "Error connecting to Band!";
-
-                    if (bandClient != null)
-                    {
-                        bandClient.Dispose();
-                        bandClient = null;
-                    }
-                }
-
                 if (!Connected)
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                    try
+                    {
+                        await ConnectCore();
+                    }
+                    catch
+                    {
+                        Status = "Error connecting to Band!";
+                        CleanupBandClients();
+                    }
                 }
-            }
 
-            connecting = false;
+                await Task.Delay(TimeSpan.FromMilliseconds(100));
+            }
 #endif
+        }
+
+        private async Task ConnectCore()
+        {
+            var bands = await BandClientManager.Instance.GetBandsAsync();
+
+            if (bands.Length > 0)
+            {
+                bandClients = new IBandClient[bands.Length];
+                punchDetectors = new Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector>();
+                previousTimestamps = new Dictionary<IBandSensor<IBandAccelerometerReading>, DateTimeOffset>();
+
+                var currentAppId = Guid.NewGuid();
+
+                for (int i = 0; i < Math.Min(bands.Length, 2); i++)
+                {
+                    bandClients[i] = await BandClientManager.Instance.ConnectAsync(bands[i]);
+
+                    // HACK: need to set this to stream sensor data from dev/debug on Windows
+                    Type.GetType("Microsoft.Band.BandClient, Microsoft.Band")
+                        .GetRuntimeFields()
+                        .First(field => field.Name == "currentAppId")
+                        .SetValue(bandClients[i], currentAppId);
+
+                    // Only start fitness sensors on first band
+                    if (i == 0)
+                    {
+                        await StartFitnessSensors(bandClients[i]);
+                    }
+
+                    // TODO: prompt user for fist side on band tile
+                    await StartPunchDetection(bandClients[i], (FistSide)i);
+                }
+
+                Connected = true;
+            }
+            else
+            {
+                Status = "No Bands found!";
+            }
+        }
+
+        private async Task StartFitnessSensors(IBandClient bandClient)
+        {
+            bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
+            bandClient.SensorManager.Pedometer.ReadingChanged += PedometerOnReadingChanged;
+            bandClient.SensorManager.HeartRate.ReadingChanged += HeartRateOnReadingChanged;
+            bandClient.SensorManager.SkinTemperature.ReadingChanged += SkinTemperatureOnReadingChanged;
+            
+            if (bandClient.SensorManager.HeartRate.GetCurrentUserConsent() != UserConsent.Granted)
+            {
+                await bandClient.SensorManager.HeartRate.RequestUserConsentAsync();
+            }
+            
+            await bandClient.SensorManager.Contact.StartReadingsAsync();
+            await bandClient.SensorManager.HeartRate.StartReadingsAsync();
+            await bandClient.SensorManager.Pedometer.StartReadingsAsync();
+            await bandClient.SensorManager.SkinTemperature.StartReadingsAsync();
+        }
+
+        private async Task StartPunchDetection(IBandClient bandClient, FistSide fistSide)
+        {
+            punchDetectors[bandClient.SensorManager.Accelerometer] = new PunchDetector(fistSide);
+            previousTimestamps[bandClient.SensorManager.Accelerometer] = DateTimeOffset.MinValue;
+
+            bandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
+
+            bandClient.SensorManager.Accelerometer.ReportingInterval =
+                bandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
+
+#if DEBUG
+            punchDetectors[bandClient.SensorManager.Accelerometer].InitializeLogging();
+#endif
+
+            await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
         }
 
         public void Disconnect()
         {
-            if (!Connected || bandClient == null) return;
+            if (!Connected || bandClients == null || bandClients[0] == null) return;
 
-            bandClient.Dispose();
-            bandClient = null;
-
-            punchDetector.Reset();
+            CleanupBandClients();
 
             Connected = false;
             Worn = false;
+        }
+
+        private void CleanupBandClients()
+        {
+            if (bandClients != null)
+            {
+                foreach (var bandClient in bandClients.Where(b => b != null))
+                {
+                    bandClient.Dispose();
+                }
+
+                bandClients = null;
+            }
+
+            if (punchDetectors != null)
+            {
+                foreach (var punchDetector in punchDetectors.Values.Where(p => p != null))
+                {
+                    punchDetector.Dispose();
+                }
+
+                punchDetectors = null;
+            }
         }
 
         private void SkinTemperatureOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandSkinTemperatureReading> bandSensorReadingEventArgs)
@@ -248,22 +281,22 @@ namespace PunchingBand.Models
                 else
                 {
                     Worn = false;
-                    Status = "Band is not being worn!";
+                    Status = "Please wear your Band.";
                 }
             });
         }
 
-        private DateTimeOffset previousTimestamp = DateTimeOffset.MinValue;
-
         private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
         {
+            var key = sender as IBandSensor<IBandAccelerometerReading>;
+
             // HACK: due to bug in API throw out duplicate timestamps which have all zero values anyway
-            if (!worn || previousTimestamp == bandSensorReadingEventArgs.SensorReading.Timestamp)
+            if (!worn || previousTimestamps[key] == bandSensorReadingEventArgs.SensorReading.Timestamp)
             {
                 return;
             }
 
-            var punchInfo = punchDetector.GetPunchInfo(bandSensorReadingEventArgs.SensorReading);
+            var punchInfo = punchDetectors[key].GetPunchInfo(bandSensorReadingEventArgs.SensorReading);
 
             if (punchInfo.Status == PunchStatus.Finish)
             {
@@ -271,7 +304,7 @@ namespace PunchingBand.Models
                 {
                     if (punchInfo.Strength.HasValue)
                     {
-                        PunchEnded(this, new PunchEventArgs(punchInfo.Strength.Value));
+                        PunchEnded(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value));
                     }
                 });
             }
@@ -279,18 +312,18 @@ namespace PunchingBand.Models
             {
                 invokeOnUiThread(() =>
                 {
-                    PunchStarted(this, new PunchEventArgs(punchInfo.Strength.Value));
+                    PunchStarted(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value));
                 });
             }
             else if (punchInfo.Status == PunchStatus.InProgress)
             {
                 invokeOnUiThread(() =>
                 {
-                    Punching(this, new PunchEventArgs(punchInfo.Strength.Value));
+                    Punching(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value));
                 });
             }
 
-            previousTimestamp = bandSensorReadingEventArgs.SensorReading.Timestamp;
+            previousTimestamps[key] = bandSensorReadingEventArgs.SensorReading.Timestamp;
         }
     }
 }
