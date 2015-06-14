@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SoundEffect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SuspensionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\BandTileModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\BandPosition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\FistSide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\GameMode.cs" />
@@ -66,11 +67,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchStatus.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Assets\countdownbeep.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\endbuzzer.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\fightbell.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\powerpunch.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\punch.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\countdownbeep.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\endbuzzer.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\fightbell.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\powerpunch.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconSmall.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">

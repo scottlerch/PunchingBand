@@ -36,11 +36,11 @@ namespace PunchingBand.Pages
             timer.Interval = TimeSpan.FromMilliseconds(17);
             timer.Start();
 
-            punchSound = new SoundEffect("Assets/punch.wav");
-            powerPunchSound = new SoundEffect("Assets/powerpunch.wav");
-            beepSound = new SoundEffect("Assets/countdownbeep.wav");
-            endBuzzer = new SoundEffect("Assets/endbuzzer.wav");
-            fightBell = new SoundEffect("Assets/fightbell.wav");
+            punchSound = new SoundEffect("Assets/Audio/punch.wav");
+            powerPunchSound = new SoundEffect("Assets/Audio/powerpunch.wav");
+            beepSound = new SoundEffect("Assets/Audio/countdownbeep.wav");
+            endBuzzer = new SoundEffect("Assets/Audio/endbuzzer.wav");
+            fightBell = new SoundEffect("Assets/Audio/fightbell.wav");
 
             model.PunchingModel.PunchStarted += PunchingModelOnPunchStarted;
             model.GameModel.PropertyChanged += GameModelOnPropertyChanged;
