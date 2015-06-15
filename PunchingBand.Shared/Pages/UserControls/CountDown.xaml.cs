@@ -18,7 +18,7 @@ namespace PunchingBand.Pages.UserControls
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 DataContext = this;
-                beepSound = new SoundEffect("Assets/countdownbeep.wav");
+                beepSound = new SoundEffect("Assets/Audio/countdownbeep.wav");
 
                 timer = new DispatcherTimer();
                 timer.Tick += TimerOnTick;
