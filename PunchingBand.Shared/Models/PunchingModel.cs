@@ -143,11 +143,13 @@ namespace PunchingBand.Models
                 {
                     bandClients[i] = await BandClientManager.Instance.ConnectAsync(bands[i]);
 
+#if WINDOWS_APP
                     // HACK: need to set this to stream sensor data from dev/debug on Windows
                     Type.GetType("Microsoft.Band.BandClient, Microsoft.Band")
                         .GetRuntimeFields()
                         .First(field => field.Name == "currentAppId")
                         .SetValue(bandClients[i], currentAppId);
+#endif
 
                     // Only start fitness sensors on first band
                     if (i == 0)
@@ -157,6 +159,9 @@ namespace PunchingBand.Models
 
                     // TODO: prompt user for fist side on band tile
                     await StartPunchDetection(bandClients[i], (FistSide)i);
+
+                    //var tile = new BandTileModel();
+                    //await tile.Initialize(bandClients[i]);
                 }
 
                 Connected = true;
