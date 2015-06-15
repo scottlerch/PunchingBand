@@ -1,13 +1,14 @@
-﻿using System;
+﻿using PunchingBand.Infrastructure;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using Windows.Storage;
-using PunchingBand.Infrastructure;
 using Windows.ApplicationModel;
+using Windows.Storage;
 
 namespace PunchingBand.Models
 {
-    public class GameModel : ModelBase
+    public class GameModel : PersistentModelBase
     {
         private readonly HistoryModel historyModel;
         private readonly PunchingModel punchingModel;
@@ -64,6 +65,20 @@ namespace PunchingBand.Models
 
             this.punchingModel = punchingModel;
             this.historyModel = historyModel;
+
+            this.PropertyChanged += GameModelOnPropertyChanged;
+        }
+
+        private async void GameModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "GameMode":
+                case "Duration":
+                case "FistSide":
+                    await Save();
+                    break;
+            }
         }
 
         private void PunchingModelOnPunching(object sender, PunchEventArgs e)
@@ -176,37 +191,37 @@ namespace PunchingBand.Models
         public bool Running
         {
             get { return running; }
-            set { Set("Running", ref running, value); }
+            private set { Set("Running", ref running, value); }
         }
 
         public int Score
         {
             get { return score; }
-            set { Set("Score", ref score, value); }
+            private set { Set("Score", ref score, value); }
         }
 
         public TimeSpan TimeLeft
         {
             get { return timeLeft; }
-            set { Set("TimeLeft", ref timeLeft, value); }
+            private set { Set("TimeLeft", ref timeLeft, value); }
         }
 
         public int TimeLeftSeconds
         {
             get { return timeLeftSeconds; }
-            set { Set("TimeLeftSeconds", ref timeLeftSeconds, value); }
+            private set { Set("TimeLeftSeconds", ref timeLeftSeconds, value); }
         }
 
         public int PunchCount
         {
             get { return punchCount; }
-            set { Set("PunchCount", ref punchCount, value); }
+            private set { Set("PunchCount", ref punchCount, value); }
         }
 
         public int SpeedComboCount
         {
             get { return speedComboCount; }
-            set
+            private set
             {
                 Set("SpeedComboCount", ref speedComboCount, value);
                 RaisePropertyChanged("SpeedComboText");
@@ -234,7 +249,7 @@ namespace PunchingBand.Models
         public int PowerComboCount
         {
             get { return powerComboCount; }
-            set
+            private set
             {
                 Set("powerComboCount", ref powerComboCount, value);
                 RaisePropertyChanged("PowerComboText");

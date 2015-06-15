@@ -13,22 +13,29 @@ namespace PunchingBand.Models
 
         public async Task Save()
         {
-            var dataFolder = await GetFolder();
-            var file = await dataFolder.CreateFileAsync(GetFileName(), CreationCollisionOption.ReplaceExisting);
+            try
+            { 
+                var dataFolder = await GetFolder();
+                var file = await dataFolder.CreateFileAsync(GetFileName(), CreationCollisionOption.ReplaceExisting);
 
-            using (var fileStream = await file.OpenStreamForWriteAsync())
-            using (var streamWriter = new StreamWriter(fileStream))
+                using (var fileStream = await file.OpenStreamForWriteAsync())
+                using (var streamWriter = new StreamWriter(fileStream))
+                {
+                    serializer.Serialize(streamWriter, this);
+                }
+            }
+            catch (Exception)
             {
-                serializer.Serialize(streamWriter, this);
+                // TODO: log
             }
         }
 
         public async Task Load()
         {
-            var dataFolder = await GetFolder();
-
             try
             {
+                var dataFolder = await GetFolder();
+
                 var file = await dataFolder.GetFileAsync(GetFileName());
 
                 using (var fileStream = await file.OpenStreamForReadAsync())
@@ -40,6 +47,10 @@ namespace PunchingBand.Models
             catch (FileNotFoundException)
             {
                 // Do nothing
+            }
+            catch (Exception)
+            {
+                // TODO: log
             }
         }
 

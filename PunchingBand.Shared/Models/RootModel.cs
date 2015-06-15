@@ -44,6 +44,7 @@ namespace PunchingBand.Models
         {
             await historyModel.Load();
             await userModel.Load();
+            await gameModel.Load();
         }
     }
 }
