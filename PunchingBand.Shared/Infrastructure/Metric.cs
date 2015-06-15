@@ -1,55 +1,51 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace PunchingBand.Infrastructure
 {
-    public struct Metric
+    public class Metric
     {
-        private bool intialized;
-        private int count;
-        private double mean;
-        private double min;
-        private double max;
-        private double last;
+        public Metric()
+        {
+        }
 
         public Metric(double value)
         {
-            intialized = true;
-            count = 1;
-            min = value;
-            max = value;
-            mean = value;
-            last = value;
+            Update(value);
         }
 
-        public double Minimum { get { return min; } }
+        [JsonProperty]
+        public double Minimum { get; private set; }
 
-        public double Maximum { get { return max; } }
+        [JsonProperty]
+        public double Maximum { get; private set; }
 
-        public double Mean { get { return mean; } }
+        [JsonProperty]
+        public double Mean { get; private set; }
 
-        public double Last { get { return last; } }
+        [JsonProperty]
+        public double Last { get; private set; }
+
+        [JsonProperty]
+        public int Count { get; private set; }
 
         public void Update(double value)
         {
-            if (!intialized)
-            {
-                intialized = true;
+            Last = value;
+            Count++;
 
-                count = 1;
-                min = value;
-                max = value;
-                last = value;
+            if (Count == 1)
+            {
+                Minimum = value;
+                Maximum = value;
+                Mean = value;
             }
             else
             {
-                last = value;
+                Minimum = Math.Min(value, Minimum);
+                Maximum = Math.Max(value, Maximum);
 
-                count++;
-
-                min = Math.Min(value, min);
-                max = Math.Max(value, max);
-
-                mean = mean + ((value - mean) / count);
+                Mean = Mean + ((value - Mean) / Count);
             }
         }
     }

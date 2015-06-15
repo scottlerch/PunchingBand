@@ -11,10 +11,17 @@ namespace PunchingBand.Models
         private const string RootFolder = "UserData";
         private readonly JsonSerializer serializer = new JsonSerializer();
 
+        protected bool IsLoading { get; private set; }
+
         public async Task Save()
         {
+            if (IsLoading)
+            {
+                return;
+            }
+
             try
-            { 
+            {
                 var dataFolder = await GetFolder();
                 var file = await dataFolder.CreateFileAsync(GetFileName(), CreationCollisionOption.ReplaceExisting);
 
@@ -34,6 +41,8 @@ namespace PunchingBand.Models
         {
             try
             {
+                IsLoading = true;
+
                 var dataFolder = await GetFolder();
 
                 var file = await dataFolder.GetFileAsync(GetFileName());
@@ -51,6 +60,10 @@ namespace PunchingBand.Models
             catch (Exception)
             {
                 // TODO: log
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

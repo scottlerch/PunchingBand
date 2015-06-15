@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace PunchingBand.Models
             if (DesignMode.DesignModeEnabled)
             {
                 // In designer create some fake data for visualization
-                Records = new ObservableCollection<HistoryInfo>
+                records = new ObservableCollection<HistoryInfo>
                 {
                     new HistoryInfo { Duration = TimeSpan.FromSeconds(15), Score = 10, Timestamp = DateTime.Now.AddDays(-1) },
                     new HistoryInfo { Duration = TimeSpan.FromSeconds(15), Score = 20, Timestamp = DateTime.Now.AddDays(-2) },
@@ -25,12 +26,15 @@ namespace PunchingBand.Models
                     new HistoryInfo { Duration = TimeSpan.FromSeconds(15), Score = 50, Timestamp = DateTime.Now.AddDays(-5) },
                     new HistoryInfo { Duration = TimeSpan.FromSeconds(15), Score = 60, Timestamp = DateTime.Now.AddDays(-6) },
                 };
+                Records = new ObservableCollection<HistoryInfo>(records);
             }
             else
             {
-                Records = new ObservableCollection<HistoryInfo>();
+                records = new ObservableCollection<HistoryInfo>();
+                Records = new ObservableCollection<HistoryInfo>(records);
+
                 PropertyChanged += async (s, e) => await Save();
-            }  
+            }
         }
 
         public ObservableCollection<HistoryInfo> Records
@@ -60,6 +64,7 @@ namespace PunchingBand.Models
             }
         }
 
+        [JsonIgnore]
         public ObservableCollection<HistoryInfo> SortedRecords
         {
             get { return sortedRecords; }
