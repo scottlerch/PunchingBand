@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Windows.ApplicationModel;
@@ -42,6 +43,7 @@ namespace PunchingBand.Models
             }
         }
 
+        [JsonIgnore]
         public IEnumerable<Gender> Genders
         {
             get
@@ -100,6 +102,7 @@ namespace PunchingBand.Models
             }
         }
 
+        [JsonIgnore]
         public int Age
         {
             get { return (int) Math.Round((DateTime.UtcNow - birthDate).TotalDays/LengthOfYearInDays); }

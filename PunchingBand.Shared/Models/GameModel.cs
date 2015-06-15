@@ -1,4 +1,5 @@
-﻿using PunchingBand.Infrastructure;
+﻿using Newtonsoft.Json;
+using PunchingBand.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -144,6 +145,7 @@ namespace PunchingBand.Models
             
         }
 
+        [JsonIgnore]
         public IEnumerable<TimeSpan> GameDurations
         {
             get
@@ -154,6 +156,7 @@ namespace PunchingBand.Models
             }
         }
 
+        [JsonIgnore]
         public StorageFile Song
         {
             get { return song; }
@@ -178,46 +181,54 @@ namespace PunchingBand.Models
             set { Set("Duration", ref duration, value); }
         }
 
+        [JsonIgnore]
         public double PunchStrength
         {
             get { return punchStrength.Last; }
         }
 
+        [JsonIgnore]
         public double PunchStrengthMeter
         {
             get { return 1.0 - punchStrength.Last; }
         }
 
+        [JsonIgnore]
         public bool Running
         {
             get { return running; }
             private set { Set("Running", ref running, value); }
         }
 
+        [JsonIgnore]
         public int Score
         {
             get { return score; }
             private set { Set("Score", ref score, value); }
         }
 
+        [JsonIgnore]
         public TimeSpan TimeLeft
         {
             get { return timeLeft; }
             private set { Set("TimeLeft", ref timeLeft, value); }
         }
 
+        [JsonIgnore]
         public int TimeLeftSeconds
         {
             get { return timeLeftSeconds; }
             private set { Set("TimeLeftSeconds", ref timeLeftSeconds, value); }
         }
 
+        [JsonIgnore]
         public int PunchCount
         {
             get { return punchCount; }
             private set { Set("PunchCount", ref punchCount, value); }
         }
 
+        [JsonIgnore]
         public int SpeedComboCount
         {
             get { return speedComboCount; }
@@ -228,6 +239,7 @@ namespace PunchingBand.Models
             }
         }
 
+        [JsonIgnore]
         public string SpeedComboText
         {
             get
@@ -246,6 +258,7 @@ namespace PunchingBand.Models
             }
         }
 
+        [JsonIgnore]
         public int PowerComboCount
         {
             get { return powerComboCount; }
@@ -256,6 +269,7 @@ namespace PunchingBand.Models
             }
         }
 
+        [JsonIgnore]
         public string PowerComboText
         {
             get
