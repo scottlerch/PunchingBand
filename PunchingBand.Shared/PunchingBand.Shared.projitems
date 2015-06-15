@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PersistentModelBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PunchEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PunchingModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RootModel.cs" />

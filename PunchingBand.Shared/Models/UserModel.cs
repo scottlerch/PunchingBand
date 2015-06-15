@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Windows.ApplicationModel;
 
 namespace PunchingBand.Models
 {
-    public class UserModel : ModelBase
+    public class UserModel : PersistentModelBase
     {
         private const double LengthOfYearInDays = 365.24218967;
 
@@ -33,6 +34,11 @@ namespace PunchingBand.Models
             {
                 temperatureUnit = TemperatureUnit.Fahrenheit;
                 weightUnit = WeightUnit.Lbs; 
+            }
+
+            if (!DesignMode.DesignModeEnabled)
+            {
+                PropertyChanged += async (s, e) => await Save();
             }
         }
 

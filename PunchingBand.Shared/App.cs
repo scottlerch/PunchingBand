@@ -171,6 +171,7 @@ namespace PunchingBand
             // Ensure the current window is active
             Window.Current.Activate();
 
+            await RootModel.Load();
             await RootModel.PunchingModel.Connect();
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Band;
+﻿using Windows.ApplicationModel;
+using Microsoft.Band;
 using Microsoft.Band.Sensors;
 using PunchingBand.Utilities;
 using System;
@@ -37,6 +38,11 @@ namespace PunchingBand.Models
 
         public PunchingModel()
         {
+            if (!DesignMode.DesignModeEnabled)
+            {
+                throw new InvalidOperationException("Parameterless constructor can only be called by designer");
+            }
+
             userModel = new UserModel();
             invokeOnUiThread = action => action();
         }
