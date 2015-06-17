@@ -1,5 +1,6 @@
 ﻿using System;
 using PunchingBand.Infrastructure;
+using PunchingBand.Models.Enums;
 
 namespace PunchingBand.Models
 {
@@ -11,7 +12,7 @@ namespace PunchingBand.Models
 
         public int Score { get; set; }
 
-        public FistSide FistSide { get; set; }
+        public FistSides FistSide { get; set; }
 
         public Metric CaloriesBurned { get; set; }
 

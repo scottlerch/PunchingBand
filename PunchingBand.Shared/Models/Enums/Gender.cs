@@ -1,4 +1,4 @@
-﻿namespace PunchingBand
+﻿namespace PunchingBand.Models.Enums
 {
     public enum Gender
     {

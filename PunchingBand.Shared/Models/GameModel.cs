@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using Windows.ApplicationModel;
 using Windows.Storage;
+using PunchingBand.Models.Enums;
 
 namespace PunchingBand.Models
 {
@@ -19,7 +20,7 @@ namespace PunchingBand.Models
         // Game setup
         private GameMode gameMode = GameMode.TimeTrial;
         private TimeSpan duration;
-        private FistSide fistSide;
+        private FistSides fistSide = FistSides.Right;
 
         // Game state
         private int punchCount;
@@ -63,11 +64,23 @@ namespace PunchingBand.Models
             punchingModel.PunchStarted += PunchingModelOnPunchStarted;
             punchingModel.PunchEnded += PunchingModelOnPunchEnded;
             punchingModel.Punching += PunchingModelOnPunching;
+            punchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
 
             this.punchingModel = punchingModel;
             this.historyModel = historyModel;
 
             this.PropertyChanged += GameModelOnPropertyChanged;
+        }
+
+        private void PunchingModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            switch (propertyChangedEventArgs.PropertyName)
+            {
+                case "FistSides":
+                    // TODO: what if left and right sides?
+                    FistSide = punchingModel.FistSides;
+                    break;
+            }
         }
 
         private async void GameModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -169,7 +182,7 @@ namespace PunchingBand.Models
             set { Set("GameMode", ref gameMode, value); }
         }
 
-        public FistSide FistSide
+        public FistSides FistSide
         {
             get { return fistSide; }
             set { Set("FistSide", ref fistSide, value); }

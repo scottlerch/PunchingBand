@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
+using PunchingBand.Models.Enums;
 
 namespace PunchingBand.Pages.BindingConverters
 {

@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
+using PunchingBand.Models.Enums;
 
 namespace PunchingBand.Utilities
 {
@@ -35,9 +36,9 @@ namespace PunchingBand.Utilities
 
         public double LastPunchStrength { get; private set; }
 
-        private FistSide fistSide;
+        private FistSides fistSide;
 
-        public PunchDetector(FistSide fistSide)
+        public PunchDetector(FistSides fistSide)
         {
             this.fistSide = fistSide;
         }

@@ -12,6 +12,8 @@ namespace PunchingBand.Pages
             NavigationCacheMode = NavigationCacheMode.Required;
 
             DataContext = App.Current.RootModel;
+
+            App.Current.RootModel.PunchingModel.StartFight += (sender, args) => Frame.Navigate(typeof(GamePage));
         }
 
         /// <summary>

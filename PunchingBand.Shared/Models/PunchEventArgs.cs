@@ -1,14 +1,15 @@
 ﻿using System;
+using PunchingBand.Models.Enums;
 
 namespace PunchingBand.Models
 {
     public class PunchEventArgs : EventArgs
     {
-        public FistSide FistSide { get; private set; }
+        public FistSides FistSide { get; private set; }
 
         public double Strength { get; private set; }
 
-        public PunchEventArgs(FistSide fistSide, double strength)
+        public PunchEventArgs(FistSides fistSide, double strength)
         {
             FistSide = fistSide;
             Strength = strength;

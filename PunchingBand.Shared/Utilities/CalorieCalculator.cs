@@ -1,4 +1,5 @@
 ﻿using System;
+using PunchingBand.Models.Enums;
 
 namespace PunchingBand.Utilities
 {

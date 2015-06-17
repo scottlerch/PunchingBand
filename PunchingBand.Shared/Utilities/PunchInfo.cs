@@ -1,14 +1,16 @@
-﻿namespace PunchingBand.Utilities
+﻿using PunchingBand.Models.Enums;
+
+namespace PunchingBand.Utilities
 {
     internal class PunchInfo
     {
-        public FistSide FistSide { get; private set; }
+        public FistSides FistSide { get; private set; }
 
         public PunchStatus Status { get; private set; }
 
         public double? Strength { get; private set; }
 
-        public PunchInfo(FistSide fistSide, PunchStatus status, double? strength)
+        public PunchInfo(FistSides fistSide, PunchStatus status, double? strength)
         {
             FistSide = fistSide;
             Status = status;

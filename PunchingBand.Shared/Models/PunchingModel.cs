@@ -1,6 +1,9 @@
-﻿using Windows.ApplicationModel;
+﻿using System.ComponentModel;
+using System.Security.Principal;
+using Windows.ApplicationModel;
 using Microsoft.Band;
 using Microsoft.Band.Sensors;
+using PunchingBand.Models.Enums;
 using PunchingBand.Utilities;
 using System;
 using System.Collections.Generic;
@@ -17,6 +20,7 @@ namespace PunchingBand.Models
         private IBandClient[] bandClients;
         private Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector> punchDetectors;
         private Dictionary<IBandSensor<IBandAccelerometerReading>, DateTimeOffset> previousTimestamps;
+        private Dictionary<IBandSensor<IBandContactReading>, BandTileModel> tiles; 
 
         private bool connected;
         private string status = "Connecting...";
@@ -29,12 +33,14 @@ namespace PunchingBand.Models
         private DateTime? lastCaloriCountUpdate;
         private long? startStepCount;
         private bool worn;
+        private FistSides fistSides;
 
         private readonly Action<Action> invokeOnUiThread;
 
         public event EventHandler<PunchEventArgs> PunchStarted = delegate { };
         public event EventHandler<PunchEventArgs> Punching = delegate { };
         public event EventHandler<PunchEventArgs> PunchEnded = delegate { };
+        public event EventHandler StartFight = delegate { }; 
 
         public PunchingModel()
         {
@@ -89,6 +95,12 @@ namespace PunchingBand.Models
             set { Set("Worn", ref worn, value); }
         }
 
+        public FistSides FistSides
+        {
+            get { return fistSides; }
+            set { Set("FistSides", ref fistSides, value); }
+        }
+
         public bool Connected
         {
             get { return connected; }
@@ -115,7 +127,7 @@ namespace PunchingBand.Models
                     {
                         await ConnectCore();
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         Status = "Error connecting to Band!";
                         CleanupBandClients();
@@ -136,8 +148,11 @@ namespace PunchingBand.Models
                 bandClients = new IBandClient[bands.Length];
                 punchDetectors = new Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector>();
                 previousTimestamps = new Dictionary<IBandSensor<IBandAccelerometerReading>, DateTimeOffset>();
+                tiles = new Dictionary<IBandSensor<IBandContactReading>, BandTileModel>();
 
+#if WINDOWS_APP
                 var currentAppId = Guid.NewGuid();
+#endif
 
                 for (int i = 0; i < Math.Min(bands.Length, 2); i++)
                 {
@@ -151,17 +166,16 @@ namespace PunchingBand.Models
                         .SetValue(bandClients[i], currentAppId);
 #endif
 
+                    await SetupBandTile(bandClients[i]);
+
                     // Only start fitness sensors on first band
                     if (i == 0)
                     {
                         await StartFitnessSensors(bandClients[i]);
                     }
 
-                    // TODO: prompt user for fist side on band tile
-                    await StartPunchDetection(bandClients[i], (FistSide)i);
-
-                    //var tile = new BandTileModel();
-                    //await tile.Initialize(bandClients[i]);
+                    // TODO: get fist side from band tile
+                    await StartPunchDetection(bandClients[i], (FistSides)i);
                 }
 
                 Connected = true;
@@ -190,7 +204,7 @@ namespace PunchingBand.Models
             await bandClient.SensorManager.SkinTemperature.StartReadingsAsync();
         }
 
-        private async Task StartPunchDetection(IBandClient bandClient, FistSide fistSide)
+        private async Task StartPunchDetection(IBandClient bandClient, FistSides fistSide)
         {
             punchDetectors[bandClient.SensorManager.Accelerometer] = new PunchDetector(fistSide);
             previousTimestamps[bandClient.SensorManager.Accelerometer] = DateTimeOffset.MinValue;
@@ -205,6 +219,29 @@ namespace PunchingBand.Models
 #endif
 
             await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
+        }
+
+        private async Task SetupBandTile(IBandClient bandClient)
+        {
+            tiles[bandClient.SensorManager.Contact] = new BandTileModel();
+
+            tiles[bandClient.SensorManager.Contact].PropertyChanged += TileOnPropertyChanged;
+            tiles[bandClient.SensorManager.Contact].FightButtonClick += (sender, args) => invokeOnUiThread(() => StartFight(this, EventArgs.Empty));
+
+            await tiles[bandClient.SensorManager.Contact].Initialize(bandClient);
+        }
+
+        private void TileOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName == "FistSide")
+            {
+                invokeOnUiThread(() =>
+                {
+                    // TODO: support specifying both fists
+                    var model = sender as BandTileModel;
+                    FistSides = model.FistSide;
+                });
+            }
         }
 
         public void Disconnect()

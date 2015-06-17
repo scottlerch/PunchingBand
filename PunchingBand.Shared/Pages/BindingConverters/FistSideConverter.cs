@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
+using PunchingBand.Models.Enums;
 
 namespace PunchingBand.Pages.BindingConverters
 {
@@ -7,12 +8,12 @@ namespace PunchingBand.Pages.BindingConverters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return ((FistSide) value) == FistSide.Left;
+            return ((FistSides) value).HasFlag(FistSides.Right);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return ((bool) value)? FistSide.Left : FistSide.Right;
+            return ((bool) value)? FistSides.Left : FistSides.Right;
         }
     }
 }

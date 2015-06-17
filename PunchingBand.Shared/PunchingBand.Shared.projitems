@@ -21,7 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SuspensionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BandTileModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\BandPosition.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\FistSide.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\FistSides.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\GameMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\Gender.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\TemperatureUnit.cs" />
