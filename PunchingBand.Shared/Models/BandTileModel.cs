@@ -43,6 +43,7 @@ namespace PunchingBand.Models
         {
             this.bandClient = bandClient;
 
+#if WINDOWS_APP
             var tile = await GetTile();
 
             bandClient.TileManager.TileButtonPressed += TileManagerOnTileButtonPressed;
@@ -51,6 +52,9 @@ namespace PunchingBand.Models
             await SetPages(includeFistSelection: true);
 
             await bandClient.TileManager.StartReadingsAsync();
+#else
+            await Task.Yield();
+#endif
         }
 
         private async void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
