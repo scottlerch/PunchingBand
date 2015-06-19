@@ -40,6 +40,7 @@ namespace PunchingBand.Models
         private Metric punchStrength;
         private Metric caloriesBurned;
         private Metric skinTemperature;
+        private Metric heartrate;
 
         private StorageFile song;
 
@@ -314,6 +315,7 @@ namespace PunchingBand.Models
             punchStrength = new Metric(0.001);
             caloriesBurned = new Metric();
             skinTemperature = new Metric();
+            heartrate = new Metric();
 
             RaisePropertyChanged("PunchStrength");
             RaisePropertyChanged("PunchStrengthMeter"); 
@@ -348,6 +350,11 @@ namespace PunchingBand.Models
                     {
                         skinTemperature.Update(punchingModel.SkinTemperature.Value);
                     }
+
+                    if (punchingModel.HeartRate.HasValue)
+                    {
+                        heartrate.Update(punchingModel.HeartRate.Value);
+                    }
                 }
             }
         }
@@ -364,6 +371,7 @@ namespace PunchingBand.Models
                 PunchStrenth = punchStrength,
                 CaloriesBurned = caloriesBurned,
                 SkinTemperature = skinTemperature,
+                Heartrate = heartrate,
                 Duration = Duration, 
                 Score = Score,
                 FistSide = FistSide,

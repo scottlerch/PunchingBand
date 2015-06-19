@@ -22,6 +22,8 @@ namespace PunchingBand.Models
 
         public Metric SkinTemperature { get; set; }
 
+        public Metric Heartrate { get; set; }
+
         public GameMode GameMode { get; set; }
     }
 }
