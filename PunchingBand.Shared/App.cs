@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using PunchingBand.Infrastructure;
 using PunchingBand.Models;
 using PunchingBand.Pages;
 using System;
@@ -27,6 +28,8 @@ namespace PunchingBand
     {
         public event ApplicationActivatedEventHandler Activated;
 
+        private readonly SoundEffect wornSoundEffect;
+
         public RootModel RootModel { get; private set; }
 
         private CoreDispatcher dispatcher;
@@ -44,6 +47,9 @@ namespace PunchingBand
             InitializeComponent();
             Suspending += OnSuspending;
             RootModel = new RootModel(InvokeOnUIThread);
+            RootModel.PunchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
+
+            wornSoundEffect = new SoundEffect("Assets/Audio/worn.wav");
         }
 
         private async void UpdateStatus()
@@ -177,9 +183,17 @@ namespace PunchingBand
 
         private void PunchingModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            if (propertyChangedEventArgs.PropertyName == "Status")
+            switch (propertyChangedEventArgs.PropertyName)
             {
-                InvokeOnUIThread(UpdateStatus);
+                case "Status":
+                    InvokeOnUIThread(UpdateStatus);
+                    break;
+                case "Worn":
+                    if (RootModel.PunchingModel.Worn)
+                    {
+                        wornSoundEffect.Play(0.3);
+                    }
+                    break;
             }
         }
 

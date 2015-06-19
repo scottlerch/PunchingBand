@@ -45,9 +45,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\HomePage.xaml.cs">
-      <DependentUpon>HomePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Pages\ResponsivePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\CountDown.xaml.cs">
       <DependentUpon>CountDown.xaml</DependentUpon>
@@ -69,10 +66,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\countdownbeep.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\ding.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\endbuzzer.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\endgame.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\fightbell.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\heavypunch1.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\powerpunch.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch1.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch2.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\worn.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconSmall.png" />
   </ItemGroup>
@@ -84,10 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Pages\GamePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Pages\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

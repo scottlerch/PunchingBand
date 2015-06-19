@@ -36,9 +36,9 @@ namespace PunchingBand.Pages
             timer.Interval = TimeSpan.FromMilliseconds(17);
             timer.Start();
 
-            punchSound = new SoundEffect("Assets/Audio/punch.wav");
-            powerPunchSound = new SoundEffect("Assets/Audio/powerpunch.wav");
-            beepSound = new SoundEffect("Assets/Audio/countdownbeep.wav");
+            punchSound = new SoundEffect("Assets/Audio/punch1.wav", poolSize: 10);
+            powerPunchSound = new SoundEffect("Assets/Audio/heavypunch1.wav", poolSize: 10);
+            beepSound = new SoundEffect("Assets/Audio/ding.wav", poolSize: 2);
             endBuzzer = new SoundEffect("Assets/Audio/endbuzzer.wav");
             fightBell = new SoundEffect("Assets/Audio/fightbell.wav");
 
@@ -54,6 +54,8 @@ namespace PunchingBand.Pages
 #if WINDOWS_PHONE_APP
             backButton.Visibility = Visibility.Collapsed;
 #endif
+
+            model.PunchingModel.StartFight += (sender, args) => Restart();
         }
 
         private void PunchingModelOnPunchStarted(object sender, EventArgs eventArgs)
@@ -165,24 +167,17 @@ namespace PunchingBand.Pages
 #if WINDOWS_PHONE_APP
         private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
         {
-            model.GameModel.StopGame();
-
-            var frame = Window.Current.Content as Frame;
-
-            if (frame == null)
-            {
-                return;
-            }
-
-            if (frame.CanGoBack)
-            {
-                frame.GoBack();
-                backPressedEventArgs.Handled = true;
-            }
+            Stop();
+            backPressedEventArgs.Handled = true;
         }
 #endif
 
         private void RestartButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            Restart();
+        }
+
+        private void Restart()
         {
             if (SongMedia.CurrentState == MediaElementState.Playing)
             {
@@ -202,6 +197,12 @@ namespace PunchingBand.Pages
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+           Stop();
+        }
+
+        private void Stop()
+        {
+            countDownUserControl.Stop();
             model.GameModel.StopGame();
 
             var frame = Window.Current.Content as Frame;

@@ -20,7 +20,7 @@ namespace PunchingBand.Infrastructure
             masteringVoice = new MasteringVoice(xAudio);
         }
 
-        public SoundEffect(string path, int poolSize = 10)
+        public SoundEffect(string path, int poolSize = 1)
         {
             var nativeFileStream = new NativeFileStream(path, NativeFileMode.Open, NativeFileAccess.Read, NativeFileShare.Read);
 

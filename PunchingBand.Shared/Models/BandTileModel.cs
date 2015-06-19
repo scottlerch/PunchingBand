@@ -43,7 +43,7 @@ namespace PunchingBand.Models
         {
             this.bandClient = bandClient;
 
-#if WINDOWS_APP
+#if WINDOWS_PHONE_APP
             var tile = await GetTile();
 
             bandClient.TileManager.TileButtonPressed += TileManagerOnTileButtonPressed;
