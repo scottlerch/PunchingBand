@@ -17,9 +17,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "punchdata", "punchdata", "{2BF9AD06-EEA1-437F-B53A-D8BCFB6BE286}"
 	ProjectSection(SolutionItems) = preProject
 		punchdata\PunchData-Hook.csv = punchdata\PunchData-Hook.csv
-		punchdata\PunchData-JabCross.csv = punchdata\PunchData-JabCross.csv
-		punchdata\PunchData-PowerJab.csv = punchdata\PunchData-PowerJab.csv
-		punchdata\PunchData-SpeedJab.csv = punchdata\PunchData-SpeedJab.csv
+		punchdata\PunchData-Jab.csv = punchdata\PunchData-Jab.csv
 		punchdata\PunchData-UpperCut.csv = punchdata\PunchData-UpperCut.csv
 	EndProjectSection
 EndProject
