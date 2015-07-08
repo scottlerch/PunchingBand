@@ -14,6 +14,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "linqpad", "linqpad", "{115A
 		linqpad\PreparePunchDataAzureML.linq = linqpad\PreparePunchDataAzureML.linq
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "punchdata", "punchdata", "{2BF9AD06-EEA1-437F-B53A-D8BCFB6BE286}"
+	ProjectSection(SolutionItems) = preProject
+		punchdata\PunchData-Hook.csv = punchdata\PunchData-Hook.csv
+		punchdata\PunchData-JabCross.csv = punchdata\PunchData-JabCross.csv
+		punchdata\PunchData-PowerJab.csv = punchdata\PunchData-PowerJab.csv
+		punchdata\PunchData-SpeedJab.csv = punchdata\PunchData-SpeedJab.csv
+		punchdata\PunchData-UpperCut.csv = punchdata\PunchData-UpperCut.csv
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prepared", "prepared", "{B01712E5-90CA-408E-B290-62930E472698}"
+	ProjectSection(SolutionItems) = preProject
+		punchdata\prepared\punchdata.csv = punchdata\prepared\punchdata.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PunchingBand.Shared\PunchingBand.Shared.projitems*{cdbed812-5c14-4072-952d-3ebe906d66d1}*SharedItemsImports = 13
@@ -104,5 +118,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B01712E5-90CA-408E-B290-62930E472698} = {2BF9AD06-EEA1-437F-B53A-D8BCFB6BE286}
 	EndGlobalSection
 EndGlobal
