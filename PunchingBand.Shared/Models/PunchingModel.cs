@@ -20,6 +20,7 @@ namespace PunchingBand.Models
         private IBandClient[] bandClients;
         private Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector> punchDetectors;
         private Dictionary<IBandSensor<IBandAccelerometerReading>, DateTimeOffset> previousTimestamps;
+        private Dictionary<IBandSensor<IBandContactReading>, bool> wornStatus;
         private Dictionary<IBandSensor<IBandContactReading>, BandTileModel> tiles; 
 
         private bool connected;
@@ -148,11 +149,8 @@ namespace PunchingBand.Models
                 bandClients = new IBandClient[bands.Length];
                 punchDetectors = new Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector>();
                 previousTimestamps = new Dictionary<IBandSensor<IBandAccelerometerReading>, DateTimeOffset>();
+                wornStatus = new Dictionary<IBandSensor<IBandContactReading>, bool>();
                 tiles = new Dictionary<IBandSensor<IBandContactReading>, BandTileModel>();
-
-#if WINDOWS_APP
-                var currentAppId = Guid.NewGuid();
-#endif
 
                 for (int i = 0; i < Math.Min(bands.Length, 2); i++)
                 {
@@ -161,13 +159,14 @@ namespace PunchingBand.Models
                     await SetupBandTile(bandClients[i]);
 
                     // Only start fitness sensors on first band
+                    // TODO: maybe use sensors from both or at least on the one currently worn?
                     if (i == 0)
                     {
                         await StartFitnessSensors(bandClients[i]);
                     }
 
-                    // TODO: get fist side from band tile
-                    await StartPunchDetection(bandClients[i], (FistSides)i);
+                    // TODO: get fist side from band tile, for now assume first band is Left and second is Right
+                    await StartPunchDetection(bandClients[i], (FistSides)(i+ 1));
                 }
 
                 Connected = true;
@@ -180,7 +179,6 @@ namespace PunchingBand.Models
 
         private async Task StartFitnessSensors(IBandClient bandClient)
         {
-            bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
             bandClient.SensorManager.Pedometer.ReadingChanged += PedometerOnReadingChanged;
             bandClient.SensorManager.HeartRate.ReadingChanged += HeartRateOnReadingChanged;
             bandClient.SensorManager.SkinTemperature.ReadingChanged += SkinTemperatureOnReadingChanged;
@@ -190,7 +188,6 @@ namespace PunchingBand.Models
                 await bandClient.SensorManager.HeartRate.RequestUserConsentAsync();
             }
             
-            await bandClient.SensorManager.Contact.StartReadingsAsync();
             await bandClient.SensorManager.HeartRate.StartReadingsAsync();
             await bandClient.SensorManager.Pedometer.StartReadingsAsync();
             await bandClient.SensorManager.SkinTemperature.StartReadingsAsync();
@@ -198,6 +195,8 @@ namespace PunchingBand.Models
 
         private async Task StartPunchDetection(IBandClient bandClient, FistSides fistSide)
         {
+            bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
+
             punchDetectors[bandClient.SensorManager.Accelerometer] = new PunchDetector(fistSide);
             previousTimestamps[bandClient.SensorManager.Accelerometer] = DateTimeOffset.MinValue;
 
@@ -210,6 +209,7 @@ namespace PunchingBand.Models
             punchDetectors[bandClient.SensorManager.Accelerometer].InitializeLogging();
 #endif
 
+            await bandClient.SensorManager.Contact.StartReadingsAsync();
             await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
         }
 
@@ -311,16 +311,21 @@ namespace PunchingBand.Models
 
         private void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
         {
+            var key = sender as IBandSensor<IBandContactReading>;
+
+            wornStatus[key] = bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn;
+
             invokeOnUiThread(() =>
             {
-                if (bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn)
-                {
-                    Worn = true;
+                // Consider worn if either wrist has band worn
+                Worn = wornStatus.Values.Any(worn => worn);
+
+                if (Worn)
+                { 
                     Status = string.Empty;
                 }
                 else
                 {
-                    Worn = false;
                     Status = "Please wear your Band.";
                 }
             });
