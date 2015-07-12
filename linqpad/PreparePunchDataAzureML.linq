@@ -2,12 +2,13 @@
 
 void Main()
 {
-	var directory = @"C:\Users\Scott\Desktop\punchdata";
-	var outputFilePath = @"C:\Users\Scott\Desktop\punchdata\combined\punchdata.csv";
+	var directory = @"C:\Users\scott_000\Source\Repos\PunchingBand\punchdata";
+	var outputFilePath = @"C:\Users\scott_000\Source\Repos\PunchingBand\punchdata\combined\punchdata.csv";
 	
 	var lines = new List<string>();
 	var builder = new StringBuilder();
-	var windowSize = 15;
+	var windowSize = 25;
+	var prepunchRecordCount = 1;
 	
 	builder.Append("PunchType");
 	for(int i = 0; i< windowSize; i++)
@@ -21,6 +22,7 @@ void Main()
 	{
 		var classification = Path.GetFileNameWithoutExtension(file).Split('-')[1];
 		var records = new List<Record>();
+		var startRecords = new List<Record>();
 		
 		foreach (var line in File.ReadAllLines(file))
 		{
@@ -35,10 +37,21 @@ void Main()
 			
 			if (record.State != "Unknown")
 			{
+				if (startRecords.Count > 0)
+				{
+					for (int i = Math.Max(0, startRecords.Count - prepunchRecordCount); i < startRecords.Count; i++)
+					{
+						records.Add(startRecords[i]);
+					}
+				}
 				records.Add(record);
 			}
+			else
+			{
+				startRecords.Add(record);
+			}
 			
-			if (record.State == "Finish")
+			if (record.State == "Reset")
 			{
 				builder = new StringBuilder();
 				builder.Append(classification);

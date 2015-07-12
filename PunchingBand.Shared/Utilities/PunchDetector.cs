@@ -29,6 +29,8 @@ namespace PunchingBand.Utilities
 
         private DateTime nextPunchTime = DateTime.MinValue;
 
+        private PunchStatus lastPunchStatus = PunchStatus.Unknown;
+
         private bool punchStarted;
 
         private BlockingCollection<LogData> logData;
@@ -63,11 +65,21 @@ namespace PunchingBand.Utilities
                 {
                     status = PunchStatus.InProgress;
                 }
+                else if (!readyForPunch)
+                {
+                    status = PunchStatus.Resetting;
+                }
+                else if (lastPunchStatus == PunchStatus.Resetting)
+                {
+                    status = PunchStatus.Reset;
+                }
             }
 
             var punchInfo = new PunchInfo(fistSide, status, punchStrength);
 
             Log(reading, punchInfo);
+
+            lastPunchStatus = status;
 
             return punchInfo;
         }
@@ -149,6 +161,7 @@ namespace PunchingBand.Utilities
                 var local = ApplicationData.Current.LocalFolder;
                 var dataFolder = await local.CreateFolderAsync("LogData", CreationCollisionOption.OpenIfExists);
                 var file = await dataFolder.CreateFileAsync(string.Format("PunchData{0}.csv", fistSide), CreationCollisionOption.ReplaceExisting);
+                var startTimestamp = DateTime.Now;
 
                 using (var fileStream = await file.OpenStreamForWriteAsync())
                 {
@@ -157,8 +170,8 @@ namespace PunchingBand.Utilities
                     foreach (var data in logData.GetConsumingEnumerable())
                     {
                         streamWriter.WriteLine(
-                            "{0:HH:mm:ss.ffffff},{1},{2},{3},{4}",
-                            data.AccelerometerReading.Timestamp,
+                            "{0},{1},{2},{3},{4}",
+                            (int)(data.AccelerometerReading.Timestamp - startTimestamp).TotalMilliseconds,
                             data.AccelerometerReading.AccelerationX,
                             data.AccelerometerReading.AccelerationY,
                             data.AccelerometerReading.AccelerationZ,

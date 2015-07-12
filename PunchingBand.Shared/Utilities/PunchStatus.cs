@@ -6,6 +6,7 @@
         Start,
         InProgress,
         Finish,
+        Resetting,
         Reset,
     }
 }
