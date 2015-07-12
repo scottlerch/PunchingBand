@@ -158,14 +158,6 @@ namespace PunchingBand.Models
                 {
                     bandClients[i] = await BandClientManager.Instance.ConnectAsync(bands[i]);
 
-#if WINDOWS_APP
-                    // HACK: need to set this to stream sensor data from dev/debug on Windows
-                    Type.GetType("Microsoft.Band.BandClient, Microsoft.Band")
-                        .GetRuntimeFields()
-                        .First(field => field.Name == "currentAppId")
-                        .SetValue(bandClients[i], currentAppId);
-#endif
-
                     await SetupBandTile(bandClients[i]);
 
                     // Only start fitness sensors on first band
@@ -338,8 +330,7 @@ namespace PunchingBand.Models
         {
             var key = sender as IBandSensor<IBandAccelerometerReading>;
 
-            // HACK: due to bug in API throw out duplicate timestamps which have all zero values anyway
-            if (!worn || previousTimestamps[key] == bandSensorReadingEventArgs.SensorReading.Timestamp)
+            if (!worn)
             {
                 return;
             }
