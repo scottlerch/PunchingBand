@@ -1,10 +1,20 @@
-﻿using Microsoft.Band.Sensors;
+﻿#define DISABLE_PUNCH_RECOGNITION
+
+using Microsoft.Band.Sensors;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 using PunchingBand.Models.Enums;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace PunchingBand.Utilities
 {
@@ -36,6 +46,8 @@ namespace PunchingBand.Utilities
         private BlockingCollection<LogData> logData;
         private Task logTask;
 
+        private List<IBandAccelerometerReading> punchReadings = new List<IBandAccelerometerReading>();
+
         public double LastPunchStrength { get; private set; }
 
         private FistSides fistSide;
@@ -45,7 +57,7 @@ namespace PunchingBand.Utilities
             this.fistSide = fistSide;
         }
 
-        public PunchInfo GetPunchInfo(IBandAccelerometerReading reading)
+        public async Task<PunchInfo> GetPunchInfo(IBandAccelerometerReading reading)
         {
             var status = PunchStatus.Unknown;
             double? punchStrength;
@@ -75,13 +87,111 @@ namespace PunchingBand.Utilities
                 }
             }
 
+            if (status == PunchStatus.Unknown)
+            {
+                punchReadings.Clear();
+            }
+
+            punchReadings.Add(reading);
+
             var punchInfo = new PunchInfo(fistSide, status, punchStrength);
 
             Log(reading, punchInfo);
 
             lastPunchStatus = status;
 
-            return punchInfo;
+            if (status == PunchStatus.Reset)
+            {
+                var punchType = await DeterminePunchType(punchReadings.ToList()).ConfigureAwait(false);
+                return new PunchInfo(fistSide, status, punchStrength, punchType);
+            }
+            else
+            {
+                return punchInfo;
+            }
+        }
+
+        private async Task<PunchType> DeterminePunchType(List<IBandAccelerometerReading> readings)
+        {
+#if DISABLE_PUNCH_RECOGNITION
+            return await Task.FromResult(PunchType.Unknown);
+#else
+            const int windowSize = 100;
+
+            // TODO: there has to be a more efficient way to do all this... ideally Azure ML web service can take simpler input or maybe binary input
+            // TODO: see if we can execute Azure ML trained model locally using .NET machine learning library
+            using (var client = new HttpClient())
+            {
+                var columnNames = new List<string>();
+                columnNames.Add("PunchType");
+                for (int i = 0; i < windowSize; i++)
+                {
+                    columnNames.Add("X" + i);
+                    columnNames.Add("Y" + i);
+                    columnNames.Add("Z" + i);
+                }
+
+                var values = new List<string>();
+                values.Add("");
+                for (int i = 0; i < windowSize; i++)
+                {
+                    if (i < readings.Count)
+                    {
+                        values.Add(readings[i].AccelerationX.ToString());
+                        values.Add(readings[i].AccelerationY.ToString());
+                        values.Add(readings[i].AccelerationZ.ToString());
+                    }
+                    else
+                    {
+                        values.Add("0");
+                        values.Add("0");
+                        values.Add("0");
+                    }
+                }
+
+                var scoreRequest = new
+                {
+                    Inputs = new
+                    {
+                        punchData = new
+                        {
+                            ColumnNames = columnNames,
+                            Values = new[] { values },
+                        }
+                    },
+                    GlobalParameters = new { },
+                };
+
+                const string apiKey = "0altQZMnmD/uuvva0NADe2hjoM1m6e/Prx2yx+NICqpQSKEZwhdvsJrPzjhRi/ksYggU4VX1tWqBuh5EQ59npQ==";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                client.BaseAddress = new Uri("https://ussouthcentral.services.azureml.net/workspaces/b67bf94b67004a95b0bb0be9be60b916/services/a472d8313a2b4af398dba9b7a310ae82/execute?api-version=2.0&details=true");
+
+                var jsonBody = JsonConvert.SerializeObject(scoreRequest);
+
+                var sw = Stopwatch.StartNew();
+                var response = await client.PostAsync("", new StringContent(jsonBody, Encoding.UTF8, "application/json")).ConfigureAwait(false);
+                sw.Stop();
+
+                PunchType punchType;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = JObject.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                    var v = result["Results"]["punchType"]["value"]["Values"][0];
+                    punchType = (PunchType)Enum.Parse(typeof(PunchType), v.Last.ToObject<string>());
+                }
+                else
+                {
+                    dynamic result = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                    punchType = PunchType.Unknown;
+                }
+
+                Debug.WriteLine("{0} {1}", sw.ElapsedMilliseconds, punchType);
+                return punchType;
+            }
+#endif
         }
 
         private bool IsPunchDetected(IBandAccelerometerReading reading, out double? punchStrength)

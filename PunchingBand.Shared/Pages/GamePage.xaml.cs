@@ -110,6 +110,9 @@ namespace PunchingBand.Pages
                 case "PowerComboText":
                     powerComboStoryboard.Begin();
                     break;
+                case "PunchType":
+                    punchTypeStoryboard.Begin();
+                    break;
             }
         }
 

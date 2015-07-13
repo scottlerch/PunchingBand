@@ -76,6 +76,29 @@
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
+        <Storyboard x:Name="punchTypeStoryboard">
+            <DoubleAnimation
+                Storyboard.TargetName="punchTypeTextBlock"
+                Storyboard.TargetProperty="Opacity"
+                To="0.0" From="1.0" Duration="0:0:1" AutoReverse="False">
+            </DoubleAnimation>
+            <DoubleAnimation
+                Storyboard.TargetName="punchTypeScaleTransform"
+                Storyboard.TargetProperty="(ScaleTransform.ScaleX)"
+                To="1.3" From="1.0" Duration="0:0:0.1" AutoReverse="True">
+                <DoubleAnimation.EasingFunction>
+                    <BounceEase Bounces="2" EasingMode="EaseOut" Bounciness="4" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation
+                Storyboard.TargetName="punchTypeScaleTransform"
+                Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                To="1.3" From="1.0" Duration="0:0:0.1" AutoReverse="True">
+                <DoubleAnimation.EasingFunction>
+                    <BounceEase Bounces="2" EasingMode="EaseOut" Bounciness="4" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <MediaElement x:Name="SongMedia" AudioCategory="ForegroundOnlyMedia"></MediaElement>
@@ -124,6 +147,11 @@
             <TextBlock x:Name="speedComboTextBlock" HorizontalAlignment="Center" Margin="260,0,0,270" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding GameModel.SpeedComboText}" Width="150" FontSize="28" Foreground="SkyBlue" FontWeight="Bold" RenderTransformOrigin="0,1">
                 <TextBlock.RenderTransform>
                     <ScaleTransform x:Name="speedComboScaleTransform" ScaleX="1" ScaleY="1"  />
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            <TextBlock x:Name="punchTypeTextBlock" HorizontalAlignment="Center" Margin="0,0,0,470" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding GameModel.PunchType}" Width="170" FontSize="28" Foreground="White" FontWeight="Bold" RenderTransformOrigin="0.5,0.5">
+                <TextBlock.RenderTransform>
+                    <ScaleTransform x:Name="punchTypeScaleTransform" ScaleX="1" ScaleY="1"  />
                 </TextBlock.RenderTransform>
             </TextBlock>
             <Button x:Name="backButton" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Margin="20" Style="{StaticResource CustomBackButtonStyle}" Click="BackButton_Click"></Button>

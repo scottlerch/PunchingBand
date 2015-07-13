@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\FistSides.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\GameMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\Gender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\PunchType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\TemperatureUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\WeightUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\GameModel.cs" />

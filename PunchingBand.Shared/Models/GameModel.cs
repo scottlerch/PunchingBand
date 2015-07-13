@@ -28,6 +28,7 @@ namespace PunchingBand.Models
         private TimeSpan timeLeft;
         private int timeLeftSeconds;
         private bool running;
+        private string punchType;
 
         // Combo trackers
         private int speedComboCount;
@@ -65,6 +66,7 @@ namespace PunchingBand.Models
             punchingModel.PunchStarted += PunchingModelOnPunchStarted;
             punchingModel.PunchEnded += PunchingModelOnPunchEnded;
             punchingModel.Punching += PunchingModelOnPunching;
+            punchingModel.PunchTypeRecognized += PunchingModelOnPunchTypeRecognized;
             punchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
 
             this.punchingModel = punchingModel;
@@ -100,6 +102,18 @@ namespace PunchingBand.Models
         {
             //currentPunchStrength = e.Strength;
             //RaisePropertyChanged("PunchStrengthMeter");
+        }
+
+        private void PunchingModelOnPunchTypeRecognized(object sender, PunchEventArgs e)
+        {
+            if (e.PunchType != Enums.PunchType.Unknown)
+            {
+                PunchType = e.PunchType.ToString();
+            }
+            else
+            {
+                PunchType = string.Empty;
+            }
         }
 
         private void PunchingModelOnPunchEnded(object sender, PunchEventArgs punchEventArgs)
@@ -240,6 +254,13 @@ namespace PunchingBand.Models
         {
             get { return punchCount; }
             private set { Set("PunchCount", ref punchCount, value); }
+        }
+
+        [JsonIgnore]
+        public string PunchType
+        {
+            get { return punchType; }
+            private set { Set("PunchType", ref punchType, value); }
         }
 
         [JsonIgnore]

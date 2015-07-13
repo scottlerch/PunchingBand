@@ -10,7 +10,9 @@ namespace PunchingBand.Utilities
 
         public double? Strength { get; private set; }
 
-        public PunchInfo(FistSides fistSide, PunchStatus status, double? strength)
+        public PunchType PunchType { get; private set; }
+
+        public PunchInfo(FistSides fistSide, PunchStatus status, double? strength, PunchType punchType = PunchType.Unknown)
         {
             FistSide = fistSide;
             Status = status;
@@ -29,6 +31,7 @@ namespace PunchingBand.Utilities
             }
 
             Strength = strength;
+            PunchType = punchType;
         }
     }
 }

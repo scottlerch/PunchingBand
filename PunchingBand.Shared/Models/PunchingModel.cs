@@ -41,6 +41,7 @@ namespace PunchingBand.Models
         public event EventHandler<PunchEventArgs> PunchStarted = delegate { };
         public event EventHandler<PunchEventArgs> Punching = delegate { };
         public event EventHandler<PunchEventArgs> PunchEnded = delegate { };
+        public event EventHandler<PunchEventArgs> PunchTypeRecognized = delegate { };
         public event EventHandler StartFight = delegate { }; 
 
         public PunchingModel()
@@ -331,7 +332,7 @@ namespace PunchingBand.Models
             });
         }
 
-        private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
+        private async void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
         {
             var key = sender as IBandSensor<IBandAccelerometerReading>;
 
@@ -340,7 +341,7 @@ namespace PunchingBand.Models
                 return;
             }
 
-            var punchInfo = punchDetectors[key].GetPunchInfo(bandSensorReadingEventArgs.SensorReading);
+            var punchInfo = await punchDetectors[key].GetPunchInfo(bandSensorReadingEventArgs.SensorReading).ConfigureAwait(false);
 
             if (punchInfo.Status == PunchStatus.Finish)
             {
@@ -364,6 +365,13 @@ namespace PunchingBand.Models
                 invokeOnUiThread(() =>
                 {
                     Punching(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value));
+                });
+            }
+            else if (punchInfo.Status == PunchStatus.Reset)
+            {
+                invokeOnUiThread(() =>
+                {
+                    PunchTypeRecognized(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength ?? 0, punchInfo.PunchType));
                 });
             }
 

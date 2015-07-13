@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PunchingBand.Shared", "PunchingBand.Shared\PunchingBand.Shared.shproj", "{CDBED812-5C14-4072-952D-3EBE906D66D1}"
 EndProject
@@ -15,16 +15,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "linqpad", "linqpad", "{115A
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "punchdata", "punchdata", "{2BF9AD06-EEA1-437F-B53A-D8BCFB6BE286}"
-	ProjectSection(SolutionItems) = preProject
-		punchdata\PunchData-Hook.csv = punchdata\PunchData-Hook.csv
-		punchdata\PunchData-Jab.csv = punchdata\PunchData-Jab.csv
-		punchdata\PunchData-UpperCut.csv = punchdata\PunchData-UpperCut.csv
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prepared", "prepared", "{B01712E5-90CA-408E-B290-62930E472698}"
 	ProjectSection(SolutionItems) = preProject
-		punchdata\prepared\punchdata.csv = punchdata\prepared\punchdata.csv
+		punchdata\prepared\punchdata-right.csv = punchdata\prepared\punchdata-right.csv
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "raw", "raw", "{CC405A49-D756-48CC-89FA-BFC61ECA0A21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "right", "right", "{9109AD2B-8225-49B3-B7B0-64A565BD4A2C}"
+	ProjectSection(SolutionItems) = preProject
+		punchdata\raw\right\PunchData-Body.csv = punchdata\raw\right\PunchData-Body.csv
+		punchdata\raw\right\PunchData-Cross.csv = punchdata\raw\right\PunchData-Cross.csv
+		punchdata\raw\right\PunchData-Hook.csv = punchdata\raw\right\PunchData-Hook.csv
+		punchdata\raw\right\PunchData-Jab.csv = punchdata\raw\right\PunchData-Jab.csv
+		punchdata\raw\right\PunchData-UpperCut.csv = punchdata\raw\right\PunchData-UpperCut.csv
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "left", "left", "{FA4A6963-9F87-40DA-A53D-D0BB3BC8F7FB}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -119,5 +127,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B01712E5-90CA-408E-B290-62930E472698} = {2BF9AD06-EEA1-437F-B53A-D8BCFB6BE286}
+		{CC405A49-D756-48CC-89FA-BFC61ECA0A21} = {2BF9AD06-EEA1-437F-B53A-D8BCFB6BE286}
+		{9109AD2B-8225-49B3-B7B0-64A565BD4A2C} = {CC405A49-D756-48CC-89FA-BFC61ECA0A21}
+		{FA4A6963-9F87-40DA-A53D-D0BB3BC8F7FB} = {CC405A49-D756-48CC-89FA-BFC61ECA0A21}
 	EndGlobalSection
 EndGlobal

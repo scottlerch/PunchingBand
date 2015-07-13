@@ -9,10 +9,13 @@ namespace PunchingBand.Models
 
         public double Strength { get; private set; }
 
-        public PunchEventArgs(FistSides fistSide, double strength)
+        public PunchType PunchType { get; private set; }
+
+        public PunchEventArgs(FistSides fistSide, double strength, PunchType punchType = PunchType.Unknown)
         {
             FistSide = fistSide;
             Strength = strength;
+            PunchType = punchType;
         }
     }
 }
