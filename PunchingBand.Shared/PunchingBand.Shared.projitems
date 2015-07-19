@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\CalorieCalculator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\DeviceInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchStatus.cs" />

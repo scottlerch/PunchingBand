@@ -31,6 +31,7 @@ namespace PunchingBand.Utilities
         private const double punchThreshold = 0.5;
         private const double punchResetThreshold = 0.0;
         private const double maximumAcceleration = 8.0;
+        private const int punchVectorSize = 10; // ~160msec (10x16msec) timeframe to detect punch
 
         private double lastX;
         private double maxX = double.MinValue;
@@ -46,7 +47,11 @@ namespace PunchingBand.Utilities
         private BlockingCollection<LogData> logData;
         private Task logTask;
 
-        private List<IBandAccelerometerReading> punchReadings = new List<IBandAccelerometerReading>();
+        private BlockingCollection<string> punchVectors;
+        private Task punchVectorsTask;
+
+        private PunchBuffer punchBuffer = new PunchBuffer(punchVectorSize);
+        private int? punchBufferWindowCount = null;
 
         public double LastPunchStrength { get; private set; }
 
@@ -55,6 +60,8 @@ namespace PunchingBand.Utilities
         public PunchDetector(FistSides fistSide)
         {
             this.fistSide = fistSide;
+
+            TrainPunchType = "Jab";
         }
 
         public async Task<PunchInfo> GetPunchInfo(IBandAccelerometerReading reading)
@@ -70,6 +77,8 @@ namespace PunchingBand.Utilities
             {
                 if (IsDetectingPunch(reading))
                 {
+                    // Use previous previous values in recognizing punch type
+                    punchBufferWindowCount = 2;
                     // We know a punch is occuring but don't know the final strength
                     status = PunchStatus.Start;
                 }
@@ -87,12 +96,20 @@ namespace PunchingBand.Utilities
                 }
             }
 
-            if (status == PunchStatus.Unknown)
+            punchBuffer.Add(reading);
+
+            if (punchBufferWindowCount.HasValue)
             {
-                punchReadings.Clear();
+                punchBufferWindowCount++;
             }
 
-            punchReadings.Add(reading);
+            var bufferFull = punchBufferWindowCount >= punchBuffer.Size;
+
+            if (bufferFull)
+            {
+                punchVectors.Add(punchBuffer.GetVector());
+                punchBufferWindowCount = null;
+            }
 
             var punchInfo = new PunchInfo(fistSide, status, punchStrength);
 
@@ -100,9 +117,9 @@ namespace PunchingBand.Utilities
 
             lastPunchStatus = status;
 
-            if (status == PunchStatus.Reset)
+            if (bufferFull)
             {
-                var punchType = await DeterminePunchType(punchReadings.ToList()).ConfigureAwait(false);
+                var punchType = await DeterminePunchType(punchBuffer.ToList()).ConfigureAwait(false);
                 return new PunchInfo(fistSide, status, punchStrength, punchType);
             }
             else
@@ -116,15 +133,13 @@ namespace PunchingBand.Utilities
 #if DISABLE_PUNCH_RECOGNITION
             return await Task.FromResult(PunchType.Unknown);
 #else
-            const int windowSize = 100;
-
             // TODO: there has to be a more efficient way to do all this... ideally Azure ML web service can take simpler input or maybe binary input
             // TODO: see if we can execute Azure ML trained model locally using .NET machine learning library
             using (var client = new HttpClient())
             {
                 var columnNames = new List<string>();
                 columnNames.Add("PunchType");
-                for (int i = 0; i < windowSize; i++)
+                for (int i = 0; i < punchVectorSize; i++)
                 {
                     columnNames.Add("X" + i);
                     columnNames.Add("Y" + i);
@@ -133,7 +148,7 @@ namespace PunchingBand.Utilities
 
                 var values = new List<string>();
                 values.Add("");
-                for (int i = 0; i < windowSize; i++)
+                for (int i = 0; i < punchVectorSize; i++)
                 {
                     if (i < readings.Count)
                     {
@@ -286,10 +301,42 @@ namespace PunchingBand.Utilities
                             data.AccelerometerReading.AccelerationY,
                             data.AccelerometerReading.AccelerationZ,
                             data.PunchInfo.Status);
+                        streamWriter.Flush();
+                        fileStream.Flush();
+                    }
+                }
+            });
+
+            punchVectors = new BlockingCollection<string>();
+
+            punchVectorsTask = Task.Run(async () =>
+            {
+                var local = ApplicationData.Current.LocalFolder;
+                var dataFolder = await local.CreateFolderAsync("LogData", CreationCollisionOption.OpenIfExists);
+                var file = await dataFolder.CreateFileAsync(string.Format("PunchVectors{0}.csv", fistSide, TrainPunchType), CreationCollisionOption.ReplaceExisting);
+                var startTimestamp = DateTime.Now;
+
+                using (var fileStream = await file.OpenStreamForWriteAsync())
+                {
+                    var streamWriter = new StreamWriter(fileStream) { AutoFlush = true };
+
+                    streamWriter.Write("PunchType");
+                    for(int i = 0; i < punchVectorSize; i++)
+                    {
+                        streamWriter.Write(",X{0},Y{0},Z{0}", i);
+                    }
+
+                    foreach (var vector in punchVectors.GetConsumingEnumerable())
+                    {
+                        streamWriter.WriteLine(TrainPunchType + "," + vector);
+                        streamWriter.Flush();
+                        fileStream.Flush();
                     }
                 }
             });
         }
+
+        internal string TrainPunchType { get; set; }
 
         public void Dispose()
         {
@@ -298,6 +345,13 @@ namespace PunchingBand.Utilities
                 logData.CompleteAdding();
                 logTask.Wait();
                 logData.Dispose();
+            }
+
+            if (punchVectors != null)
+            {
+                punchVectors.CompleteAdding();
+                punchVectorsTask.Wait();
+                punchVectors.Dispose();
             }
         }
     }

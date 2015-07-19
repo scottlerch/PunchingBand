@@ -14,7 +14,13 @@
         </TransitionCollection>
     </Page.Transitions>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Hub Header="PUNCHING BAND">
+        <Hub>
+            <Hub.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>PUNCHING BAND</TextBlock>
+                    <Button x:Name="AdminButton" Margin="20,0,0,0" Click="AdminButton_Click">Admin</Button>
+                </StackPanel>
+            </Hub.Header>
             <HubSection Header="game">
                 <DataTemplate>
                     <Grid>

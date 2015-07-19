@@ -367,7 +367,8 @@ namespace PunchingBand.Models
                     Punching(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value));
                 });
             }
-            else if (punchInfo.Status == PunchStatus.Reset)
+
+            if (punchInfo.PunchType != PunchType.Unknown)
             {
                 invokeOnUiThread(() =>
                 {
@@ -376,6 +377,21 @@ namespace PunchingBand.Models
             }
 
             previousTimestamps[key] = bandSensorReadingEventArgs.SensorReading.Timestamp;
+        }
+
+        public string TrainPunchType
+        {
+            get { return punchDetectors != null && punchDetectors.Count > 0 ? punchDetectors.First().Value.TrainPunchType : "Jab"; }
+            set
+            {
+                if (punchDetectors != null)
+                {
+                    foreach (var punchDetector in punchDetectors)
+                    {
+                        punchDetector.Value.TrainPunchType = value;
+                    }
+                }
+            }
         }
     }
 }

@@ -14,6 +14,9 @@ namespace PunchingBand.Pages
             DataContext = App.Current.RootModel;
 
             App.Current.RootModel.PunchingModel.StartFight += (sender, args) => Frame.Navigate(typeof(GamePage));
+#if !DEBUG
+            AdminButton.Visibility = Visibility.Collapsed;
+#endif
         }
 
         /// <summary>
@@ -35,6 +38,11 @@ namespace PunchingBand.Pages
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof (GamePage));
+        }
+
+        private void AdminButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(AdminPage));
         }
     }
 }

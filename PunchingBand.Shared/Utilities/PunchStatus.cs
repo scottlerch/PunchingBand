@@ -8,5 +8,6 @@
         Finish,
         Resetting,
         Reset,
+        Recognized,
     }
 }
