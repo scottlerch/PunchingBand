@@ -1,4 +1,4 @@
-﻿#define DISABLE_PUNCH_RECOGNITION
+﻿//#define DISABLE_PUNCH_RECOGNITION
 
 using Microsoft.Band.Sensors;
 using System;
@@ -25,6 +25,13 @@ namespace PunchingBand.Utilities
             public IBandAccelerometerReading AccelerometerReading { get; set; }
 
             public PunchInfo PunchInfo { get; set; }
+        }
+        
+        private class PunchRecognition
+        {
+            public PunchType PunchType { get; set; }
+
+            public int Delay { get; set; }
         }
 
         private readonly TimeSpan punchCoolOffInterval = TimeSpan.FromMilliseconds(100);
@@ -119,8 +126,8 @@ namespace PunchingBand.Utilities
 
             if (bufferFull)
             {
-                var punchType = await DeterminePunchType(punchBuffer.ToList()).ConfigureAwait(false);
-                return new PunchInfo(fistSide, status, punchStrength, punchType);
+                var punchRecognition = await DeterminePunchType(punchBuffer.ToList()).ConfigureAwait(false);
+                return new PunchInfo(fistSide, status, punchStrength, punchRecognition.PunchType, punchRecognition.Delay);
             }
             else
             {
@@ -128,7 +135,7 @@ namespace PunchingBand.Utilities
             }
         }
 
-        private async Task<PunchType> DeterminePunchType(List<IBandAccelerometerReading> readings)
+        private async Task<PunchRecognition> DeterminePunchType(List<IBandAccelerometerReading> readings)
         {
 #if DISABLE_PUNCH_RECOGNITION
             return await Task.FromResult(PunchType.Unknown);
@@ -204,7 +211,7 @@ namespace PunchingBand.Utilities
                 }
 
                 Debug.WriteLine("{0} {1}", sw.ElapsedMilliseconds, punchType);
-                return punchType;
+                return new PunchRecognition { PunchType = punchType, Delay = (int)sw.ElapsedMilliseconds };
             }
 #endif
         }

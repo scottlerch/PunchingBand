@@ -372,7 +372,7 @@ namespace PunchingBand.Models
             {
                 invokeOnUiThread(() =>
                 {
-                    PunchTypeRecognized(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength ?? 0, punchInfo.PunchType));
+                    PunchTypeRecognized(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength ?? 0, punchInfo.PunchType, punchInfo.RecognitionDelay));
                 });
             }
 

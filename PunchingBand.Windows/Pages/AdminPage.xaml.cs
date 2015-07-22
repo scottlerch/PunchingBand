@@ -37,6 +37,7 @@ namespace PunchingBand.Pages
         private void PunchingModel_PunchTypeRecognized(object sender, Models.PunchEventArgs e)
         {
             punchType.Text = e.PunchType.ToString();
+            punchRecognitionDelay.Text = e.RecognitionDelay.ToString() + "msec";
         }
 
         private void PunchingModel_Punching(object sender, Models.PunchEventArgs e)

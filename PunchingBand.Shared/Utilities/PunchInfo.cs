@@ -12,7 +12,9 @@ namespace PunchingBand.Utilities
 
         public PunchType PunchType { get; private set; }
 
-        public PunchInfo(FistSides fistSide, PunchStatus status, double? strength, PunchType punchType = PunchType.Unknown)
+        public int RecognitionDelay { get; private set; }
+
+        public PunchInfo(FistSides fistSide, PunchStatus status, double? strength, PunchType punchType = PunchType.Unknown, int recognitionDelay = 0)
         {
             FistSide = fistSide;
             Status = status;
@@ -32,6 +34,7 @@ namespace PunchingBand.Utilities
 
             Strength = strength;
             PunchType = punchType;
+            RecognitionDelay = recognitionDelay;
         }
     }
 }
