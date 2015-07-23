@@ -80,6 +80,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\worn.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconSmall.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\PunchRecognitionNetwork.json" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
@@ -112,5 +113,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\PunchRecognitionNetwork.dat" />
   </ItemGroup>
 </Project>

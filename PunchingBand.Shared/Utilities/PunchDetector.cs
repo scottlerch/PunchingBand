@@ -1,5 +1,10 @@
-﻿//#define DISABLE_PUNCH_RECOGNITION
+﻿//#define USE_AZURE_ML
+//#define DISABLE_PUNCH_RECOGNITION
 
+using System.Reflection;
+using Accord;
+using Accord.Math;
+using AForge.Neuro;
 using Microsoft.Band.Sensors;
 using System;
 using System.Collections.Concurrent;
@@ -15,6 +20,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using PunchingBand.Portable.Neuro;
 
 namespace PunchingBand.Utilities
 {
@@ -64,12 +70,42 @@ namespace PunchingBand.Utilities
 
         private FistSides fistSide;
 
+#if !USE_AZURE_ML
+        private Network network;
+#endif
+
         public PunchDetector(FistSides fistSide)
         {
             this.fistSide = fistSide;
 
             TrainPunchType = "Jab";
         }
+
+        public async Task InitalizerecognitionModel()
+        {
+#if !USE_AZURE_ML
+            try
+            {
+                var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///Assets/PunchRecognitionNetwork.json"));
+                using (var stream = await file.OpenAsync(FileAccessMode.Read))
+                using (var streamReader = new StreamReader(stream.AsStream()))
+                {
+                    var jsonNetwork = new JsonNetwork();
+                    var serializer = new JsonSerializer();
+                    serializer.Populate(streamReader, jsonNetwork);
+
+                    network = jsonNetwork.CreateActivationNetwork();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+#else
+            await Task.Yield();
+#endif
+        }
+
 
         public async Task<PunchInfo> GetPunchInfo(IBandAccelerometerReading reading)
         {
@@ -140,6 +176,7 @@ namespace PunchingBand.Utilities
 #if DISABLE_PUNCH_RECOGNITION
             return await Task.FromResult(PunchType.Unknown);
 #else
+#if USE_AZURE_ML
             // TODO: there has to be a more efficient way to do all this... ideally Azure ML web service can take simpler input or maybe binary input
             // TODO: see if we can execute Azure ML trained model locally using .NET machine learning library
             using (var client = new HttpClient())
@@ -213,6 +250,23 @@ namespace PunchingBand.Utilities
                 Debug.WriteLine("{0} {1}", sw.ElapsedMilliseconds, punchType);
                 return new PunchRecognition { PunchType = punchType, Delay = (int)sw.ElapsedMilliseconds };
             }
+#else
+            await Task.Yield();
+
+            try
+            {
+                var inputs = readings.SelectMany(r => new[] { r.AccelerationX, r.AccelerationY, r.AccelerationZ }).ToArray();
+                var answer = network.Compute(inputs);
+                int actual; answer.Max(out actual);
+
+                return new PunchRecognition { PunchType = (PunchType)actual, Delay = 0 };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+#endif
 #endif
         }
 

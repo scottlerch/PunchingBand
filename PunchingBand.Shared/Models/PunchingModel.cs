@@ -210,6 +210,8 @@ namespace PunchingBand.Models
             punchDetectors[bandClient.SensorManager.Accelerometer].InitializeLogging();
 #endif
 
+            await punchDetectors[bandClient.SensorManager.Accelerometer].InitalizerecognitionModel();
+
             await bandClient.SensorManager.Contact.StartReadingsAsync();
             await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
         }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PunchingBand.Shared", "PunchingBand.Shared\PunchingBand.Shared.shproj", "{CDBED812-5C14-4072-952D-3EBE906D66D1}"
 EndProject
@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "punchdata", "punchdata", "{
 	ProjectSection(SolutionItems) = preProject
 		punchdata\PunchVectorsRight.csv = punchdata\PunchVectorsRight.csv
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PunchingBand.Portable", "PunchingBand.Portable\PunchingBand.Portable.csproj", "{2BE76624-D6A0-458F-9784-BC731728163C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PunchingBand.MachineLearning", "PunchingBand.MachineLearning\PunchingBand.MachineLearning.csproj", "{E3448DFA-3F66-409B-B5EE-16C33266C16E}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -106,6 +110,36 @@ Global
 		{885121F5-37B3-40A4-AF90-E9ACC1C988F3}.Release|x86.ActiveCfg = Release|x86
 		{885121F5-37B3-40A4-AF90-E9ACC1C988F3}.Release|x86.Build.0 = Release|x86
 		{885121F5-37B3-40A4-AF90-E9ACC1C988F3}.Release|x86.Deploy.0 = Release|x86
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug (Mock Band)|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug (Mock Band)|Any CPU.Build.0 = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug (Mock Band)|ARM.ActiveCfg = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug (Mock Band)|x64.ActiveCfg = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug (Mock Band)|x86.ActiveCfg = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Release|x64.ActiveCfg = Release|Any CPU
+		{2BE76624-D6A0-458F-9784-BC731728163C}.Release|x86.ActiveCfg = Release|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug (Mock Band)|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug (Mock Band)|Any CPU.Build.0 = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug (Mock Band)|ARM.ActiveCfg = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug (Mock Band)|x64.ActiveCfg = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug (Mock Band)|x86.ActiveCfg = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Release|x64.ActiveCfg = Release|Any CPU
+		{E3448DFA-3F66-409B-B5EE-16C33266C16E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
