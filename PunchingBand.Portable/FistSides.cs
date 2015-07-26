@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PunchingBand.Models.Enums
+namespace PunchingBand
 {
     [Flags]
     public enum FistSides

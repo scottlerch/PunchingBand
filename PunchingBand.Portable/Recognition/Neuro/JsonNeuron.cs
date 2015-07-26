@@ -1,7 +1,7 @@
 ﻿using AForge.Neuro;
 using System;
 
-namespace PunchingBand.Portable.Neuro
+namespace PunchingBand.Recognition.Neuro
 {
     public class JsonNeuron : Neuron
     {

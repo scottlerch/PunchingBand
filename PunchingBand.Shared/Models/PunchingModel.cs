@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Security.Principal;
 using Windows.ApplicationModel;
+using Windows.Storage;
 using Microsoft.Band;
 using Microsoft.Band.Sensors;
-using PunchingBand.Models.Enums;
+using PunchingBand.Recognition;
 using PunchingBand.Utilities;
 using System;
 using System.Collections.Generic;
@@ -19,7 +21,6 @@ namespace PunchingBand.Models
 
         private IBandClient[] bandClients;
         private Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector> punchDetectors;
-        private Dictionary<IBandSensor<IBandAccelerometerReading>, DateTimeOffset> previousTimestamps;
         private Dictionary<IBandSensor<IBandContactReading>, bool> wornStatus;
         private Dictionary<IBandSensor<IBandContactReading>, BandTileModel> tiles; 
 
@@ -149,7 +150,6 @@ namespace PunchingBand.Models
             {
                 bandClients = new IBandClient[bands.Length];
                 punchDetectors = new Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector>();
-                previousTimestamps = new Dictionary<IBandSensor<IBandAccelerometerReading>, DateTimeOffset>();
                 wornStatus = new Dictionary<IBandSensor<IBandContactReading>, bool>();
                 tiles = new Dictionary<IBandSensor<IBandContactReading>, BandTileModel>();
 
@@ -198,19 +198,31 @@ namespace PunchingBand.Models
         {
             bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
 
-            punchDetectors[bandClient.SensorManager.Accelerometer] = new PunchDetector(fistSide);
-            previousTimestamps[bandClient.SensorManager.Accelerometer] = DateTimeOffset.MinValue;
+            punchDetectors[bandClient.SensorManager.Accelerometer] = new PunchDetector(
+                fistSide, 
+                async filePath =>
+                {
+                    var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///" + filePath));
+                    return await file.OpenStreamForReadAsync();
+                },
+                async filePath =>
+                {
+                    var folder = Path.GetDirectoryName(filePath);
+                    var fileName = Path.GetFileName(filePath);
+
+                    var local = ApplicationData.Current.LocalFolder;
+                    var dataFolder = await local.CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
+                    var file = await dataFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+                    return await file.OpenStreamForWriteAsync();
+                });
 
             bandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
 
             bandClient.SensorManager.Accelerometer.ReportingInterval =
                 bandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
 
-#if DEBUG
-            punchDetectors[bandClient.SensorManager.Accelerometer].InitializeLogging();
-#endif
-
-            await punchDetectors[bandClient.SensorManager.Accelerometer].InitalizerecognitionModel();
+            await punchDetectors[bandClient.SensorManager.Accelerometer].Initialize();
 
             await bandClient.SensorManager.Contact.StartReadingsAsync();
             await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
@@ -351,7 +363,7 @@ namespace PunchingBand.Models
                 {
                     if (punchInfo.Strength.HasValue)
                     {
-                        PunchEnded(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value));
+                        PunchEnded(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value, PunchRecognition.Unknown));
                     }
                 });
             }
@@ -359,26 +371,24 @@ namespace PunchingBand.Models
             {
                 invokeOnUiThread(() =>
                 {
-                    PunchStarted(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value));
+                    PunchStarted(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value, PunchRecognition.Unknown));
                 });
             }
             else if (punchInfo.Status == PunchStatus.InProgress)
             {
                 invokeOnUiThread(() =>
                 {
-                    Punching(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value));
+                    Punching(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value, PunchRecognition.Unknown));
                 });
             }
 
-            if (punchInfo.PunchType != PunchType.Unknown)
+            if (punchInfo.PunchRecognition != PunchRecognition.Unknown)
             {
                 invokeOnUiThread(() =>
                 {
-                    PunchTypeRecognized(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength ?? 0, punchInfo.PunchType, punchInfo.RecognitionDelay));
+                    PunchTypeRecognized(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength ?? 0, punchInfo.PunchRecognition));
                 });
             }
-
-            previousTimestamps[key] = bandSensorReadingEventArgs.SensorReading.Timestamp;
         }
 
         public string TrainPunchType

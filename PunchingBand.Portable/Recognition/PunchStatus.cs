@@ -1,6 +1,6 @@
-﻿namespace PunchingBand.Utilities
+﻿namespace PunchingBand.Recognition
 {
-    internal enum PunchStatus
+    public enum PunchStatus
     {
         Unknown,
         Start,

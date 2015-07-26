@@ -1,4 +1,4 @@
-﻿namespace PunchingBand.Models.Enums
+﻿namespace PunchingBand
 {
     public enum GameMode
     {

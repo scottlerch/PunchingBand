@@ -1,6 +1,5 @@
 ﻿using System;
 using PunchingBand.Infrastructure;
-using PunchingBand.Models.Enums;
 
 namespace PunchingBand.Models
 {

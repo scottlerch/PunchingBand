@@ -3,10 +3,10 @@ using Accord.Neuro;
 using Accord.Neuro.Learning;
 using AForge.Neuro;
 using Newtonsoft.Json;
-using PunchingBand.Portable.Neuro;
 using System;
 using System.IO;
 using System.Linq;
+using PunchingBand.Recognition.Neuro;
 
 namespace PunchingBand.MachineLearning
 {
@@ -16,8 +16,9 @@ namespace PunchingBand.MachineLearning
         {
             var lines = File.ReadAllLines(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\PunchVectorsRight.csv").Skip(1);
             var splitLines = lines.Select(line => line.Split(',')).ToList();
-            var categories = new[] { "Jab", "UpperCut", "Hook" };
-            var categoryIndices = categories.Select((category, index) => new { category, index }).ToDictionary(c => c.category, c => c.index);
+
+            var categories = ((PunchType[]) Enum.GetValues(typeof (PunchType))).Except(new[] {PunchType.Unknown, PunchType.Body, PunchType.Cross}).ToArray();
+            var categoryIndices = categories.ToDictionary(c => c.ToString(), c => (int)c);
 
             double[][] inputs = splitLines.Select(line => line.Skip(1).Select(double.Parse).ToArray()).ToArray();
             int[] classes = splitLines.Select(line => categoryIndices[line[0]]).ToArray();

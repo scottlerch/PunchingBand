@@ -1,5 +1,5 @@
 ﻿using System;
-using PunchingBand.Models.Enums;
+using PunchingBand.Recognition;
 
 namespace PunchingBand.Models
 {
@@ -9,16 +9,13 @@ namespace PunchingBand.Models
 
         public double Strength { get; private set; }
 
-        public PunchType PunchType { get; private set; }
+        public PunchRecognition PunchRecognition { get; private set; }
 
-        public int RecognitionDelay { get; private set; }
-
-        public PunchEventArgs(FistSides fistSide, double strength, PunchType punchType = PunchType.Unknown, int recognitionDelay = 0)
+        public PunchEventArgs(FistSides fistSide, double strength, PunchRecognition punchRecognition)
         {
             FistSide = fistSide;
             Strength = strength;
-            PunchType = punchType;
-            RecognitionDelay = recognitionDelay;
+            PunchRecognition = punchRecognition;
         }
     }
 }

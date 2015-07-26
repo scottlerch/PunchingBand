@@ -1,4 +1,4 @@
-﻿namespace PunchingBand.Models.Enums
+﻿namespace PunchingBand
 {
     /// <summary>
     /// Position user wears the band.  Typically this is on the inside wrist with

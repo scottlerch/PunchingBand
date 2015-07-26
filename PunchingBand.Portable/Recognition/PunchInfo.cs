@@ -1,8 +1,6 @@
-﻿using PunchingBand.Models.Enums;
-
-namespace PunchingBand.Utilities
+﻿namespace PunchingBand.Recognition
 {
-    internal class PunchInfo
+    public class PunchInfo
     {
         public FistSides FistSide { get; private set; }
 
@@ -10,11 +8,9 @@ namespace PunchingBand.Utilities
 
         public double? Strength { get; private set; }
 
-        public PunchType PunchType { get; private set; }
+        public PunchRecognition PunchRecognition { get; private set; }
 
-        public int RecognitionDelay { get; private set; }
-
-        public PunchInfo(FistSides fistSide, PunchStatus status, double? strength, PunchType punchType = PunchType.Unknown, int recognitionDelay = 0)
+        public PunchInfo(FistSides fistSide, PunchStatus status, double? strength, PunchRecognition punchRecognition)
         {
             FistSide = fistSide;
             Status = status;
@@ -33,8 +29,7 @@ namespace PunchingBand.Utilities
             }
 
             Strength = strength;
-            PunchType = punchType;
-            RecognitionDelay = recognitionDelay;
+            PunchRecognition = punchRecognition;
         }
     }
 }

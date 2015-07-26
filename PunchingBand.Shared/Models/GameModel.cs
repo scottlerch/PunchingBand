@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using Windows.ApplicationModel;
 using Windows.Storage;
-using PunchingBand.Models.Enums;
+using PunchingBand.Recognition;
 
 namespace PunchingBand.Models
 {
@@ -38,10 +38,10 @@ namespace PunchingBand.Models
         //private double currentPunchStrength = 0.0;
 
         // Game performance metrics
-        private Metric punchStrength;
-        private Metric caloriesBurned;
-        private Metric skinTemperature;
-        private Metric heartrate;
+        private Metric punchStrength = new Metric();
+        private Metric caloriesBurned = new Metric();
+        private Metric skinTemperature = new Metric();
+        private Metric heartrate = new Metric();
 
         private StorageFile song;
 
@@ -106,9 +106,9 @@ namespace PunchingBand.Models
 
         private void PunchingModelOnPunchTypeRecognized(object sender, PunchEventArgs e)
         {
-            if (e.PunchType != Enums.PunchType.Unknown)
+            if (e.PunchRecognition != PunchRecognition.Unknown)
             {
-                PunchType = e.PunchType.ToString();
+                PunchType = e.PunchRecognition.PunchType.ToString();
                 RaisePropertyChanged("PunchType");
             }
             else

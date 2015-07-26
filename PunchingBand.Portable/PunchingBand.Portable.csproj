@@ -8,7 +8,7 @@
     <ProjectGuid>{2BE76624-D6A0-458F-9784-BC731728163C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PunchingBand.Portable</RootNamespace>
+    <RootNamespace>PunchingBand</RootNamespace>
     <AssemblyName>PunchingBand.Portable</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
@@ -34,10 +34,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Neuro\JsonLayer.cs" />
-    <Compile Include="Neuro\JsonNetwork.cs" />
-    <Compile Include="Neuro\JsonNeuron.cs" />
+    <Compile Include="BandPosition.cs" />
+    <Compile Include="FistSides.cs" />
+    <Compile Include="GameMode.cs" />
+    <Compile Include="Gender.cs" />
+    <Compile Include="Infrastructure\Metric.cs" />
+    <Compile Include="Infrastructure\ObservableObject.cs" />
+    <Compile Include="Recognition\IPunchRecognizer.cs" />
+    <Compile Include="Recognition\Neuro\JsonLayer.cs" />
+    <Compile Include="Recognition\Neuro\JsonNetwork.cs" />
+    <Compile Include="Recognition\Neuro\JsonNeuron.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PunchType.cs" />
+    <Compile Include="Recognition\PunchBuffer.cs" />
+    <Compile Include="Recognition\PunchDetector.cs" />
+    <Compile Include="Recognition\PunchInfo.cs" />
+    <Compile Include="Recognition\PunchLogger.cs" />
+    <Compile Include="Recognition\PunchRecognition.cs" />
+    <Compile Include="Recognition\PunchStatus.cs" />
+    <Compile Include="Recognition\Recognizers\AccordNeuralNetworkRecognizer.cs" />
+    <Compile Include="Recognition\Recognizers\AzureMachineLearningRecognizer.cs" />
+    <Compile Include="TemperatureUnit.cs" />
+    <Compile Include="WeightUnit.cs" />
+    <Compile Include="Utilities\CalorieCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Accord">
@@ -64,6 +83,9 @@
     <Reference Include="AForge.Neuro">
       <HintPath>..\packages\portable.aforge.neuro.2.2.5.50504\lib\portable-net45+netcore45+wpa81\AForge.Neuro.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Band">
+      <HintPath>..\packages\Microsoft.Band.1.3.10702\lib\portable-net45+win+wpa81\Microsoft.Band.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -74,6 +96,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

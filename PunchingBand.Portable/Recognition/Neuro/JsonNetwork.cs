@@ -1,6 +1,6 @@
 ﻿using AForge.Neuro;
 
-namespace PunchingBand.Portable.Neuro
+namespace PunchingBand.Recognition.Neuro
 {
     public class JsonNetwork : Network
     {

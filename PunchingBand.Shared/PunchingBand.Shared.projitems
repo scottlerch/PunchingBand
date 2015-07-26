@@ -12,21 +12,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Metric.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\NavigationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\ObservableDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SoundEffect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SuspensionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BandTileModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\BandPosition.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\FistSides.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\GameMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\Gender.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\PunchType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\TemperatureUnit.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\WeightUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\GameModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryModel.cs" />
@@ -59,28 +50,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\UserSetup.xaml.cs">
       <DependentUpon>UserSetup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\CalorieCalculator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\DeviceInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchBuffer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchDetector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\PunchStatus.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\countdownbeep.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\ding.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\endbuzzer.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\endgame.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\fightbell.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\heavypunch1.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\powerpunch.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch1.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch2.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\worn.wav" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconSmall.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\PunchRecognitionNetwork.json" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
@@ -115,6 +85,20 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Assets\PunchRecognitionNetwork.dat" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\countdownbeep.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\ding.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\endbuzzer.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\endgame.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\fightbell.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\heavypunch1.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\powerpunch.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch1.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch2.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\worn.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconSmall.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\NeuralNetworks\PunchesLeftFist.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\NeuralNetworks\PunchesRightFist.json" />
   </ItemGroup>
 </Project>
