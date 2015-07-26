@@ -256,6 +256,11 @@ namespace PunchingBand.Utilities
             try
             {
                 var inputs = readings.SelectMany(r => new[] { r.AccelerationX, r.AccelerationY, r.AccelerationZ }).ToArray();
+                if (inputs.Length != network.InputsCount)
+                {
+                    return new PunchRecognition { PunchType = PunchType.Unknown, Delay = 0 };
+                }
+
                 var answer = network.Compute(inputs);
                 int actual; answer.Max(out actual);
 

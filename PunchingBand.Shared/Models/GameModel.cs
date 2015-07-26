@@ -109,6 +109,7 @@ namespace PunchingBand.Models
             if (e.PunchType != Enums.PunchType.Unknown)
             {
                 PunchType = e.PunchType.ToString();
+                RaisePropertyChanged("PunchType");
             }
             else
             {
