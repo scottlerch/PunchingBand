@@ -6,7 +6,7 @@ namespace PunchingBand.Recognition
 {
     public interface IPunchRecognizer
     {
-        Task Initialize();
+        Task Initialize(FistSides fistSide);
 
         Task<PunchRecognition> Recognize(IEnumerable<IBandAccelerometerReading> readings);
     }

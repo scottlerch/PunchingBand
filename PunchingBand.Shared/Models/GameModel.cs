@@ -20,7 +20,7 @@ namespace PunchingBand.Models
         // Game setup
         private GameMode gameMode = GameMode.TimeTrial;
         private TimeSpan duration;
-        private FistSides fistSide = FistSides.Right;
+        private FistSides fistSide = FistSides.Unknown;
 
         // Game state
         private int punchCount;
@@ -66,7 +66,7 @@ namespace PunchingBand.Models
             punchingModel.PunchStarted += PunchingModelOnPunchStarted;
             punchingModel.PunchEnded += PunchingModelOnPunchEnded;
             punchingModel.Punching += PunchingModelOnPunching;
-            punchingModel.PunchTypeRecognized += PunchingModelOnPunchTypeRecognized;
+            punchingModel.PunchRecognized += PunchingModelOnPunchRecognized;
             punchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
 
             this.punchingModel = punchingModel;
@@ -80,7 +80,6 @@ namespace PunchingBand.Models
             switch (propertyChangedEventArgs.PropertyName)
             {
                 case "FistSides":
-                    // TODO: what if left and right sides?
                     FistSide = punchingModel.FistSides;
                     break;
             }
@@ -104,9 +103,9 @@ namespace PunchingBand.Models
             //RaisePropertyChanged("PunchStrengthMeter");
         }
 
-        private void PunchingModelOnPunchTypeRecognized(object sender, PunchEventArgs e)
+        private void PunchingModelOnPunchRecognized(object sender, PunchEventArgs e)
         {
-            if (e.PunchRecognition != PunchRecognition.Unknown)
+            if (e.PunchRecognition != PunchRecognition.Unknown && Running)
             {
                 PunchType = e.PunchRecognition.PunchType.ToString();
                 RaisePropertyChanged("PunchType");
@@ -119,12 +118,12 @@ namespace PunchingBand.Models
 
         private void PunchingModelOnPunchEnded(object sender, PunchEventArgs punchEventArgs)
         {
-            if (Running)
+            if (Running && punchEventArgs.Strength.HasValue)
             {
                 PunchCount++;
                 UpdateCombos(punchEventArgs);
 
-                var points = 100.0 * punchEventArgs.Strength;
+                var points = 100.0 * punchEventArgs.Strength.Value;
 
                 if (powerComboCount > 1)
                 {
@@ -138,7 +137,7 @@ namespace PunchingBand.Models
 
                 Score += (int) Math.Round(points);
 
-                punchStrength.Update(punchEventArgs.Strength);
+                punchStrength.Update(punchEventArgs.Strength.Value);
                 RaisePropertyChanged("PunchStrength");
                 RaisePropertyChanged("PunchStrengthMeter"); 
             }
@@ -198,6 +197,7 @@ namespace PunchingBand.Models
             set { Set("GameMode", ref gameMode, value); }
         }
 
+        [JsonIgnore]
         public FistSides FistSide
         {
             get { return fistSide; }

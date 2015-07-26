@@ -15,16 +15,14 @@ namespace PunchingBand.Recognition.Recognizers
     public class AccordNeuralNetworkRecognizer : IPunchRecognizer
     {
         private Network network;
-        private readonly FistSides fistSide;
         private readonly Func<string, Task<Stream>> readFile;
 
-        public AccordNeuralNetworkRecognizer(FistSides fistSide, Func<string, Task<Stream>> readFile)
+        public AccordNeuralNetworkRecognizer(Func<string, Task<Stream>> readFile)
         {
             this.readFile = readFile;
-            this.fistSide = fistSide;
         }
 
-        public async Task Initialize()
+        public async Task Initialize(FistSides fistSide)
         {
             using (var stream = await readFile("Assets/NeuralNetworks/Punches" + fistSide + "Fist.json"))
             using (var streamReader = new StreamReader(stream))
@@ -41,12 +39,7 @@ namespace PunchingBand.Recognition.Recognizers
         {
             if (network == null)
             {
-                await Initialize();
-
-                if (network == null)
-                {
-                    throw new InvalidOperationException("Unable to initialize neural network.");
-                }
+                throw new InvalidOperationException("Neural network has not been initialized.");
             }
 
             var inputs = readings.SelectMany(r => new[] { r.AccelerationX, r.AccelerationY, r.AccelerationZ }).ToArray();

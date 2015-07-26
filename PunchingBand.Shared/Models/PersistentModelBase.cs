@@ -31,7 +31,7 @@ namespace PunchingBand.Models
                     serializer.Serialize(streamWriter, this);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // TODO: log
             }

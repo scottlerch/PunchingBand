@@ -1,17 +1,12 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.Security.Principal;
-using Windows.ApplicationModel;
-using Windows.Storage;
-using Microsoft.Band;
+﻿using Microsoft.Band;
 using Microsoft.Band.Sensors;
 using PunchingBand.Recognition;
 using PunchingBand.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 
 namespace PunchingBand.Models
 {
@@ -19,10 +14,7 @@ namespace PunchingBand.Models
     {
         private readonly UserModel userModel;
 
-        private IBandClient[] bandClients;
-        private Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector> punchDetectors;
-        private Dictionary<IBandSensor<IBandContactReading>, bool> wornStatus;
-        private Dictionary<IBandSensor<IBandContactReading>, BandTileModel> tiles; 
+        private readonly List<PunchBand> punchBands = new List<PunchBand>();
 
         private bool connected;
         private string status = "Connecting...";
@@ -32,17 +24,18 @@ namespace PunchingBand.Models
         private double? skinTemperature;
         private long stepCount;
         private double calorieCount;
-        private DateTime? lastCaloriCountUpdate;
+        private DateTime? lastCalorieCountUpdate;
         private long? startStepCount;
         private bool worn;
-        private FistSides fistSides;
+        private FistSides fistSides = FistSides.Unknown;
+        private FistSides fitnessSensorsSide = FistSides.Unknown;
 
         private readonly Action<Action> invokeOnUiThread;
 
         public event EventHandler<PunchEventArgs> PunchStarted = delegate { };
         public event EventHandler<PunchEventArgs> Punching = delegate { };
         public event EventHandler<PunchEventArgs> PunchEnded = delegate { };
-        public event EventHandler<PunchEventArgs> PunchTypeRecognized = delegate { };
+        public event EventHandler<PunchEventArgs> PunchRecognized = delegate { };
         public event EventHandler StartFight = delegate { }; 
 
         public PunchingModel()
@@ -95,13 +88,18 @@ namespace PunchingBand.Models
         public bool Worn
         {
             get { return worn; }
-            set { Set("Worn", ref worn, value); }
+            set { Set("Worn", ref worn, value); RaisePropertyChanged("Ready"); }
+        }
+
+        public bool Ready
+        {
+            get { return worn && fistSides != FistSides.Unknown; }
         }
 
         public FistSides FistSides
         {
             get { return fistSides; }
-            set { Set("FistSides", ref fistSides, value); }
+            private set { Set("FistSides", ref fistSides, value); RaisePropertyChanged("Ready"); }
         }
 
         public bool Connected
@@ -148,26 +146,18 @@ namespace PunchingBand.Models
 
             if (bands.Length > 0)
             {
-                bandClients = new IBandClient[bands.Length];
-                punchDetectors = new Dictionary<IBandSensor<IBandAccelerometerReading>, PunchDetector>();
-                wornStatus = new Dictionary<IBandSensor<IBandContactReading>, bool>();
-                tiles = new Dictionary<IBandSensor<IBandContactReading>, BandTileModel>();
-
                 for (int i = 0; i < Math.Min(bands.Length, 2); i++)
                 {
-                    bandClients[i] = await BandClientManager.Instance.ConnectAsync(bands[i]);
+                    var punchBand = new PunchBand(await BandClientManager.Instance.ConnectAsync(bands[i]));
 
-                    await SetupBandTile(bandClients[i]);
+                    punchBands.Add(punchBand);
 
-                    // Only start fitness sensors on first band
-                    // TODO: maybe use sensors from both or at least on the one currently worn?
-                    if (i == 0)
-                    {
-                        await StartFitnessSensors(bandClients[i]);
-                    }
+                    punchBand.FistSideChanged += PunchBandOnFistSideChanged;
+                    punchBand.PunchInfoChanged += PunchBandOnPunchInfoChanged;
+                    punchBand.WornChanged += PunchBandOnWornChanged;
+                    punchBand.StartFight += PunchBandOnStartFight;
 
-                    // TODO: get fist side from band tile, for now assume first band is Left and second is Right
-                    await StartPunchDetection(bandClients[i], (FistSides)(i+ 1));
+                    await punchBand.Initialize();
                 }
 
                 Connected = true;
@@ -175,6 +165,29 @@ namespace PunchingBand.Models
             else
             {
                 Status = "No Bands found!";
+            }
+        }
+
+        private async void PunchBandOnWornChanged(object sender, EventArgs eventArgs)
+        {
+            var punchBand = sender as PunchBand;
+
+            invokeOnUiThread(() =>
+            {
+                // Consider worn if either wrist has band worn
+                Worn = punchBands.Any(b => b.Worn);
+                Status = Worn ? string.Empty : "Please wear your Band.";
+            });
+
+            if (!punchBand.Worn && punchBand.FistSide == fitnessSensorsSide)
+            {
+                await StopFitnessSensors(punchBand.BandClient);
+                fitnessSensorsSide = FistSides.Unknown;
+            }
+            else if (punchBand.Worn && fitnessSensorsSide == FistSides.Unknown)
+            {
+                await StartFitnessSensors(punchBand.BandClient);
+                fitnessSensorsSide = punchBand.FistSide;
             }
         }
 
@@ -194,66 +207,61 @@ namespace PunchingBand.Models
             await bandClient.SensorManager.SkinTemperature.StartReadingsAsync();
         }
 
-        private async Task StartPunchDetection(IBandClient bandClient, FistSides fistSide)
+        private async Task StopFitnessSensors(IBandClient bandClient)
         {
-            bandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
+            bandClient.SensorManager.Pedometer.ReadingChanged -= PedometerOnReadingChanged;
+            bandClient.SensorManager.HeartRate.ReadingChanged -= HeartRateOnReadingChanged;
+            bandClient.SensorManager.SkinTemperature.ReadingChanged -= SkinTemperatureOnReadingChanged;
 
-            punchDetectors[bandClient.SensorManager.Accelerometer] = new PunchDetector(
-                fistSide, 
-                async filePath =>
-                {
-                    var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///" + filePath));
-                    return await file.OpenStreamForReadAsync();
-                },
-                async filePath =>
-                {
-                    var folder = Path.GetDirectoryName(filePath);
-                    var fileName = Path.GetFileName(filePath);
-
-                    var local = ApplicationData.Current.LocalFolder;
-                    var dataFolder = await local.CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
-                    var file = await dataFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-
-                    return await file.OpenStreamForWriteAsync();
-                });
-
-            bandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
-
-            bandClient.SensorManager.Accelerometer.ReportingInterval =
-                bandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
-
-            await punchDetectors[bandClient.SensorManager.Accelerometer].Initialize();
-
-            await bandClient.SensorManager.Contact.StartReadingsAsync();
-            await bandClient.SensorManager.Accelerometer.StartReadingsAsync();
+            await bandClient.SensorManager.HeartRate.StopReadingsAsync();
+            await bandClient.SensorManager.Pedometer.StopReadingsAsync();
+            await bandClient.SensorManager.SkinTemperature.StopReadingsAsync();
         }
 
-        private async Task SetupBandTile(IBandClient bandClient)
+        private void PunchBandOnStartFight(object sender, EventArgs eventArgs)
         {
-            tiles[bandClient.SensorManager.Contact] = new BandTileModel();
-
-            tiles[bandClient.SensorManager.Contact].PropertyChanged += TileOnPropertyChanged;
-            tiles[bandClient.SensorManager.Contact].FightButtonClick += (sender, args) => invokeOnUiThread(() => StartFight(this, EventArgs.Empty));
-
-            await tiles[bandClient.SensorManager.Contact].Initialize(bandClient);
+            invokeOnUiThread(() => StartFight(this, EventArgs.Empty));
         }
 
-        private void TileOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void PunchBandOnPunchInfoChanged(object sender, EventArgs eventArgs)
         {
-            if (propertyChangedEventArgs.PropertyName == "FistSide")
+            var punchBand = sender as PunchBand;
+            var punchInfo = punchBand.PunchInfo;
+
+            var punchEventArgs = new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength, punchInfo.PunchRecognition);
+
+            if (punchInfo.Status == PunchStatus.Finish && punchInfo.Strength.HasValue)
             {
-                invokeOnUiThread(() =>
-                {
-                    // TODO: support specifying both fists
-                    var model = sender as BandTileModel;
-                    FistSides = model.FistSide;
-                });
+                invokeOnUiThread(() => PunchEnded(this, punchEventArgs));
             }
+            else if (punchInfo.Status == PunchStatus.Start)
+            {
+                invokeOnUiThread(() => PunchStarted(this, punchEventArgs));
+            }
+            else if (punchInfo.Status == PunchStatus.InProgress)
+            {
+                invokeOnUiThread(() => Punching(this, punchEventArgs));
+            }
+            
+            if (punchInfo.PunchRecognition != PunchRecognition.Unknown)
+            {
+                invokeOnUiThread(() => PunchRecognized(this, punchEventArgs));
+            }
+        }
+
+        private void PunchBandOnFistSideChanged(object sender, EventArgs eventArgs)
+        {
+            var punchBand = sender as PunchBand;
+
+            invokeOnUiThread(() =>
+            { 
+                FistSides = punchBand.FistSide;
+            });
         }
 
         public void Disconnect()
         {
-            if (!Connected || bandClients == null || bandClients[0] == null) return;
+            if (!Connected || punchBands == null || punchBands.Count == 0) return;
 
             CleanupBandClients();
 
@@ -263,25 +271,12 @@ namespace PunchingBand.Models
 
         private void CleanupBandClients()
         {
-            if (bandClients != null)
+            foreach (var punchBand in punchBands)
             {
-                foreach (var bandClient in bandClients.Where(b => b != null))
-                {
-                    bandClient.Dispose();
-                }
-
-                bandClients = null;
+                punchBand.Dispose();
             }
 
-            if (punchDetectors != null)
-            {
-                foreach (var punchDetector in punchDetectors.Values.Where(p => p != null))
-                {
-                    punchDetector.Dispose();
-                }
-
-                punchDetectors = null;
-            }
+            punchBands.Clear();
         }
 
         private void SkinTemperatureOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandSkinTemperatureReading> bandSensorReadingEventArgs)
@@ -296,18 +291,18 @@ namespace PunchingBand.Models
                 HeartRate = bandSensorReadingEventArgs.SensorReading.HeartRate;
                 HeartRateLocked = bandSensorReadingEventArgs.SensorReading.Quality == HeartRateQuality.Locked;
 
-                if (lastCaloriCountUpdate.HasValue && heartRate.HasValue)
+                if (lastCalorieCountUpdate.HasValue && heartRate.HasValue)
                 {
                     CalorieCount = CalorieCalculator.GetCalories(
                         userModel.Gender,
                         heartRate.Value,
                         userModel.Weight,
                         userModel.Age,
-                        DateTime.UtcNow - lastCaloriCountUpdate.Value);
+                        DateTime.UtcNow - lastCalorieCountUpdate.Value);
                 }
                 else
                 {
-                    lastCaloriCountUpdate = DateTime.UtcNow;
+                    lastCalorieCountUpdate = DateTime.UtcNow;
                 }
             });
         }
@@ -324,84 +319,14 @@ namespace PunchingBand.Models
             }
         }
 
-        private void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
-        {
-            var key = sender as IBandSensor<IBandContactReading>;
-
-            wornStatus[key] = bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn;
-
-            invokeOnUiThread(() =>
-            {
-                // Consider worn if either wrist has band worn
-                Worn = wornStatus.Values.Any(worn => worn);
-
-                if (Worn)
-                { 
-                    Status = string.Empty;
-                }
-                else
-                {
-                    Status = "Please wear your Band.";
-                }
-            });
-        }
-
-        private async void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
-        {
-            var key = sender as IBandSensor<IBandAccelerometerReading>;
-
-            if (!worn)
-            {
-                return;
-            }
-
-            var punchInfo = await punchDetectors[key].GetPunchInfo(bandSensorReadingEventArgs.SensorReading).ConfigureAwait(false);
-
-            if (punchInfo.Status == PunchStatus.Finish)
-            {
-                invokeOnUiThread(() =>
-                {
-                    if (punchInfo.Strength.HasValue)
-                    {
-                        PunchEnded(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value, PunchRecognition.Unknown));
-                    }
-                });
-            }
-            else if (punchInfo.Status == PunchStatus.Start)
-            {
-                invokeOnUiThread(() =>
-                {
-                    PunchStarted(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value, PunchRecognition.Unknown));
-                });
-            }
-            else if (punchInfo.Status == PunchStatus.InProgress)
-            {
-                invokeOnUiThread(() =>
-                {
-                    Punching(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength.Value, PunchRecognition.Unknown));
-                });
-            }
-
-            if (punchInfo.PunchRecognition != PunchRecognition.Unknown)
-            {
-                invokeOnUiThread(() =>
-                {
-                    PunchTypeRecognized(this, new PunchEventArgs(punchInfo.FistSide, punchInfo.Strength ?? 0, punchInfo.PunchRecognition));
-                });
-            }
-        }
-
         public string TrainPunchType
         {
-            get { return punchDetectors != null && punchDetectors.Count > 0 ? punchDetectors.First().Value.TrainPunchType : "Jab"; }
+            get { return punchBands.Count > 0 ? punchBands.First().PunchDetector.TrainPunchType : PunchType.Jab.ToString(); }
             set
             {
-                if (punchDetectors != null)
+                foreach (var punchBand in punchBands)
                 {
-                    foreach (var punchDetector in punchDetectors)
-                    {
-                        punchDetector.Value.TrainPunchType = value;
-                    }
+                    punchBand.PunchDetector.TrainPunchType = value;
                 }
             }
         }

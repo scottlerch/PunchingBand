@@ -7,11 +7,11 @@ namespace PunchingBand.Models
     {
         public FistSides FistSide { get; private set; }
 
-        public double Strength { get; private set; }
+        public double? Strength { get; private set; }
 
         public PunchRecognition PunchRecognition { get; private set; }
 
-        public PunchEventArgs(FistSides fistSide, double strength, PunchRecognition punchRecognition)
+        public PunchEventArgs(FistSides fistSide, double? strength, PunchRecognition punchRecognition)
         {
             FistSide = fistSide;
             Strength = strength;

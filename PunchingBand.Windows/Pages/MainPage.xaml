@@ -26,7 +26,7 @@
                     <Grid>
                         <StackPanel>
                             <userControls:GameSetup DataContext="{Binding GameModel}" VerticalAlignment="Top" ></userControls:GameSetup>
-                            <Button Content="FIGHT!" HorizontalAlignment="Center"  VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Worn}"/>
+                            <Button Content="FIGHT!" HorizontalAlignment="Center"  VerticalAlignment="Top" FontSize="24" Height="73" Width="149" Click="Button_Click" FontFamily="Global User Interface" IsEnabled="{Binding PunchingModel.Ready}"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

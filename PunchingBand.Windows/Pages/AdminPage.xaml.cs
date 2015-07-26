@@ -31,10 +31,10 @@ namespace PunchingBand.Pages
             App.Current.RootModel.PunchingModel.PunchEnded += PunchingModel_PunchEnded;
             App.Current.RootModel.PunchingModel.Punching += PunchingModel_Punching;
             App.Current.RootModel.PunchingModel.PunchStarted += PunchingModel_PunchStarted;
-            App.Current.RootModel.PunchingModel.PunchTypeRecognized += PunchingModel_PunchTypeRecognized;
+            App.Current.RootModel.PunchingModel.PunchRecognized += PunchingModelPunchRecognized;
         }
 
-        private void PunchingModel_PunchTypeRecognized(object sender, Models.PunchEventArgs e)
+        private void PunchingModelPunchRecognized(object sender, Models.PunchEventArgs e)
         {
             punchType.Text = e.PunchRecognition.PunchType.ToString();
             punchRecognitionDelay.Text = e.PunchRecognition.Delay.TotalMilliseconds.ToString("0.000") + "msec";

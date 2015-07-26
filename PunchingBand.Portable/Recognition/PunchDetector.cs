@@ -1,4 +1,5 @@
-﻿using Microsoft.Band.Sensors;
+﻿using Accord;
+using Microsoft.Band.Sensors;
 using PunchingBand.Recognition.Recognizers;
 using System;
 using System.Collections.Generic;
@@ -34,19 +35,17 @@ namespace PunchingBand.Recognition
         private readonly PunchBuffer punchBuffer = new PunchBuffer(punchVectorSize);
         private int? punchBufferWindowCount;
 
-        private readonly FistSides fistSide;
+        private FistSides fistSide = FistSides.Unknown;
 
         private readonly IPunchRecognizer punchRecognizer;
         private readonly PunchLogger punchLogger;
 
-        public PunchDetector(FistSides fistSide, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
+        public PunchDetector(Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
         {
-            this.fistSide = fistSide;
+            punchRecognizer = new AccordNeuralNetworkRecognizer(getReadStream);
+            punchLogger = new PunchLogger(getWriteStream);
 
-            punchRecognizer = new AccordNeuralNetworkRecognizer(fistSide, getReadStream);
-            punchLogger = new PunchLogger(fistSide, getWriteStream);
-
-            TrainPunchType = "Jab";
+            TrainPunchType = PunchType.Jab.ToString();
         }
 
         public double LastPunchStrength { get; private set; }
@@ -176,10 +175,12 @@ namespace PunchingBand.Recognition
             return false;
         }
 
-        public async Task Initialize()
+        public async Task Initialize(FistSides fistSide)
         {
-            await punchRecognizer.Initialize();
-            await punchLogger.Initialize();
+            this.fistSide = fistSide;
+
+            await punchRecognizer.Initialize(fistSide);
+            await punchLogger.Initialize(fistSide);
         }
 
         public string TrainPunchType

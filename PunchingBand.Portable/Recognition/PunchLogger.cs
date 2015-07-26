@@ -36,9 +36,8 @@ namespace PunchingBand.Recognition
 
         public string TrainPunchType { get; set; }
 
-        public PunchLogger(FistSides fistSide, Func<string, Task<Stream>> getWriteStream)
+        public PunchLogger(Func<string, Task<Stream>> getWriteStream)
         {
-            this.fistSide = fistSide;
             this.getWriteStream = getWriteStream;
         }
 
@@ -78,8 +77,10 @@ namespace PunchingBand.Recognition
             return stringBuilder.ToString();
         }
 
-        public Task Initialize()
+        public Task Initialize(FistSides fistSide)
         {
+            this.fistSide = fistSide;
+
             logData = new BlockingCollection<PunchLogData>();
 
             logTask = Task.Run(async () =>

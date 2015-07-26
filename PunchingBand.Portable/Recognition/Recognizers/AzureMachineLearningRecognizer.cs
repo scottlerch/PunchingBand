@@ -17,14 +17,7 @@ namespace PunchingBand.Recognition.Recognizers
         private string serviceUrl;
         private string apiKey;
 
-        private readonly FistSides fistSide;
-
-        public AzureMachineLearningRecognizer(FistSides fistSide)
-        {
-            this.fistSide = fistSide;
-        }
-
-        public Task Initialize()
+        public Task Initialize(FistSides fistSide)
         {
             if (fistSide == FistSides.Right)
             {

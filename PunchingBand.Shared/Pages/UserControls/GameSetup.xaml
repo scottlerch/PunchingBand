@@ -22,7 +22,7 @@
             <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Music Selection" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
             <Button  Margin="0,0,0,30" x:Name="SongButton" HorizontalAlignment="Left" VerticalAlignment="Center" Width="229" HorizontalContentAlignment="Left" Tapped="Button_Tapped" Content="{Binding Song.DisplayName, FallbackValue=None, Mode=OneWay, TargetNullValue=None}"></Button>
             <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Primary Fist" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
-            <ToggleSwitch HorizontalAlignment="Left" VerticalAlignment="Center" OffContent="Left" OnContent="Right" Width="229" FontSize="12" IsOn="{Binding FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Width="229" FontSize="12" Text="{Binding FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
     </Grid>
 </UserControl>

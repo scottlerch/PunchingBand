@@ -13,7 +13,6 @@ namespace PunchingBand.Models
         private Gender gender;
         private double weight;
         private DateTimeOffset birthDate;
-        private FistSides defaultFistSide;
         private TemperatureUnit temperatureUnit;
         private WeightUnit weightUnit;
         private BandPosition bandPosition;
@@ -25,7 +24,6 @@ namespace PunchingBand.Models
             weight = 74.8427;
             birthDate = new DateTimeOffset(1982, 1, 15, 0, 0, 0, TimeSpan.Zero);
             bandPosition = BandPosition.ButtonFacingIn;
-            defaultFistSide = FistSides.Right;
 
             if (RegionInfo.CurrentRegion.IsMetric)
             {
@@ -58,12 +56,6 @@ namespace PunchingBand.Models
         {
             get { return bandPosition; }
             set { Set("BandPosition", ref bandPosition, value); }
-        }
-
-        public FistSides DefaultFistSide
-        {
-            get { return defaultFistSide; }
-            set { Set("DefaultFistSide", ref defaultFistSide, value); }
         }
 
         public TemperatureUnit TemperatureUnit

@@ -28,7 +28,7 @@ namespace PunchingBand.Models
         }
 
         private IBandClient bandClient;
-        private FistSides fistSide;
+        private FistSides fistSide = FistSides.Unknown;
 
         public event EventHandler FightButtonClick = delegate { }; 
 
