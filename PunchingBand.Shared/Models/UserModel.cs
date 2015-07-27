@@ -16,6 +16,7 @@ namespace PunchingBand.Models
         private TemperatureUnit temperatureUnit;
         private WeightUnit weightUnit;
         private BandPosition bandPosition;
+        private string name;
 
         public UserModel()
         {
@@ -24,6 +25,7 @@ namespace PunchingBand.Models
             weight = 74.8427;
             birthDate = new DateTimeOffset(1982, 1, 15, 0, 0, 0, TimeSpan.Zero);
             bandPosition = BandPosition.ButtonFacingIn;
+            name = "Clippy";
 
             if (RegionInfo.CurrentRegion.IsMetric)
             {
@@ -50,6 +52,12 @@ namespace PunchingBand.Models
                 yield return Gender.Male;
                 yield return Gender.Female;
             }
+        }
+
+        public string Name
+        {
+            get { return name; }
+            set { Set("Name", ref name, value); }
         }
 
         public BandPosition BandPosition

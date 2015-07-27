@@ -5,6 +5,13 @@ namespace PunchingBand.Models
 {
     public class HistoryInfo
     {
+        public HistoryInfo()
+        {
+            Name = "Clippy";
+        }
+
+        public string Name { get; set; }
+
         public DateTime Timestamp { get; set; }
 
         public TimeSpan Duration { get; set; }

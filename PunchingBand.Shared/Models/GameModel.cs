@@ -14,6 +14,7 @@ namespace PunchingBand.Models
     {
         private readonly HistoryModel historyModel;
         private readonly PunchingModel punchingModel;
+        private readonly UserModel userModel;
 
         private readonly TimeSpan speedComboInterval = TimeSpan.FromMilliseconds(250);
 
@@ -57,7 +58,7 @@ namespace PunchingBand.Models
             timeLeftSeconds = (int)duration.TotalSeconds;
         }
 
-        public GameModel(PunchingModel punchingModel, HistoryModel historyModel)
+        public GameModel(PunchingModel punchingModel, HistoryModel historyModel, UserModel userModel)
         {
             duration = GameDurations.First();
             timeLeft = duration;
@@ -71,6 +72,7 @@ namespace PunchingBand.Models
 
             this.punchingModel = punchingModel;
             this.historyModel = historyModel;
+            this.userModel = userModel;
 
             this.PropertyChanged += GameModelOnPropertyChanged;
         }
@@ -390,6 +392,7 @@ namespace PunchingBand.Models
 
             historyModel.Records.Add(new HistoryInfo
             {
+                Name = userModel.Name,
                 Timestamp = DateTime.UtcNow,
                 PunchStrenth = punchStrength,
                 CaloriesBurned = caloriesBurned,

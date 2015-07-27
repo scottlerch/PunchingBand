@@ -29,7 +29,7 @@ namespace PunchingBand.Models
             historyModel = new HistoryModel();
             userModel = new UserModel();
             punchingModel = new PunchingModel();
-            gameModel = new GameModel(punchingModel, historyModel);
+            gameModel = new GameModel(punchingModel, historyModel, userModel);
         }
 
         public RootModel(Action<Action> invokeOnUiThread)
@@ -37,7 +37,7 @@ namespace PunchingBand.Models
             historyModel = new HistoryModel();
             userModel = new UserModel();
             punchingModel = new PunchingModel(userModel, invokeOnUiThread);
-            gameModel = new GameModel(punchingModel, historyModel);
+            gameModel = new GameModel(punchingModel, historyModel, userModel);
         }
 
         public async Task Load()

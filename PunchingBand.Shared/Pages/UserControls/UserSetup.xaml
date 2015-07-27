@@ -17,12 +17,14 @@
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
+            <TextBlock Name="nameTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center" Foreground="#FF909090" FontSize="20" />
+            <TextBox Name="nameTextBox" Margin="0,0,0,30"  Width="200" InputScope="Number" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="{Binding Name, Mode=TwoWay}" VerticalAlignment="Center" FontFamily="Global User Interface"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Center" Foreground="#FF909090" FontSize="20"/>
             <ComboBox Margin="0,0,0,30" HorizontalAlignment="Left" VerticalAlignment="Center" Width="120" FontFamily="Global User Interface" ItemsSource="{Binding Genders, Converter={StaticResource EnumerableEnumTypeConverter}, Mode=OneWay}" SelectedItem="{Binding Gender, Converter={StaticResource EnumTypeConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Birth Date" VerticalAlignment="Center" Foreground="#FF909090" FontSize="20" Width="{Binding Width, ElementName=BirthDatePicker}"/>
             <DatePicker Margin="0,0,0,30" x:Name="BirthDatePicker" HorizontalAlignment="Left" VerticalAlignment="Center" Date="{Binding BirthDate, Mode=TwoWay}" FontFamily="Global User Interface"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Weight" VerticalAlignment="Center" Foreground="#FF909090" FontSize="20" />
-            <TextBox InputScope="Number" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="{Binding Weight, Converter={StaticResource WeightConverter}, ConverterParameter='Lbs', FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Center" FontFamily="Global User Interface"/>
+            <TextBox  InputScope="Number" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="{Binding Weight, Converter={StaticResource WeightConverter}, ConverterParameter='Lbs', FallbackValue=68.0, Mode=TwoWay}" VerticalAlignment="Center" FontFamily="Global User Interface"/>
         </StackPanel>
     </Grid>
 </UserControl>
