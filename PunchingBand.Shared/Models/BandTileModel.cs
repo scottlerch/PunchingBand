@@ -61,6 +61,9 @@ namespace PunchingBand.Models
                     "Punching Band",
                     "Please specify fist.");
             }
+
+            // If user takes off or puts on band make them re-select fist
+            await SetPages(includeFistSelection: true);
         }
 
         private async void TileManagerOnTileButtonPressed(object sender, BandTileEventArgs<IBandTileButtonPressedEvent> bandTileEventArgs)
@@ -70,10 +73,12 @@ namespace PunchingBand.Models
                 case ElementId.LeftFistButton:
                     FistSide = FistSides.Left;
                     await bandClient.NotificationManager.VibrateAsync(VibrationType.OneToneHigh);
+                    await SetPages(includeFistSelection: false);
                     break;
                 case ElementId.RightFistButton:
                     FistSide = FistSides.Right;
                     await bandClient.NotificationManager.VibrateAsync(VibrationType.OneToneHigh);
+                    await SetPages(includeFistSelection: false);
                     break;
                 case ElementId.FightButton:
                     FightButtonClick(this, EventArgs.Empty);
