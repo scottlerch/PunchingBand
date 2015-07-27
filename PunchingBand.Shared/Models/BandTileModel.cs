@@ -35,7 +35,7 @@ namespace PunchingBand.Models
         public FistSides FistSide
         {
             get { return fistSide; }
-            set { Set("FistSide", ref fistSide, value); }
+            set { if (!Set("FistSide", ref fistSide, value)) RaisePropertyChanged("FistSide"); } // Always raise event
         }
 
         public async Task Initialize(IBandClient bandClient)

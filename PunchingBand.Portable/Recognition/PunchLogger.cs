@@ -84,7 +84,17 @@ namespace PunchingBand.Recognition
         {
             this.fistSide = fistSide;
 
+            var originalLogData = logData;
+            var originalLogTask = logTask;
+
             logData = new BlockingCollection<PunchLogData>();
+
+            if (originalLogData != null)
+            {
+                originalLogData.CompleteAdding();
+                originalLogTask.Wait();
+                originalLogData.Dispose();
+            }
 
             logTask = Task.Run(async () =>
             {
@@ -112,7 +122,17 @@ namespace PunchingBand.Recognition
                 }
             });
 
+            var originalPunchVector = punchVectors;
+            var originalPunchVectorTask = punchVectorsTask;
+
             punchVectors = new BlockingCollection<string>();
+
+            if (originalPunchVector != null)
+            {
+                originalPunchVector.CompleteAdding();
+                originalPunchVectorTask.Wait();
+                originalPunchVector.Dispose();
+            }
 
             punchVectorsTask = Task.Run(async () =>
             {

@@ -19,6 +19,12 @@ namespace PunchingBand.Pages
 #endif
         }
 
+        public string StatusText
+        {
+            get { return statusBar.Text; }
+            set { statusBar.Text = value; }
+        }
+
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>

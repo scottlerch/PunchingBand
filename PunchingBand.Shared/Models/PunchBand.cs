@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.Band;
 using Microsoft.Band.Sensors;
 using PunchingBand.Recognition;
@@ -12,6 +13,8 @@ namespace PunchingBand.Models
 {
     public sealed class PunchBand : IDisposable
     {
+        private bool punchDetectionRunning;
+
         public PunchBand(IBandClient bandClient)
         {
             BandClient = bandClient;
@@ -50,7 +53,7 @@ namespace PunchingBand.Models
 
         public event EventHandler StartFight = delegate { };
 
-        public event EventHandler FistSideChanged = delegate { };
+        public event EventHandler FistSideSelected = delegate { };
 
         public event EventHandler WornChanged = delegate { };
 
@@ -79,17 +82,55 @@ namespace PunchingBand.Models
 
         private async void TileOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            if (propertyChangedEventArgs.PropertyName == "FistSide" && BandTile.FistSide != FistSide)
+            if (propertyChangedEventArgs.PropertyName == "FistSide")
             {
                 FistSide = BandTile.FistSide;
-                FistSideChanged(this, EventArgs.Empty);
+                FistSideSelected(this, EventArgs.Empty);
 
-                await StartPunchDetection();
+                await EnsurePunchDetection();
             }
         }
 
-        private  async Task StartPunchDetection()
+        private async void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
         {
+            Worn = bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn;
+            WornChanged(this, EventArgs.Empty);
+
+            await EnsurePunchDetection();
+        }
+
+        private async void GyroscopeOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandGyroscopeReading> bandSensorReadingEventArgs)
+        {
+            if (punchDetectionRunning) return;
+
+            PunchInfo = await PunchDetector.GetPunchInfo(bandSensorReadingEventArgs.SensorReading).ConfigureAwait(false);
+            PunchInfoChanged(this, EventArgs.Empty);
+        }
+
+        private async Task EnsurePunchDetection()
+        {
+            if (FistSide != FistSides.Unknown && Worn)
+            {
+                await StartPunchDetection();
+            }
+            else
+            {
+                await StopPunchDetection();
+            }
+        }
+
+        private async Task StartPunchDetection()
+        {
+            if (punchDetectionRunning)
+            {
+                // If fist side changed after punch detection was running reinitialize for new fist side
+                if (PunchDetector.FistSide != FistSide)
+                {
+                    await PunchDetector.Initialize(FistSide);
+                }
+                return;
+            }
+
             BandClient.SensorManager.Gyroscope.ReadingChanged += GyroscopeOnReadingChanged;
 
             BandClient.SensorManager.Gyroscope.ReportingInterval =
@@ -98,25 +139,20 @@ namespace PunchingBand.Models
             await PunchDetector.Initialize(FistSide);
 
             await BandClient.SensorManager.Gyroscope.StartReadingsAsync();
+
+            punchDetectionRunning = true;
         }
 
-        private void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
+        private async Task StopPunchDetection()
         {
-            var worn = bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn;
-
-            if (Worn != worn)
+            if (!punchDetectionRunning)
             {
-                Worn = worn;
-                WornChanged(this, EventArgs.Empty);
+                return;
             }
-        }
 
-        private async void GyroscopeOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandGyroscopeReading> bandSensorReadingEventArgs)
-        {
-            if (!Worn) return;
+            BandClient.SensorManager.Gyroscope.ReadingChanged -= GyroscopeOnReadingChanged;
 
-            PunchInfo = await PunchDetector.GetPunchInfo(bandSensorReadingEventArgs.SensorReading).ConfigureAwait(false);
-            PunchInfoChanged(this, EventArgs.Empty);
+            await BandClient.SensorManager.Gyroscope.StopReadingsAsync();
         }
 
         public void Dispose()

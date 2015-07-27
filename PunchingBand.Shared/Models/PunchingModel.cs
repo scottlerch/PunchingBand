@@ -146,18 +146,38 @@ namespace PunchingBand.Models
 
             if (bands.Length > 0)
             {
+                var connectExceptions = new List<Exception>();
+
                 for (int i = 0; i < Math.Min(bands.Length, 2); i++)
                 {
-                    var punchBand = new PunchBand(await BandClientManager.Instance.ConnectAsync(bands[i]));
+                    IBandClient bandClient;
+
+                    try
+                    {
+                        bandClient = await BandClientManager.Instance.ConnectAsync(bands[i]);
+                    }
+                    catch (Exception ex)
+                    {
+                        connectExceptions.Add(ex);
+                        continue;
+                    }
+
+                    var punchBand = new PunchBand(bandClient);
 
                     punchBands.Add(punchBand);
 
-                    punchBand.FistSideChanged += PunchBandOnFistSideChanged;
+                    punchBand.FistSideSelected += PunchBandOnFistSideSelected;
                     punchBand.PunchInfoChanged += PunchBandOnPunchInfoChanged;
                     punchBand.WornChanged += PunchBandOnWornChanged;
                     punchBand.StartFight += PunchBandOnStartFight;
 
                     await punchBand.Initialize();
+                }
+
+                // If all connections failed rethrow exception, otherwise 1 band is good enough
+                if (connectExceptions.Count == bands.Length)
+                {
+                    throw new AggregateException(connectExceptions);
                 }
 
                 Connected = true;
@@ -176,6 +196,12 @@ namespace PunchingBand.Models
             {
                 // Consider worn if either wrist has band worn
                 Worn = punchBands.Any(b => b.Worn);
+
+                if (!Worn)
+                {
+                    FistSides = FistSides.Unknown;
+                }
+
                 Status = Worn ? string.Empty : "Please wear your Band.";
             });
 
@@ -249,7 +275,7 @@ namespace PunchingBand.Models
             }
         }
 
-        private void PunchBandOnFistSideChanged(object sender, EventArgs eventArgs)
+        private void PunchBandOnFistSideSelected(object sender, EventArgs eventArgs)
         {
             var punchBand = sender as PunchBand;
 

@@ -42,5 +42,6 @@
                 </DataTemplate>
             </HubSection>
         </Hub>
+        <TextBlock Name="statusBar" VerticalAlignment="Bottom" Text="Connecting to Band..." Margin="4,4,4,4" FontSize="14"></TextBlock>
     </Grid>
 </Page>

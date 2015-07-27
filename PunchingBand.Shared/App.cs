@@ -71,11 +71,23 @@ namespace PunchingBand
                 await statusBar.ShowAsync();
             }
 #else
+
+            /*
             var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText01);
             var toastTextElements = toastXml.GetElementsByTagName("text");
             toastTextElements[0].AppendChild(toastXml.CreateTextNode(statusText));
             var toast = new ToastNotification(toastXml);
             ToastNotificationManager.CreateToastNotifier().Show(toast);
+             */
+            if (Window.Current.Content != null)
+            {
+                var page = (Window.Current.Content as Frame).Content as MainPage;
+                var app = Application.Current;
+                if (page != null)
+                {
+                    page.StatusText = statusText;
+                }
+            }
             await Task.Yield();
 #endif
         }

@@ -52,6 +52,8 @@ namespace PunchingBand.Recognition
 
         public double LastPunchStrength { get; private set; }
 
+        public FistSides FistSide { get { return fistSide; } }
+
         public async Task<PunchInfo> GetPunchInfo(IBandGyroscopeReading reading)
         {
             var status = PunchStatus.Unknown;
