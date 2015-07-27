@@ -86,22 +86,22 @@ namespace PunchingBand.Models
         {
             await bandClient.TileManager.RemovePagesAsync(TileId);
 
-            var titlePage = new PageData(
-                TitlePageId,
-                0,
-                new TextBlockData((short)ElementId.TitleText, "Punching Band"),
-                new TextButtonData((short)ElementId.FightButton, "FIGHT!"));
-
             var fistSelectionPage = new PageData(
                 FistSelectionPageId,
-                1,
+                0,
                 new TextBlockData((short)ElementId.FistSelectionText, "Which fist is this?"),
                 new TextButtonData((short)ElementId.LeftFistButton, "Left"),
                 new TextButtonData((short)ElementId.RightFistButton, "Right"));
 
+            var titlePage = new PageData(
+                TitlePageId,
+                1,
+                new TextBlockData((short)ElementId.TitleText, "Punching Band"),
+                new TextButtonData((short)ElementId.FightButton, "FIGHT!"));
+
             if (includeFistSelection)
             {
-                await bandClient.TileManager.SetPagesAsync(TileId, fistSelectionPage, titlePage);
+                await bandClient.TileManager.SetPagesAsync(TileId, titlePage, fistSelectionPage);
             }
             else
             {
@@ -129,7 +129,7 @@ namespace PunchingBand.Models
 
                 // NOTE: Resolution of page area is 245x106, recommended 15px margins on left and right
 
-                tile.PageLayouts.Add(
+                var fightPage =
                     new PageLayout(
                         new FlowPanel(
                             new TextBlock
@@ -154,9 +154,9 @@ namespace PunchingBand.Models
                             Rect = new PageRect(0, 0, 245, 100),
                             Margins = new Margins(0, 0, 0, 0),
                         }
-                    ));
+                    );
 
-                tile.PageLayouts.Add(
+                var fistSelectionPage =
                     new PageLayout(
                         new FlowPanel(
                             new TextBlock
@@ -196,7 +196,10 @@ namespace PunchingBand.Models
                             Orientation = FlowPanelOrientation.Vertical,
                             Rect = new PageRect(0, 0, 245, 100),
                             Margins = new Margins(0, 0, 0, 0),
-                        }));
+                        });
+
+                tile.PageLayouts.Add(fistSelectionPage);
+                tile.PageLayouts.Add(fightPage);
 
                 await bandClient.TileManager.AddTileAsync(tile);
             }
