@@ -156,7 +156,8 @@ namespace PunchingBand.Models
                 SpeedComboCount = 0;
             }
 
-            if (1.0 - punchEventArgs.Strength < 0.001 && 1.0 - punchStrength.Last < 0.001)
+            if (PunchDetector.MaximumAcceleration - punchEventArgs.Strength < 0.001 && 
+                PunchDetector.MaximumAcceleration - punchStrength.Last < 0.001)
             {
                 PowerComboCount++;
             }
@@ -219,7 +220,7 @@ namespace PunchingBand.Models
         [JsonIgnore]
         public double PunchStrengthMeter
         {
-            get { return 1.0 - punchStrength.Last; }
+            get { return 1.0 - (punchStrength.Last / PunchDetector.MaximumAcceleration); }
         }
 
         [JsonIgnore]

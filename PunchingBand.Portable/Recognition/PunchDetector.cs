@@ -13,10 +13,14 @@ namespace PunchingBand.Recognition
     /// </summary>
     public sealed class PunchDetector : IDisposable
     {
+        /// <summary>
+        /// Maximum acceleration in g's (1g = 9.81m/s^2).
+        /// </summary>
+        public const double MaximumAcceleration = 8.0;
+
         private readonly TimeSpan punchCoolOffInterval = TimeSpan.FromMilliseconds(100);
         private const double punchThreshold = 0.5;
-        private const double punchResetThreshold = 0.0;
-        private const double maximumAcceleration = 8.0;
+        private const double punchResetThreshold = 0.0; 
         private const int punchVectorSize = 20; // ~320msec (20x16msec) max timeframe to detect punch
         private const int numberOfSamplesBeforePunchStart = 4; // 64msec of pre-punch data
 
@@ -120,9 +124,9 @@ namespace PunchingBand.Recognition
                 if (reading.AccelerationX > punchThreshold)
                 {
                     maxX = Math.Max(maxX, reading.AccelerationX);
-                    punchStrength = (maxX - punchThreshold) / (maximumAcceleration - punchThreshold);
+                    punchStrength = ((maxX - punchThreshold) / (MaximumAcceleration - punchThreshold)) * MaximumAcceleration;
 
-                    if (reading.AccelerationX >= maximumAcceleration || reading.AccelerationX - lastX < 0)
+                    if (reading.AccelerationX >= MaximumAcceleration || reading.AccelerationX - lastX < 0)
                     {
                         LastPunchStrength = punchStrength.Value;
 

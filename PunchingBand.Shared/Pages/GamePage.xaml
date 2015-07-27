@@ -111,7 +111,7 @@
                     <ScaleTransform x:Name="punchCountScaleTransform" ScaleX="1" ScaleY="1"  />
                 </TextBlock.RenderTransform>
             </TextBlock>
-            <TextBlock HorizontalAlignment="Center" Margin="75,140,210,0" TextWrapping="Wrap" Text="{Binding GameModel.PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Center" FontSize="22" Width="120"/>
+            <TextBlock HorizontalAlignment="Center" Margin="75,140,210,0" TextWrapping="Wrap" Text="{Binding GameModel.PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}g'}" VerticalAlignment="Center" FontSize="22" Width="120"/>
 
             <TextBlock HorizontalAlignment="Left" Margin="51,40,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
             <TextBlock HorizontalAlignment="Left" Margin="9,40,0,0" TextWrapping="Wrap" Text="HR:" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>

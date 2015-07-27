@@ -101,7 +101,7 @@ namespace PunchingBand.Models
 
         private async void GyroscopeOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandGyroscopeReading> bandSensorReadingEventArgs)
         {
-            if (punchDetectionRunning) return;
+            if (!punchDetectionRunning) return;
 
             PunchInfo = await PunchDetector.GetPunchInfo(bandSensorReadingEventArgs.SensorReading).ConfigureAwait(false);
             PunchInfoChanged(this, EventArgs.Empty);
@@ -153,6 +153,8 @@ namespace PunchingBand.Models
             BandClient.SensorManager.Gyroscope.ReadingChanged -= GyroscopeOnReadingChanged;
 
             await BandClient.SensorManager.Gyroscope.StopReadingsAsync();
+
+            punchDetectionRunning = false;
         }
 
         public void Dispose()
