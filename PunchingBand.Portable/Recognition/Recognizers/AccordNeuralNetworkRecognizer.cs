@@ -35,7 +35,7 @@ namespace PunchingBand.Recognition.Recognizers
             }
         }
 
-        public async Task<PunchRecognition> Recognize(IEnumerable<IBandAccelerometerReading> readings)
+        public async Task<PunchRecognition> Recognize(IEnumerable<IBandGyroscopeReading> readings)
         {
             if (network == null)
             {

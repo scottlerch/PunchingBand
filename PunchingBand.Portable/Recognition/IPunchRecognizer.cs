@@ -8,6 +8,6 @@ namespace PunchingBand.Recognition
     {
         Task Initialize(FistSides fistSide);
 
-        Task<PunchRecognition> Recognize(IEnumerable<IBandAccelerometerReading> readings);
+        Task<PunchRecognition> Recognize(IEnumerable<IBandGyroscopeReading> readings);
     }
 }

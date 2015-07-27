@@ -50,7 +50,7 @@ namespace PunchingBand.Recognition
 
         public double LastPunchStrength { get; private set; }
 
-        public async Task<PunchInfo> GetPunchInfo(IBandAccelerometerReading reading)
+        public async Task<PunchInfo> GetPunchInfo(IBandGyroscopeReading reading)
         {
             var status = PunchStatus.Unknown;
             double? punchStrength;
@@ -114,12 +114,12 @@ namespace PunchingBand.Recognition
             }
         }
 
-        private async Task<PunchRecognition> DeterminePunchType(IEnumerable<IBandAccelerometerReading> readings)
+        private async Task<PunchRecognition> DeterminePunchType(IEnumerable<IBandGyroscopeReading> readings)
         {
             return await punchRecognizer.Recognize(readings);
         }
 
-        private bool IsPunchDetected(IBandAccelerometerReading reading, out double? punchStrength)
+        private bool IsPunchDetected(IBandGyroscopeReading reading, out double? punchStrength)
         {
             punchStrength = null;
             bool punchDetected = false;
@@ -164,7 +164,7 @@ namespace PunchingBand.Recognition
             readyForPunch = true;
         }
 
-        private bool IsDetectingPunch(IBandAccelerometerReading reading)
+        private bool IsDetectingPunch(IBandGyroscopeReading reading)
         {
             if (!punchStarted && readyForPunch && reading.AccelerationX > punchThreshold)
             {

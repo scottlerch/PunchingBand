@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace PunchingBand.Recognition
 {
-    public class PunchBuffer : IEnumerable<IBandAccelerometerReading>
+    public class PunchBuffer : IEnumerable<IBandGyroscopeReading>
     {
         // TODO: implement as circular buffer array for performance
-        private readonly LinkedList<IBandAccelerometerReading> buffer = new LinkedList<IBandAccelerometerReading>();
+        private readonly LinkedList<IBandGyroscopeReading> buffer = new LinkedList<IBandGyroscopeReading>();
 
         public PunchBuffer(int size)
         {
@@ -16,7 +16,7 @@ namespace PunchingBand.Recognition
 
         public int Size { get; private set; }
 
-        public void Add(IBandAccelerometerReading reading)
+        public void Add(IBandGyroscopeReading reading)
         {
             if (buffer.Count >= Size)
             {
@@ -26,7 +26,7 @@ namespace PunchingBand.Recognition
             buffer.AddLast(reading);
         }
 
-        public IEnumerator<IBandAccelerometerReading> GetEnumerator()
+        public IEnumerator<IBandGyroscopeReading> GetEnumerator()
         {
             return buffer.GetEnumerator();
         }

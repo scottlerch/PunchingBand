@@ -32,7 +32,7 @@ namespace PunchingBand.Recognition.Recognizers
             return Task.FromResult(0);
         }
 
-        public async Task<PunchRecognition> Recognize(IEnumerable<IBandAccelerometerReading> readings)
+        public async Task<PunchRecognition> Recognize(IEnumerable<IBandGyroscopeReading> readings)
         {
             var punchVector = readings.ToList();
             var punchVectorSize = punchVector.Count;

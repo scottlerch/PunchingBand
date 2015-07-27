@@ -12,13 +12,13 @@ namespace PunchingBand.Recognition
     {
         private class PunchLogData
         {
-            public PunchLogData(IBandAccelerometerReading reading, PunchInfo punchInfo)
+            public PunchLogData(IBandGyroscopeReading reading, PunchInfo punchInfo)
             {
                 AccelerometerReading = reading;
                 PunchInfo = punchInfo;
             }
 
-            public IBandAccelerometerReading AccelerometerReading { get; private set; }
+            public IBandGyroscopeReading AccelerometerReading { get; private set; }
 
             public PunchInfo PunchInfo { get; private set; }
         }
@@ -41,7 +41,7 @@ namespace PunchingBand.Recognition
             this.getWriteStream = getWriteStream;
         }
 
-        public void LogPunchData(IBandAccelerometerReading reading, PunchInfo punchInfo)
+        public void LogPunchData(IBandGyroscopeReading reading, PunchInfo punchInfo)
         {
             if (logData != null)
             {
@@ -58,7 +58,7 @@ namespace PunchingBand.Recognition
             }
         }
 
-        private string GetVectorCsv(IEnumerable<IBandAccelerometerReading> punchBuffer)
+        private string GetVectorCsv(IEnumerable<IBandGyroscopeReading> punchBuffer)
         {
             var stringBuilder = new StringBuilder();
             foreach (var reading in punchBuffer)

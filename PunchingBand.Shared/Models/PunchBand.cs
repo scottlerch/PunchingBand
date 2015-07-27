@@ -90,14 +90,14 @@ namespace PunchingBand.Models
 
         private  async Task StartPunchDetection()
         {
-            BandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
+            BandClient.SensorManager.Gyroscope.ReadingChanged += GyroscopeOnReadingChanged;
 
-            BandClient.SensorManager.Accelerometer.ReportingInterval =
+            BandClient.SensorManager.Gyroscope.ReportingInterval =
                 BandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
 
             await PunchDetector.Initialize(FistSide);
 
-            await BandClient.SensorManager.Accelerometer.StartReadingsAsync();
+            await BandClient.SensorManager.Gyroscope.StartReadingsAsync();
         }
 
         private void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
@@ -111,7 +111,7 @@ namespace PunchingBand.Models
             }
         }
 
-        private async void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandAccelerometerReading> bandSensorReadingEventArgs)
+        private async void GyroscopeOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandGyroscopeReading> bandSensorReadingEventArgs)
         {
             if (!Worn) return;
 
