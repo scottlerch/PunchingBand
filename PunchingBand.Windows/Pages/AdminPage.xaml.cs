@@ -38,6 +38,7 @@ namespace PunchingBand.Pages
         {
             punchType.Text = e.PunchRecognition.PunchType.ToString();
             punchRecognitionDelay.Text = e.PunchRecognition.Delay.TotalMilliseconds.ToString("0.000") + "msec";
+            punchRecognitionConfidence.Text = e.PunchRecognition.Confidence.ToString("0.000");
         }
 
         private void PunchingModel_Punching(object sender, Models.PunchEventArgs e)

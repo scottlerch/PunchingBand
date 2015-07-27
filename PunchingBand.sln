@@ -9,13 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PunchingBand.Windows", "Pun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PunchingBand.WindowsPhone", "PunchingBand.WindowsPhone\PunchingBand.WindowsPhone.csproj", "{885121F5-37B3-40A4-AF90-E9ACC1C988F3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "linqpad", "linqpad", "{115A1E00-C516-432D-B980-9950C868D2CA}"
-	ProjectSection(SolutionItems) = preProject
-		linqpad\PreparePunchDataAzureML.linq = linqpad\PreparePunchDataAzureML.linq
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "punchdata", "punchdata", "{2BF9AD06-EEA1-437F-B53A-D8BCFB6BE286}"
 	ProjectSection(SolutionItems) = preProject
+		punchdata\PunchVectorsLeft.csv = punchdata\PunchVectorsLeft.csv
 		punchdata\PunchVectorsRight.csv = punchdata\PunchVectorsRight.csv
 	EndProjectSection
 EndProject

@@ -14,5 +14,6 @@
         <TextBlock x:Name="punchCount" HorizontalAlignment="Left" Margin="146,52,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" FontSize="21.333"/>
         <TextBlock x:Name="punchType" HorizontalAlignment="Left" Margin="197,52,0,0" TextWrapping="Wrap" Text="N/A" VerticalAlignment="Top" FontSize="21.333"/>
         <TextBlock x:Name="punchRecognitionDelay" HorizontalAlignment="Left" Margin="197,79,0,0" TextWrapping="Wrap" Text="N/A" VerticalAlignment="Top" FontSize="21.333"/>
+        <TextBlock x:Name="punchRecognitionConfidence" HorizontalAlignment="Left" Margin="197,106,0,0" TextWrapping="Wrap" Text="N/A" VerticalAlignment="Top" FontSize="21.333"/>
     </Grid>
 </Page>

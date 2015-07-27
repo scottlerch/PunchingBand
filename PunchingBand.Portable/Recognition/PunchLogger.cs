@@ -32,8 +32,6 @@ namespace PunchingBand.Recognition
         private FistSides fistSide;
         private Func<string, Task<Stream>> getWriteStream;
 
-        private int punchVectorSize;
-
         public string TrainPunchType { get; set; }
 
         public PunchLogger(Func<string, Task<Stream>> getWriteStream)
@@ -49,11 +47,10 @@ namespace PunchingBand.Recognition
             }
         }
 
-        public void LogPunchVector(PunchBuffer punchBuffer)
+        public void LogPunchVector(IEnumerable<IBandGyroscopeReading> punchBuffer)
         {
             if (punchVectors != null)
             {
-                punchVectorSize = punchBuffer.Size;
                 punchVectors.Add(GetVectorCsv(punchBuffer));
             }
         }
@@ -73,6 +70,12 @@ namespace PunchingBand.Recognition
                 stringBuilder.Append(reading.AccelerationY);
                 stringBuilder.Append(",");
                 stringBuilder.Append(reading.AccelerationZ);
+                stringBuilder.Append(",");
+                stringBuilder.Append(reading.AngularVelocityX);
+                stringBuilder.Append(",");
+                stringBuilder.Append(reading.AngularVelocityY);
+                stringBuilder.Append(",");
+                stringBuilder.Append(reading.AngularVelocityZ);
             }
             return stringBuilder.ToString();
         }
@@ -94,11 +97,14 @@ namespace PunchingBand.Recognition
                     foreach (var data in logData.GetConsumingEnumerable())
                     {
                         streamWriter.WriteLine(
-                            "{0},{1},{2},{3},{4}",
+                            "{0},{1},{2},{3},{4},{5},{6},{7}",
                             (int)(data.AccelerometerReading.Timestamp - startTimestamp).TotalMilliseconds,
                             data.AccelerometerReading.AccelerationX,
                             data.AccelerometerReading.AccelerationY,
                             data.AccelerometerReading.AccelerationZ,
+                            data.AccelerometerReading.AngularVelocityX,
+                            data.AccelerometerReading.AngularVelocityY,
+                            data.AccelerometerReading.AngularVelocityZ,
                             data.PunchInfo.Status);
                         streamWriter.Flush();
                         fileStream.Flush();
@@ -113,12 +119,6 @@ namespace PunchingBand.Recognition
                 using (var fileStream = await getWriteStream(string.Format("LogData/PunchVectors{0}.csv", fistSide)))
                 {
                     var streamWriter = new StreamWriter(fileStream) { AutoFlush = true };
-
-                    streamWriter.Write("PunchType");
-                    for (int i = 0; i < punchVectorSize; i++)
-                    {
-                        streamWriter.Write(",X{0},Y{0},Z{0}", i);
-                    }
 
                     foreach (var vector in punchVectors.GetConsumingEnumerable())
                     {

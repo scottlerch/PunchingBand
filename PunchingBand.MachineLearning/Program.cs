@@ -14,11 +14,15 @@ namespace PunchingBand.MachineLearning
     {
         static void Main(string[] args)
         {
-            var lines = File.ReadAllLines(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\PunchVectorsRight.csv").Skip(1);
-            var splitLines = lines.Select(line => line.Split(',')).ToList();
+            var fist = "Right";
 
-            var categories = ((PunchType[]) Enum.GetValues(typeof (PunchType))).Except(new[] {PunchType.Unknown, PunchType.Body, PunchType.Cross}).ToArray();
+            var rand = new Random(0);
+
+            var categories = ((PunchType[])Enum.GetValues(typeof(PunchType))).Except(new[] { PunchType.Unknown }).ToArray();
             var categoryIndices = categories.ToDictionary(c => c.ToString(), c => (int)c);
+
+            var lines = File.ReadAllLines(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\PunchVectors" + fist + ".csv").Skip(1);
+            var splitLines = lines.Select(line => line.Split(',')).Where(parts => categoryIndices.ContainsKey(parts[0])).OrderBy(x => rand.Next()).ToList();
 
             double[][] inputs = splitLines.Select(line => line.Skip(1).Select(double.Parse).ToArray()).ToArray();
             int[] classes = splitLines.Select(line => categoryIndices[line[0]]).ToArray();
@@ -33,8 +37,7 @@ namespace PunchingBand.MachineLearning
             var function = new BipolarSigmoidFunction();
 
             // Create an activation network with the function and
-            //  4 inputs, 5 hidden neurons and 3 possible outputs:
-            var network = new ActivationNetwork(function, inputs[0].Length, 100, categories.Length);
+            var network = new ActivationNetwork(function, inputs[0].Length, (int)((inputs[0].Length + categories.Length) * 0.67), categories.Length);
 
             // Randomly initialize the network
             new NguyenWidrow(network).Randomize();
@@ -43,7 +46,8 @@ namespace PunchingBand.MachineLearning
             var teacher = new ParallelResilientBackpropagationLearning(network);
 
             double error = 1.0;
-            while (error > 1e-5)
+            const double desiredErrorLevel = 1e-5;
+            while (error > desiredErrorLevel)
                 error = teacher.RunEpoch(inputs, outputs);
 
             Console.WriteLine("Model trained!");
@@ -60,11 +64,11 @@ namespace PunchingBand.MachineLearning
                 Console.WriteLine("Expected: {0}  Actual: {1}", expected, actual);
             }
 
-            network.Save(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\PunchRecognitionNetwork.dat");
+            //network.Save(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\Punches" + fist + "Fist.dat");
 
             var networkJson = JsonConvert.SerializeObject(network);
 
-            File.WriteAllText(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\PunchRecognitionNetwork.json", networkJson);
+            File.WriteAllText(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\Punches" + fist + "Fist.json", networkJson);
 
             Console.WriteLine("Model written to disk!");
 
@@ -72,7 +76,7 @@ namespace PunchingBand.MachineLearning
 
             var jsonNetwork = new JsonNetwork();
 
-            using (var file = File.OpenRead(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\PunchRecognitionNetwork.json"))
+            using (var file = File.OpenRead(@"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\Punches" + fist + "Fist.json"))
             using (var streamReader = new StreamReader(file))
             {
                 var serializer = new JsonSerializer();

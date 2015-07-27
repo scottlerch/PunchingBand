@@ -42,7 +42,7 @@ namespace PunchingBand.Recognition.Recognizers
                 throw new InvalidOperationException("Neural network has not been initialized.");
             }
 
-            var inputs = readings.SelectMany(r => new[] { r.AccelerationX, r.AccelerationY, r.AccelerationZ }).ToArray();
+            var inputs = readings.SelectMany(r => new[] { r.AccelerationX, r.AccelerationY, r.AccelerationZ, r.AngularVelocityX, r.AngularVelocityY, r.AngularVelocityZ, }).ToArray();
 
             if (inputs.Length != network.InputsCount)
             {

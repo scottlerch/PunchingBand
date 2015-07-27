@@ -1,10 +1,8 @@
-﻿using Accord;
-using Microsoft.Band.Sensors;
+﻿using Microsoft.Band.Sensors;
 using PunchingBand.Recognition.Recognizers;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PunchingBand.Recognition
@@ -19,7 +17,8 @@ namespace PunchingBand.Recognition
         private const double punchThreshold = 0.5;
         private const double punchResetThreshold = 0.0;
         private const double maximumAcceleration = 8.0;
-        private const int punchVectorSize = 10; // ~160msec (10x16msec) timeframe to detect punch
+        private const int punchVectorSize = 20; // ~320msec (20x16msec) max timeframe to detect punch
+        private const int numberOfSamplesBeforePunchStart = 4; // 64msec of pre-punch data
 
         private double lastX;
         private double maxX = double.MinValue;
@@ -32,8 +31,11 @@ namespace PunchingBand.Recognition
 
         private bool punchStarted;
 
+        // Sliding window of gryroscope/accelerometer readings
         private readonly PunchBuffer punchBuffer = new PunchBuffer(punchVectorSize);
-        private int? punchBufferWindowCount;
+
+        // Recording of gryroscope/acclerometer readings for current punch
+        private readonly PunchBuffer currentPunchBuffer = new PunchBuffer(punchVectorSize);
 
         private FistSides fistSide = FistSides.Unknown;
 
@@ -53,20 +55,25 @@ namespace PunchingBand.Recognition
         public async Task<PunchInfo> GetPunchInfo(IBandGyroscopeReading reading)
         {
             var status = PunchStatus.Unknown;
-            double? punchStrength;
+            double? punchStrength = null;
+            var punchRecognition = PunchRecognition.Unknown;
 
             if (IsPunchDetected(reading, out punchStrength))
             {
-                status = PunchStatus.Finish; 
+                status = PunchStatus.Finish;
+
+                punchRecognition = await DeterminePunchType(currentPunchBuffer).ConfigureAwait(false);
+
+                punchLogger.LogPunchVector(currentPunchBuffer);
             }
             else
             {
                 if (IsDetectingPunch(reading))
                 {
-                    // Use previous previous values in recognizing punch type
-                    punchBufferWindowCount = 2;
                     // We know a punch is occuring but don't know the final strength
                     status = PunchStatus.Start;
+
+                    currentPunchBuffer.Reset(punchBuffer, numberOfSamplesBeforePunchStart);
                 }
                 else if (punchStarted && punchStrength.HasValue)
                 {
@@ -83,35 +90,17 @@ namespace PunchingBand.Recognition
             }
 
             punchBuffer.Add(reading);
-
-            if (punchBufferWindowCount.HasValue)
-            {
-                punchBufferWindowCount++;
-            }
-
-            var bufferFull = punchBufferWindowCount >= punchBuffer.Size;
-
-            if (bufferFull)
-            {
-                punchLogger.LogPunchVector(punchBuffer);
-                punchBufferWindowCount = null;
-            }
-
-            var punchInfo = new PunchInfo(fistSide, status, punchStrength, PunchRecognition.Unknown);
-
-            punchLogger.LogPunchData(reading, punchInfo);
+            currentPunchBuffer.Add(reading);
 
             lastPunchStatus = status;
 
-            if (bufferFull)
-            {
-                var punchRecognition = await DeterminePunchType(punchBuffer.ToList()).ConfigureAwait(false);
-                return new PunchInfo(fistSide, status, punchStrength, punchRecognition);
-            }
-            else
-            {
-                return punchInfo;
-            }
+            var punchInfo = new PunchInfo(fistSide, status, punchStrength, punchRecognition);
+
+#if FULL_LOGGING
+            punchLogger.LogPunchData(reading, punchInfo);
+#endif
+
+            return punchInfo;
         }
 
         private async Task<PunchRecognition> DeterminePunchType(IEnumerable<IBandGyroscopeReading> readings)
