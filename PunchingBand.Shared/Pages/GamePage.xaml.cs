@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Navigation;
 using PunchingBand.Infrastructure;
 using PunchingBand.Models;
 using Windows.Storage;
+using PunchingBand.Recognition;
 
 namespace PunchingBand.Pages
 {
@@ -80,9 +81,10 @@ namespace PunchingBand.Pages
                         // NOTE: already played in ModelOnPunchStarted
                         //punchSound.Play(model.PunchStrength);
 
-                        if (1.0 - model.GameModel.PunchStrength < 0.001)
+                        if (PunchDetector.MaximumAcceleration - model.GameModel.PunchStrength < 0.001)
                         {
                             powerPunchSound.Play(1);
+                            powerGlowStoryboard.Begin();
                         }
                     }
                     break;

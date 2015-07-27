@@ -99,6 +99,13 @@
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
+        <Storyboard x:Name="powerGlowStoryboard">
+            <DoubleAnimation
+                Storyboard.TargetName="powerGlowImage"
+                Storyboard.TargetProperty="Opacity"
+                To="0.0" From="1.0" Duration="0:0:0.5" AutoReverse="False" >
+            </DoubleAnimation>
+        </Storyboard>
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <MediaElement x:Name="SongMedia" AudioCategory="ForegroundOnlyMedia"></MediaElement>
@@ -118,6 +125,8 @@
 
             <TextBlock HorizontalAlignment="Right" Margin="0,10,9,0" TextWrapping="Wrap" Text="°" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
             <TextBlock HorizontalAlignment="Right" Margin="0,10,25,0" TextWrapping="Wrap" Text="{Binding PunchingModel.SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+            <Image Name="powerGlowImage" HorizontalAlignment="Center" Height="60" VerticalAlignment="Center" Width="290" Source="ms-appx:///Assets/Images/PowerbarHalo.png" Margin="0,190,0,0" Opacity="0" Stretch="Fill"/>
+
             <Rectangle x:Name="strengthMeter" HorizontalAlignment="Center" Height="19" Margin="0,190,0,0" Stroke="DarkGray" VerticalAlignment="Center" Width="250">
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
@@ -155,6 +164,6 @@
                 </TextBlock.RenderTransform>
             </TextBlock>
             <Button x:Name="backButton" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Margin="20" Style="{StaticResource CustomBackButtonStyle}" Click="BackButton_Click"></Button>
-         </Grid>
+        </Grid>
     </Grid>
 </Page>

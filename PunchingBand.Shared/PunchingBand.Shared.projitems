@@ -97,6 +97,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch1.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch2.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\worn.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\PowerbarHalo.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconSmall.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\NeuralNetworks\PunchesLeftFist.json" />
