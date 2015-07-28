@@ -2,7 +2,8 @@
 {
     public enum GameMode
     {
-        TimeTrial,
-        Endurance,
+        MiniGame,
+        FreeformWorkout,
+        GuidedWorkout,
     }
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Windows.UI.Xaml;
+using Newtonsoft.Json;
 using PunchingBand.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace PunchingBand.Models
         private readonly TimeSpan speedComboInterval = TimeSpan.FromMilliseconds(250);
 
         // Game setup
-        private GameMode gameMode = GameMode.TimeTrial;
+        private GameMode gameMode = GameMode.MiniGame;
         private TimeSpan duration;
         private FistSides fistSide = FistSides.Unknown;
 
@@ -182,9 +183,36 @@ namespace PunchingBand.Models
         {
             get
             {
-                yield return TimeSpan.FromSeconds(15);
-                yield return TimeSpan.FromSeconds(30);
-                yield return TimeSpan.FromSeconds(60);
+                switch (GameMode)
+                {
+                    case GameMode.MiniGame:
+                        yield return TimeSpan.FromSeconds(15);
+                        break;
+                    case GameMode.FreeformWorkout:
+                    case GameMode.GuidedWorkout:
+                        yield return TimeSpan.FromMinutes(5);
+                        yield return TimeSpan.FromMinutes(10);
+                        yield return TimeSpan.FromMinutes(15);
+                        yield return TimeSpan.FromMinutes(20);
+                        yield return TimeSpan.FromMinutes(30);
+                        yield return TimeSpan.FromMinutes(45);
+                        yield return TimeSpan.FromMinutes(60);
+                        break;
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public bool GameDurationsEnabled { get { return GameDurations.Count() > 1;  } }
+
+        [JsonIgnore]
+        public IEnumerable<GameMode> GameModes
+        {
+            get
+            { 
+                yield return GameMode.MiniGame; 
+                yield return GameMode.FreeformWorkout;
+                yield return GameMode.GuidedWorkout; 
             }
         }
 
@@ -205,7 +233,15 @@ namespace PunchingBand.Models
         public GameMode GameMode
         {
             get { return gameMode; }
-            set { Set("GameMode", ref gameMode, value); }
+            set
+            {
+                if (Set("GameMode", ref gameMode, value))
+                {
+                    RaisePropertyChanged("GameDurationsEnabled");
+                    RaisePropertyChanged("GameDurations");
+                    Duration = GameDurations.First();
+                }
+            }
         }
 
         [JsonIgnore]

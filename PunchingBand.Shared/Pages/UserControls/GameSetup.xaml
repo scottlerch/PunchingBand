@@ -8,18 +8,23 @@
     xmlns:models="using:PunchingBand.Models"
     xmlns:bindingConverters="using:PunchingBand.Pages.BindingConverters"
     d:DataContext="{d:DesignInstance Type=models:GameModel, IsDesignTimeCreatable=True}"
-    mc:Ignorable="d"
-    d:DesignWidth="350" Height="350">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <bindingConverters:FistSideConverter x:Key="FistSideConverter"/>
         <bindingConverters:EnumerableTimeSpanTypeConverter x:Key="EnumerableTimeSpanConverter"/>
         <bindingConverters:TimeSpanTypeConverter x:Key="TimeSpanConverter"/>
+        <bindingConverters:EnumTypeConverter x:Key="EnumTypeConverter"/>
+        <bindingConverters:EnumerableEnumTypeConverter x:Key="EnumerableEnumTypeConverter"/>
+        <bindingConverters:BoolVisibilityTypeConverter x:Key="BoolVisibilityTypeConverter"/>
+
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
-            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Session Duration" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
-            <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=OneWay, Converter={StaticResource EnumerableTimeSpanConverter}}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeSpanConverter}}"/>
-            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Music Selection" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
+            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Mode" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
+            <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameModes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumerableEnumTypeConverter}}" SelectedItem="{Binding GameMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumTypeConverter}}"/>
+            <TextBlock Visibility="{Binding GameDurationsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource BoolVisibilityTypeConverter}}" HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Duration" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
+            <ComboBox Visibility="{Binding GameDurationsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource BoolVisibilityTypeConverter}}" Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumerableTimeSpanConverter}}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeSpanConverter}}"/>
+            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Music" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
             <Button  Margin="0,0,0,30" x:Name="SongButton" HorizontalAlignment="Left" VerticalAlignment="Center" Width="229" HorizontalContentAlignment="Left" Tapped="Button_Tapped" Content="{Binding Song.DisplayName, FallbackValue=None, Mode=OneWay, TargetNullValue=None}"></Button>
             <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Primary Fist" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
             <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Width="255" FontSize="16" Text="{Binding FistSide, Converter={StaticResource FistSideConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
