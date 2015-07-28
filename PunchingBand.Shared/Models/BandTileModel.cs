@@ -106,7 +106,7 @@ namespace PunchingBand.Models
 
             if (includeFistSelection)
             {
-                await bandClient.TileManager.SetPagesAsync(TileId, titlePage, fistSelectionPage);
+                await bandClient.TileManager.SetPagesAsync(TileId, fistSelectionPage);
             }
             else
             {

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 #if WINDOWS_PHONE_APP
 using Windows.Phone.UI.Input;
 #endif
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -18,10 +20,13 @@ namespace PunchingBand.Pages
     {
         private readonly RootModel model;
         private readonly SoundEffect powerPunchSound;
-        private readonly SoundEffect punchSound;
+        private readonly List<SoundEffect> punchSounds; 
         private readonly SoundEffect beepSound;
         private readonly SoundEffect endBuzzer;
         private readonly SoundEffect fightBell;
+        private readonly SoundEffect highScoreSound;
+
+        private readonly Random random = new Random();
 
         public GamePage()
         {
@@ -37,11 +42,19 @@ namespace PunchingBand.Pages
             timer.Interval = TimeSpan.FromMilliseconds(17);
             timer.Start();
 
-            punchSound = new SoundEffect("Assets/Audio/punch1.wav", poolSize: 10);
+            punchSounds = new List<SoundEffect>
+            {
+                new SoundEffect("Assets/Audio/punch1.wav", poolSize: 3),
+                new SoundEffect("Assets/Audio/punch2.wav", poolSize: 3),
+                new SoundEffect("Assets/Audio/punch3.wav", poolSize: 3),
+                new SoundEffect("Assets/Audio/punch4.wav", poolSize: 3),
+            };
+
             powerPunchSound = new SoundEffect("Assets/Audio/heavypunch1.wav", poolSize: 10);
             beepSound = new SoundEffect("Assets/Audio/ding.wav", poolSize: 2);
-            endBuzzer = new SoundEffect("Assets/Audio/endbuzzer.wav");
+            endBuzzer = new SoundEffect("Assets/Audio/endgame.wav");
             fightBell = new SoundEffect("Assets/Audio/fightbell.wav");
+            highScoreSound = new SoundEffect("Assets/Audio/highscore.wav");
 
             model.PunchingModel.PunchStarted += PunchingModelOnPunchStarted;
             model.GameModel.PropertyChanged += GameModelOnPropertyChanged;
@@ -51,6 +64,7 @@ namespace PunchingBand.Pages
 
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
+            highScoreTextBlock.Visibility = Visibility.Collapsed;
 
 #if WINDOWS_PHONE_APP
             backButton.Visibility = Visibility.Collapsed;
@@ -64,7 +78,7 @@ namespace PunchingBand.Pages
             if (model.GameModel.Running)
             {
                 // TODO: predict punch strength for volume?
-                punchSound.Play(1.0);
+                punchSounds[random.Next(punchSounds.Count)].Play(1.0);
                 punchCountStoryboard.Begin();
             }
         }
@@ -79,7 +93,7 @@ namespace PunchingBand.Pages
                     if (model.GameModel.Running)
                     {
                         // NOTE: already played in ModelOnPunchStarted
-                        //punchSound.Play(model.PunchStrength);
+                        //punchSound1.Play(model.PunchStrength);
 
                         if (PunchDetector.MaximumAcceleration - model.GameModel.PunchStrength < 0.001)
                         {
@@ -90,9 +104,22 @@ namespace PunchingBand.Pages
                     break;
                 case "Running":
                     playButton.Visibility = model.GameModel.Running ? Visibility.Collapsed : Visibility.Visible;
-                    if (!model.GameModel.Running)
+                    if (!model.GameModel.Running && !model.GameModel.NewHighScore)
                     {
                         endBuzzer.Play(0.3);
+                    }
+                    break;
+                case "NewHighScore":
+                    if (model.GameModel.NewHighScore)
+                    {
+                        highScoreTextBlock.Visibility = Visibility.Visible;
+                        highScoreStoryBoard.Begin();
+                        highScoreSound.Play(1.0);
+                    }
+                    else
+                    {
+                        highScoreTextBlock.Visibility = Visibility.Collapsed;
+                        highScoreStoryBoard.Stop();
                     }
                     break;
                 case "TimeLeftSeconds":

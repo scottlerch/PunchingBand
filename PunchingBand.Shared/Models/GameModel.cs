@@ -30,6 +30,7 @@ namespace PunchingBand.Models
         private int timeLeftSeconds;
         private bool running;
         private string punchType;
+        private bool newHighScore;
 
         // Combo trackers
         private int speedComboCount;
@@ -188,6 +189,13 @@ namespace PunchingBand.Models
         }
 
         [JsonIgnore]
+        public bool NewHighScore
+        {
+            get { return newHighScore; }
+            set { Set("NewHighScore", ref newHighScore, value); }
+        }
+
+        [JsonIgnore]
         public StorageFile Song
         {
             get { return song; }
@@ -337,6 +345,8 @@ namespace PunchingBand.Models
             SpeedComboCount = 0;
             PowerComboCount = 0;
 
+            NewHighScore = false;
+
             punchStrength = new Metric(0.001);
             caloriesBurned = new Metric();
             skinTemperature = new Metric();
@@ -386,6 +396,8 @@ namespace PunchingBand.Models
 
         private void EndGame()
         {
+            NewHighScore = historyModel.Records.All(h => h.Score < Score);
+
             TimeLeft = TimeSpan.Zero;
             TimeLeftSeconds = 0;
             Running = false;

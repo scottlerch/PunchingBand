@@ -92,10 +92,13 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\endgame.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\fightbell.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\heavypunch1.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\highscore.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\powerpunch.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch1.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch2.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch3.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch4.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\worn.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\PowerbarHalo.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />

@@ -106,6 +106,13 @@
                 To="0.0" From="1.0" Duration="0:0:0.5" AutoReverse="False" >
             </DoubleAnimation>
         </Storyboard>
+        <Storyboard x:Name="highScoreStoryBoard">
+            <DoubleAnimation
+                Storyboard.TargetName="highScoreTextBlock"
+                Storyboard.TargetProperty="Opacity"
+                To="0.0" From="1.0" Duration="0:0:0.15" AutoReverse="True" RepeatBehavior="Forever" >
+            </DoubleAnimation>
+        </Storyboard>
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <MediaElement x:Name="SongMedia" AudioCategory="ForegroundOnlyMedia"></MediaElement>
@@ -164,6 +171,7 @@
                 </TextBlock.RenderTransform>
             </TextBlock>
             <Button x:Name="backButton" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Margin="20" Style="{StaticResource CustomBackButtonStyle}" Click="BackButton_Click"></Button>
+            <TextBlock Name="highScoreTextBlock" HorizontalAlignment="Center" Margin="0,0,0,450" TextWrapping="Wrap" Text="HIGH SCORE" VerticalAlignment="Center" FontSize="40" Foreground="Yellow" FontWeight="Bold"/>
         </Grid>
     </Grid>
 </Page>
