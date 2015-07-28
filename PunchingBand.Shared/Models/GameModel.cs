@@ -240,6 +240,8 @@ namespace PunchingBand.Models
                     RaisePropertyChanged("GameDurationsEnabled");
                     RaisePropertyChanged("GameDurations");
                     Duration = GameDurations.First();
+
+                    historyModel.GameMode = gameMode;
                 }
             }
         }
@@ -432,7 +434,7 @@ namespace PunchingBand.Models
 
         private void EndGame()
         {
-            NewHighScore = historyModel.Records.All(h => h.Score < Score);
+            NewHighScore = historyModel.SortedFilteredRecords.All(h => h.Score < Score);
 
             TimeLeft = TimeSpan.Zero;
             TimeLeftSeconds = 0;

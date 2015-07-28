@@ -12,6 +12,7 @@ namespace PunchingBand.Pages.BindingConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
+            if (value == null) return TimeSpan.Zero;
             return TimeSpan.Parse(value.ToString());
         }
     }

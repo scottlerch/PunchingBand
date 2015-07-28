@@ -1,6 +1,9 @@
-﻿using System;
+﻿//#define MOCK_HISTORY
+using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Accord;
+using PunchingBand.Infrastructure;
 
 namespace PunchingBand.Models
 {
@@ -42,7 +45,29 @@ namespace PunchingBand.Models
 
         public async Task Load()
         {
+#if MOCK_HISTORY
+            var rand = new Random();
+            for (int i = 0; i < 25; i++)
+            {
+                var gameMode = (GameMode) rand.Next(3);
+                historyModel.Records.Add(new HistoryInfo
+                {
+                    GameMode = gameMode,
+                    Timestamp = DateTime.UtcNow.AddMinutes(-1*rand.Next(100000)),
+                    Duration = gameMode == GameMode.MiniGame ? TimeSpan.FromSeconds(15) : TimeSpan.FromMinutes(5),
+                    Name = gameMode.ToString(),
+                    Score = rand.Next(10, 10000),
+                    CaloriesBurned = rand.Next(1),
+                    FistSide = FistSides.Right,
+                    Heartrate = new Metric(rand.Next(50, 190)),
+                    PunchCount = rand.Next(5, 100), PunchStrenth = new Metric(rand.NextDouble() * 8.0),
+                    SkinTemperature = new Metric(96),
+                });
+            }
+#else
             await historyModel.Load();
+#endif
+
             await userModel.Load();
             await gameModel.Load();
         }
