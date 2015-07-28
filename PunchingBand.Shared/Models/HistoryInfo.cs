@@ -20,7 +20,7 @@ namespace PunchingBand.Models
 
         public FistSides FistSide { get; set; }
 
-        public Metric CaloriesBurned { get; set; }
+        public double CaloriesBurned { get; set; }
 
         public Metric PunchStrenth { get; set; }
 

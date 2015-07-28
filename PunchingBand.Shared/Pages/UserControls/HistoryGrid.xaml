@@ -12,20 +12,18 @@
         <bindingConverters:StringFormatConverter x:Key="StringFormat"/>
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView Visibility="Collapsed" Name="phoneListView" ItemsSource="{Binding SortedRecords}" SelectionMode="None">
+        <ListView Visibility="Collapsed" Name="phoneGameListView" ItemsSource="{Binding SortedRecords}" SelectionMode="None">
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Score" Grid.Column="0" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Date" Grid.Column="1" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Count" Grid.Column="2" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Avg. Strength" Grid.Column="3" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="0" Text="Score" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="1" Text="Count" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="2" Text="Avg. Strength" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
                     </Grid>
                 </DataTemplate>
             </ListView.HeaderTemplate>
@@ -34,34 +32,30 @@
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Score}" Grid.Column="0" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding Timestamp, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:yyyy/MM/dd}'}" Grid.Column="1" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding PunchCount}" Grid.Column="2" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding PunchStrenth.Mean, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Grid.Column="3" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="0" Text="{Binding Score}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="1" Text="{Binding PunchCount}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="2" Text="{Binding PunchStrenth.Mean, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView Name="windowsListView" ItemsSource="{Binding SortedRecords}" SelectionMode="None">
+        <ListView  Visibility="Collapsed" Name="windowsGameListView" ItemsSource="{Binding SortedRecords}" SelectionMode="None">
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Name" Grid.Column="0" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Score" Grid.Column="1" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Date" Grid.Column="2" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Count" Grid.Column="3" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Avg. Strength" Grid.Column="4" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="0" Text="Name"  Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="1" Text="Score" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="2" Text="Count" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="3" Text="Avg. Strength" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
                     </Grid>
                 </DataTemplate>
             </ListView.HeaderTemplate>
@@ -71,15 +65,93 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}" Grid.Column="0" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding Score}" Grid.Column="1" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding Timestamp, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:yyyy/MM/dd}'}" Grid.Column="2" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding PunchCount}" Grid.Column="3" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding PunchStrenth.Mean, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Grid.Column="4" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="0" Text="{Binding Name}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Score}"  Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="2" Text="{Binding PunchCount}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="3" Text="{Binding PunchStrenth.Mean, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ListView Visibility="Collapsed" Name="phoneFitnessListView" ItemsSource="{Binding SortedRecords}" SelectionMode="None">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Date" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="1" Text="Calories" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="2" Text="Score" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="3" Text="Count" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="4" Text="Avg. Strength" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Timestamp, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:yyyy/MM/dd}'}"  Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="1" Text="{Binding CaloriesBurned,  Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="2" Text="{Binding Score}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="3" Text="{Binding PunchCount}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="4" Text="{Binding PunchStrenth.Mean, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ListView  Visibility="Visible" Name="windowsFitnessListView" ItemsSource="{Binding SortedRecords}" SelectionMode="None">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Name"  Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="1" Text="Date"  Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="2" Text="Calories" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="3" Text="Score" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="4" Text="Count" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Grid.Column="5" Text="Avg. Strength" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Name}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Timestamp, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:yyyy/MM/dd}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="2" Text="{Binding CaloriesBurned,  Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0}'}"  Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="3" Text="{Binding Score}"  Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="4" Text="{Binding PunchCount}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="5" Text="{Binding PunchStrenth.Mean, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

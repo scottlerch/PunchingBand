@@ -42,9 +42,9 @@ namespace PunchingBand.Models
 
         // Game performance metrics
         private Metric punchStrength = new Metric();
-        private Metric caloriesBurned = new Metric();
         private Metric skinTemperature = new Metric();
         private Metric heartrate = new Metric();
+        private double caloriesBurned;
 
         private StorageFile song;
 
@@ -384,7 +384,7 @@ namespace PunchingBand.Models
             NewHighScore = false;
 
             punchStrength = new Metric(0.001);
-            caloriesBurned = new Metric();
+            caloriesBurned = 0;
             skinTemperature = new Metric();
             heartrate = new Metric();
 
@@ -415,7 +415,7 @@ namespace PunchingBand.Models
                     TimeLeft = diff;
                     TimeLeftSeconds = (int)Math.Ceiling(diff.TotalSeconds);
                     
-                    caloriesBurned.Update(punchingModel.CalorieCount);
+                    caloriesBurned += punchingModel.CalorieCount;
 
                     if (punchingModel.SkinTemperature.HasValue)
                     {
