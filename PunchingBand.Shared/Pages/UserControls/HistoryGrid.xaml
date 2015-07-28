@@ -24,10 +24,10 @@
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Score" Grid.Column="1" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Date" Grid.Column="2" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Count" Grid.Column="3" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
-                        <TextBlock Text="Avg. Strength" Grid.Column="4" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Text="Score" Grid.Column="0" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Text="Date" Grid.Column="1" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Text="Count" Grid.Column="2" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
+                        <TextBlock Text="Avg. Strength" Grid.Column="3" Style="{StaticResource ControlLabelStyle}" TextWrapping="NoWrap" FontSize="20" />
                     </Grid>
                 </DataTemplate>
             </ListView.HeaderTemplate>
@@ -40,10 +40,10 @@
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Score}" Grid.Column="1" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding Timestamp, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:yyyy/MM/dd}'}" Grid.Column="2" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding PunchCount}" Grid.Column="3" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Text="{Binding PunchStrenth.Mean, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Grid.Column="4" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Text="{Binding Score}" Grid.Column="0" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Text="{Binding Timestamp, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:yyyy/MM/dd}'}" Grid.Column="1" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Text="{Binding PunchCount}" Grid.Column="2" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Text="{Binding PunchStrenth.Mean, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Grid.Column="3" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
