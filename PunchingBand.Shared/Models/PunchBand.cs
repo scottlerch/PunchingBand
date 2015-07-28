@@ -179,5 +179,12 @@ namespace PunchingBand.Models
                 BandTile = null;
             }
         }
+
+        public async Task ForceFistSide(FistSides fistSide)
+        {
+            FistSide = fistSide;
+            await BandTile.ForceFistSide(fistSide);
+            await EnsurePunchDetection();
+        }
     }
 }

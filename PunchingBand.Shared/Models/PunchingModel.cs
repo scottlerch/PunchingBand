@@ -1,4 +1,5 @@
-﻿using Microsoft.Band;
+﻿using System.Diagnostics;
+using Microsoft.Band;
 using Microsoft.Band.Sensors;
 using PunchingBand.Recognition;
 using PunchingBand.Utilities;
@@ -130,6 +131,7 @@ namespace PunchingBand.Models
                     }
                     catch (Exception ex)
                     {
+                        Debug.WriteLine("Error connecting to Band: {0}", ex);
                         Status = "Error connecting to Band!";
                         CleanupBandClients();
                     }
@@ -158,6 +160,7 @@ namespace PunchingBand.Models
                     }
                     catch (Exception ex)
                     {
+                        Debug.WriteLine("Error connecting to Band: {0}", ex);
                         connectExceptions.Add(ex);
                         continue;
                     }
@@ -275,10 +278,18 @@ namespace PunchingBand.Models
             }
         }
 
-        private void PunchBandOnFistSideSelected(object sender, EventArgs eventArgs)
+        private async void PunchBandOnFistSideSelected(object sender, EventArgs eventArgs)
         {
             var punchBand = sender as PunchBand;
 
+            var otherPunchBand = punchBands.FirstOrDefault(p => p != punchBand);
+
+            if (otherPunchBand != null)
+            {
+                await otherPunchBand.ForceFistSide(
+                    punchBand.FistSide == FistSides.Left? FistSides.Right : FistSides.Left);
+            }
+                    
             invokeOnUiThread(() =>
             { 
                 FistSides = punchBand.FistSide;

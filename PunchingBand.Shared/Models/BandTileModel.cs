@@ -52,6 +52,12 @@ namespace PunchingBand.Models
             await bandClient.TileManager.StartReadingsAsync();
         }
 
+        public async Task ForceFistSide(FistSides fistSide)
+        {
+            this.fistSide = fistSide;
+            await SetPages(includeFistSelection: false);
+        }
+
         private async void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
         {
             if (bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn)
