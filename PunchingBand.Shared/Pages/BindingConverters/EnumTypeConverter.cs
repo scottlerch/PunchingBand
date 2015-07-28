@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Windows.UI.Xaml.Data;
 
 namespace PunchingBand.Pages.BindingConverters
@@ -10,12 +11,17 @@ namespace PunchingBand.Pages.BindingConverters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             enumType = value.GetType();
-            return value.ToString();
+            return SplitCamelCase(value.ToString());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return Enum.Parse(enumType, value.ToString());
+            return Enum.Parse(enumType, value.ToString().Replace(" ", ""));
+        }
+
+        public static string SplitCamelCase(string input)
+        {
+            return Regex.Replace(input, "([A-Z])", " $1").Trim();
         }
     }
 }
