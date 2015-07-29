@@ -47,21 +47,41 @@ namespace PunchingBand.Models
         {
 #if MOCK_HISTORY
             var rand = new Random();
-            for (int i = 0; i < 25; i++)
+            var names = new[] {"Clippy", "Bob", "Cortana"};
+            var workoutDurations = new[]
+            {
+                TimeSpan.FromMinutes(5), 
+                TimeSpan.FromMinutes(15),
+                TimeSpan.FromMinutes(20),
+                TimeSpan.FromMinutes(30),
+                TimeSpan.FromMinutes(30),
+            };
+            for (int i = 0; i < 50; i++)
             {
                 var gameMode = (GameMode) rand.Next(3);
+                var heartrate = new Metric();
+                for (int j = 0; j < 10; j++)
+                {
+                    heartrate.Update(rand.Next(50, 200));
+                }
+                var strength = new Metric();
+                for (int j = 0; j < 10; j++)
+                {
+                    strength.Update(rand.NextDouble() * 7.9 + 0.1);
+                }
                 historyModel.Records.Add(new HistoryInfo
                 {
                     GameMode = gameMode,
-                    Timestamp = DateTime.UtcNow.AddMinutes(-1*rand.Next(100000)),
-                    Duration = gameMode == GameMode.MiniGame ? TimeSpan.FromSeconds(15) : TimeSpan.FromMinutes(5),
-                    Name = gameMode.ToString(),
-                    Score = rand.Next(10, 10000),
-                    CaloriesBurned = rand.Next(1),
+                    Timestamp = DateTime.UtcNow.AddDays(-1*rand.Next(365)),
+                    Duration = gameMode == GameMode.MiniGame ? TimeSpan.FromSeconds(15) : workoutDurations[rand.Next(workoutDurations.Length)],
+                    Name = names[rand.Next(names.Length)],
+                    Score = rand.Next(10, 1000),
+                    CaloriesBurned = rand.Next(1000),
                     FistSide = FistSides.Right,
-                    Heartrate = new Metric(rand.Next(50, 190)),
-                    PunchCount = rand.Next(5, 100), PunchStrenth = new Metric(rand.NextDouble() * 8.0),
+                    Heartrate = heartrate,
+                    PunchCount = rand.Next(5, 100),
                     SkinTemperature = new Metric(96),
+                    PunchStrenth = strength,
                 });
             }
 #else

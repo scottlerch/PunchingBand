@@ -16,6 +16,8 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PunchingBand.Windows.App">
       <m2:VisualElements DisplayName="Punching Band" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Punching Band is a virtual boxing fitness/game app for the Microsoft Band. Get in shape when you're on the go with your mobile phone and Band by punching the calories away. There will be various modes such as time trial, endurance, and rhythm. Each punch is scored by type and strength while your heartbeat, temperature and calories burned are recorded." ForegroundText="light" BackgroundColor="#56318e" ToastCapable="true">
+        <m2:DefaultTile ShortName="Punching Band">
+        </m2:DefaultTile>
         <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#56318e" />
       </m2:VisualElements>
     </Application>

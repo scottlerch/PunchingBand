@@ -48,5 +48,14 @@ namespace PunchingBand.Infrastructure
                 Mean = Mean + ((value - Mean) / Count);
             }
         }
+
+        public override string ToString()
+        {
+            if (Maximum < 10)
+            {
+                return string.Format("{0:0.0} / {1:0.0} / {2:0.0}", Minimum, Mean, Maximum);  
+            }
+            return string.Format("{0:0} / {1:0} / {2:0}", Minimum, Mean, Maximum);
+        }
     }
 }

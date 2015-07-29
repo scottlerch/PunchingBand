@@ -21,7 +21,7 @@
                     <Button x:Name="AdminButton" Margin="20,0,0,0" Click="AdminButton_Click">Admin</Button>
                 </StackPanel>
             </Hub.Header>
-            <HubSection Header="game">
+            <HubSection Header="setup">
                 <DataTemplate>
                     <Grid>
                         <StackPanel>
@@ -31,7 +31,7 @@
                     </Grid>
                 </DataTemplate>
             </HubSection>
-            <HubSection Header="setup">
+            <HubSection Header="user">
                 <DataTemplate>
                     <userControls:UserSetup DataContext="{Binding UserModel}"></userControls:UserSetup>
                 </DataTemplate>
