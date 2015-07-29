@@ -400,10 +400,16 @@ namespace PunchingBand.Models
             gameStartTime = DateTime.UtcNow;
         }
 
-        internal void StopGame()
+        internal void AbortGame()
         {
             GameAborted(this, EventArgs.Empty);
             Running = false;
+
+            // Record workout sessions even if ended early
+            if (gameMode == GameMode.FreeformWorkout || gameMode == GameMode.GuidedWorkout)
+            {
+                RecordGameInHistory();
+            }
         }
 
         private DateTime gameStartTime;
@@ -447,6 +453,11 @@ namespace PunchingBand.Models
 
             GameEnded(this, EventArgs.Empty);
 
+            RecordGameInHistory();
+        }
+
+        private void RecordGameInHistory()
+        {
             historyModel.Records.Add(new HistoryInfo
             {
                 Name = userModel.Name,
@@ -455,7 +466,7 @@ namespace PunchingBand.Models
                 CaloriesBurned = caloriesBurned,
                 SkinTemperature = skinTemperature,
                 Heartrate = heartrate,
-                Duration = Duration, 
+                Duration = Duration - TimeLeft,
                 Score = Score,
                 FistSide = FistSide,
                 GameMode = gameMode,

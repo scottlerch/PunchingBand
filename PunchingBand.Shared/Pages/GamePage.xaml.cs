@@ -235,7 +235,7 @@ namespace PunchingBand.Pages
         private void Stop()
         {
             countDownUserControl.Stop();
-            model.GameModel.StopGame();
+            model.GameModel.AbortGame();
 
             var frame = Window.Current.Content as Frame;
 
