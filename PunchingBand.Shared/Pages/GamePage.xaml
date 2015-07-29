@@ -12,6 +12,20 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <bindingConverters1:StringFormatConverter x:Name="StringFormat"/>
+        <Storyboard x:Name="fistStoryboard">
+            <DoubleAnimation Storyboard.TargetName="fistScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleX)"
+                                To="1.3" From="1.0" Duration="0:0:0.15" AutoReverse="True">
+                <!--<DoubleAnimation.EasingFunction>
+                    <BounceEase Bounces="2" EasingMode="EaseOut" Bounciness="4" />
+                </DoubleAnimation.EasingFunction>-->
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="fistScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                                To="1.3" From="1.0" Duration="0:0:0.15" AutoReverse="True">
+                <!--<DoubleAnimation.EasingFunction>
+                    <BounceEase Bounces="2" EasingMode="EaseOut" Bounciness="4" />
+                </DoubleAnimation.EasingFunction>-->
+            </DoubleAnimation>
+        </Storyboard>
         <Storyboard x:Name="punchCountStoryboard">
             <DoubleAnimation
                                 Storyboard.TargetName="punchCountScaleTransform"
@@ -120,7 +134,12 @@
             <userControls:CountDown x:Name="countDownUserControl"></userControls:CountDown>
         </Grid>
         <Grid x:Name="gameGrid">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,60" TextWrapping="Wrap" Text="{Binding GameModel.PunchCount}" FontSize="200" TextAlignment="Center" RenderTransformOrigin="0.5,0.5">
+            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill" Margin="0,0,0,80" Width="200" Height="200" Source="ms-appx:///Assets/Images/Fist.png" Opacity="0.15" RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <ScaleTransform x:Name="fistScaleTransform" ScaleX="1" ScaleY="1"  />
+                </Image.RenderTransform>
+            </Image>
+            <TextBlock Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,60" TextWrapping="Wrap" Text="{Binding GameModel.PunchCount}" FontSize="200" TextAlignment="Center" RenderTransformOrigin="0.5,0.5">
                 <TextBlock.RenderTransform>
                     <ScaleTransform x:Name="punchCountScaleTransform" ScaleX="1" ScaleY="1"  />
                 </TextBlock.RenderTransform>
@@ -132,7 +151,7 @@
             <TextBlock HorizontalAlignment="Right" Margin="0,10,9,0" TextWrapping="Wrap" Text="°" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
             <TextBlock HorizontalAlignment="Right" Margin="0,10,25,0" TextWrapping="Wrap" Text="{Binding PunchingModel.SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
             <Image Name="powerGlowImage" HorizontalAlignment="Center" Height="60" VerticalAlignment="Center" Width="290" Source="ms-appx:///Assets/Images/PowerbarHalo.png" Margin="0,190,0,0" Opacity="0" Stretch="Fill"/>
-            <TextBlock HorizontalAlignment="Center" Margin="75,140,210,0" TextWrapping="Wrap" Text="{Binding GameModel.PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}g'}" VerticalAlignment="Center" FontSize="22" Width="120"/>
+            <TextBlock Foreground="#FFBDBDBD" HorizontalAlignment="Center" Margin="75,140,210,0" TextWrapping="Wrap" Text="{Binding GameModel.PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}g'}" VerticalAlignment="Center" FontSize="22" Width="120"/>
 
             <Rectangle x:Name="strengthMeter" HorizontalAlignment="Center" Height="19" Margin="0,190,0,0" Stroke="DarkGray" VerticalAlignment="Center" Width="250">
                 <Rectangle.Fill>

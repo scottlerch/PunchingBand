@@ -97,6 +97,7 @@ namespace PunchingBand.Pages
                 // TODO: predict punch strength for volume?
                 punchSounds[random.Next(punchSounds.Count)].Play(1.0);
                 punchCountStoryboard.Begin();
+                fistStoryboard.Begin();
             }
         }
 
@@ -109,9 +110,6 @@ namespace PunchingBand.Pages
                 case "PunchStrength":
                     if (model.GameModel.Running)
                     {
-                        // NOTE: already played in ModelOnPunchStarted
-                        //punchSound1.Play(model.PunchStrength);
-
                         if (PunchDetector.MaximumAcceleration - model.GameModel.PunchStrength < 0.001)
                         {
                             powerPunchSound.Play(1);
@@ -152,14 +150,6 @@ namespace PunchingBand.Pages
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            // TODO: Prepare page for display here.
-
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
-
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
 

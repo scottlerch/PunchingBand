@@ -44,12 +44,17 @@ namespace PunchingBand.Recognition
         private FistSides fistSide = FistSides.Unknown;
 
         private readonly IPunchRecognizer punchRecognizer;
+
+#if FULL_LOGGING
         private readonly PunchLogger punchLogger;
+#endif
 
         public PunchDetector(Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
         {
             punchRecognizer = new AccordNeuralNetworkRecognizer(getReadStream);
+#if FULL_LOGGING
             punchLogger = new PunchLogger(getWriteStream);
+#endif
 
             TrainPunchType = PunchType.Jab.ToString();
         }
@@ -69,8 +74,9 @@ namespace PunchingBand.Recognition
                 status = PunchStatus.Finish;
 
                 punchRecognition = await DeterminePunchType(currentPunchBuffer).ConfigureAwait(false);
-
+#if FULL_LOGGING
                 punchLogger.LogPunchVector(currentPunchBuffer);
+#endif
             }
             else
             {
@@ -175,18 +181,26 @@ namespace PunchingBand.Recognition
             this.fistSide = fistSide;
 
             await punchRecognizer.Initialize(fistSide);
+#if FULL_LOGGING
             await punchLogger.Initialize(fistSide);
+#endif
         }
 
         public string TrainPunchType
         {
+#if FULL_LOGGING
             get { return punchLogger.TrainPunchType; }
             set { punchLogger.TrainPunchType = value; }
+#else
+            get; set;
+#endif
         }
 
         public void Dispose()
         {
+#if FULL_LOGGING
             punchLogger.Dispose();
+#endif
         }
     }
 }
