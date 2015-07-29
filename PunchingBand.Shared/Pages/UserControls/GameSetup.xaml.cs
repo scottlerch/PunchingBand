@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -12,6 +14,14 @@ namespace PunchingBand.Pages.UserControls
         public GameSetup()
         {
             InitializeComponent();
+
+#if WINDOWS_APP
+            if (!DesignMode.DesignModeEnabled)
+            {
+                App.Current.RootModel.GameModel.VrEnabled = false;
+                vrCheckBox.IsEnabled = false;
+            }
+#endif
         }
 
         private async Task SelectSong()

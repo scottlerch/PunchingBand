@@ -24,6 +24,7 @@ namespace PunchingBand.Models
         private GameMode gameMode = GameMode.MiniGame;
         private TimeSpan duration;
         private FistSides fistSide = FistSides.Unknown;
+        private bool vrEnabled = false;
 
         // Game state
         private int punchCount;
@@ -223,6 +224,12 @@ namespace PunchingBand.Models
                 yield return GameMode.FreeformWorkout;
                 yield return GameMode.GuidedWorkout; 
             }
+        }
+
+        public bool VrEnabled
+        {
+            get { return vrEnabled; }
+            set { Set("VrEnabled", ref vrEnabled, value); }
         }
 
         [JsonIgnore]

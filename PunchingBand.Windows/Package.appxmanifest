@@ -19,6 +19,9 @@
         <m2:DefaultTile ShortName="Punching Band">
         </m2:DefaultTile>
         <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#56318e" />
+        <m2:InitialRotationPreference>
+          <m2:Rotation Preference="landscape" />
+        </m2:InitialRotationPreference>
       </m2:VisualElements>
     </Application>
   </Applications>

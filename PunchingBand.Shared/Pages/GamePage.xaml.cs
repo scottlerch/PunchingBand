@@ -76,6 +76,13 @@ namespace PunchingBand.Pages
 
         private void GameModelOnGameEnded(object sender, EventArgs eventArgs)
         {
+            if (model.GameModel.Song != null)
+            {
+                SongMedia.Stop();
+            }
+
+           // punchTypeTextBlock.Visibility = Visibility.Collapsed;
+
             if (model.GameModel.NewHighScore)
             {
                 endGameTextBlock.Text = "HIGH SCORE";
@@ -123,6 +130,14 @@ namespace PunchingBand.Pages
                     break;
                 case "Running":
                     playButton.Visibility = model.GameModel.Running ? Visibility.Collapsed : Visibility.Visible;
+                    if (model.GameModel.Running)
+                    {
+                        punchTypeTextBlock.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        punchTypeTextBlock.Visibility = Visibility.Collapsed;
+                    }
                     break;
                 case "TimeLeftSeconds":
                     if (model.GameModel.TimeLeftSeconds <= 5)

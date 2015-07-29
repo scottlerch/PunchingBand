@@ -14,6 +14,7 @@
         </TransitionCollection>
     </Page.Transitions>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <MediaElement Source="ms-appx:///Assets/Music/MenuMusic.mp3" IsLooping="True" AutoPlay="True" Volume="0.5"></MediaElement>
         <Hub>
             <Hub.Header>
                 <StackPanel Orientation="Horizontal">

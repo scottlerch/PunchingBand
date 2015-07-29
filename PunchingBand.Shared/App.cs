@@ -265,5 +265,25 @@ namespace PunchingBand
 
             await RootModel.PunchingModel.Connect();
         }
+
+        public static void NavigatetoGame(Frame frame)
+        {
+            if (Current.RootModel.GameModel.VrEnabled)
+            {
+                frame.Navigate(typeof(VrDemoPage));
+                return;
+            }
+
+            switch (Current.RootModel.GameModel.GameMode)
+            {
+                case GameMode.FreeformWorkout:
+                case GameMode.GuidedWorkout:
+                    frame.Navigate(typeof (WorkoutPage));
+                    break;
+                case GameMode.MiniGame:
+                    frame.Navigate(typeof (GamePage));
+                    break;
+            }
+        }
     }
 }

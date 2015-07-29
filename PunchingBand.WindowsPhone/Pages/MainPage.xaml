@@ -19,6 +19,7 @@
         </TransitionCollection>
     </Page.Transitions>
     <Grid>
+        <MediaElement Source="ms-appx:///Assets/Music/MenuMusic.mp3" IsLooping="True" AutoPlay="True" Volume="0.5"></MediaElement>
         <Pivot x:Uid="Pivot" Title="PUNCHING BAND" x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0,0,0,34">
             <!--Pivot item one-->
             <PivotItem

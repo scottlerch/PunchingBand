@@ -52,6 +52,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\UserControls\UserSetup.xaml.cs">
       <DependentUpon>UserSetup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\VrDemoPage.xaml.cs">
+      <DependentUpon>VrDemoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Pages\WorkoutPage.xaml.cs">
       <DependentUpon>WorkoutPage.xaml</DependentUpon>
     </Compile>
@@ -84,6 +87,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Pages\VrDemoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Pages\WorkoutPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -112,6 +119,9 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\PowerbarHalo.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconSmall.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\VrDemo.PNG" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Music\DefaultMusic.mp3" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Music\MenuMusic.mp3" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\NeuralNetworks\PunchesLeftFist.json" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\NeuralNetworks\PunchesRightFist.json" />
   </ItemGroup>

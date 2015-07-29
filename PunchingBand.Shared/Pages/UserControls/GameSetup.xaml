@@ -20,8 +20,11 @@
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
-            <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Mode" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
-            <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameModes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumerableEnumTypeConverter}}" SelectedItem="{Binding GameMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumTypeConverter}}"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Mode" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
+            <Grid Width="228" HorizontalAlignment="Left">
+                <ComboBox Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="165" FontFamily="Global User Interface" ItemsSource="{Binding GameModes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumerableEnumTypeConverter}}" SelectedItem="{Binding GameMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumTypeConverter}}"/>
+                <CheckBox Name="vrCheckBox" IsChecked="{Binding VrEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Foreground="DarkGray" Margin="0,0,0,30" FlowDirection="RightToLeft"  HorizontalContentAlignment="Left" HorizontalAlignment="Right">VR</CheckBox>
+            </Grid>
             <TextBlock Visibility="{Binding GameDurationsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource BoolVisibilityTypeConverter}}" HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Duration" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>
             <ComboBox Visibility="{Binding GameDurationsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource BoolVisibilityTypeConverter}}" Margin="0,0,0,30"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="228" FontFamily="Global User Interface" ItemsSource="{Binding GameDurations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumerableTimeSpanConverter}}" SelectedItem="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeSpanConverter}}"/>
             <TextBlock HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Music" FontSize="20" VerticalAlignment="Center" Style="{StaticResource ControlLabelStyle}"/>

@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.Storage;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 
 namespace PunchingBand.Pages
@@ -13,10 +15,8 @@ namespace PunchingBand.Pages
 
             DataContext = App.Current.RootModel;
 
-            App.Current.RootModel.PunchingModel.StartFight += (sender, args) =>
-                Frame.Navigate(App.Current.RootModel.GameModel.GameMode == GameMode.MiniGame
-                    ? typeof(GamePage)
-                    : typeof(WorkoutPage));
+            App.Current.RootModel.PunchingModel.StartFight += (sender, args) => App.NavigatetoGame(Frame);
+
 #if !DEBUG
             AdminButton.Visibility = Visibility.Collapsed;
 #endif
@@ -33,7 +33,7 @@ namespace PunchingBand.Pages
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
 
@@ -42,13 +42,17 @@ namespace PunchingBand.Pages
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+
+            if (App.Current.RootModel.GameModel.Song == null)
+            {
+                App.Current.RootModel.GameModel.Song = await
+                    StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/Music/DefaultMusic.mp3"));
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(App.Current.RootModel.GameModel.GameMode == GameMode.MiniGame
-                ? typeof (GamePage)
-                : typeof (WorkoutPage));
+            App.NavigatetoGame(Frame);
         }
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
