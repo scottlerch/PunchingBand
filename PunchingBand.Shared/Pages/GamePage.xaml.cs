@@ -65,7 +65,7 @@ namespace PunchingBand.Pages
 
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
-            highScoreTextBlock.Visibility = Visibility.Collapsed;
+            endGameTextBlock.Visibility = Visibility.Collapsed;
 
 #if WINDOWS_PHONE_APP
             backButton.Visibility = Visibility.Collapsed;
@@ -78,16 +78,20 @@ namespace PunchingBand.Pages
         {
             if (model.GameModel.NewHighScore)
             {
-                highScoreTextBlock.Visibility = Visibility.Visible;
-                highScoreStoryBoard.Begin();
+                endGameTextBlock.Text = "HIGH SCORE";
+                endGameTextBlock.Foreground = new SolidColorBrush(Windows.UI.Colors.Yellow);
+                endGameTextStoryBoard.Begin();
                 highScoreSound.Play(1.0);
             }
             else
             {
-                highScoreTextBlock.Visibility = Visibility.Collapsed;
-                highScoreStoryBoard.Stop();
+                endGameTextBlock.Text = "GAME OVER";
+                endGameTextBlock.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
+                endGameTextStoryBoard.Begin();
                 endBuzzer.Play(0.3);
             }
+
+            endGameTextBlock.Visibility = Visibility.Visible;
         }
 
         private void PunchingModelOnPunchStarted(object sender, EventArgs eventArgs)
@@ -152,6 +156,7 @@ namespace PunchingBand.Pages
         {
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
+            endGameTextBlock.Visibility = Visibility.Collapsed;
 
 #if WINDOWS_PHONE_APP
             HardwareButtons.BackPressed += HardwareButtonsOnBackPressed; 
@@ -208,6 +213,7 @@ namespace PunchingBand.Pages
 
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
+            endGameTextBlock.Visibility = Visibility.Collapsed;
 
             countDownUserControl.Start();
         }
