@@ -35,7 +35,7 @@
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Score}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="0" Text="{Binding Score, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:n0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                         <TextBlock Grid.Column="1" Text="{Binding PunchCount}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                         <TextBlock Grid.Column="2" Text="{Binding PunchStrenth, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                     </Grid>
@@ -69,7 +69,7 @@
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding Name}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Score}"  Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Score, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:n0}'}"  Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                         <TextBlock Grid.Column="2" Text="{Binding PunchCount}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                         <TextBlock Grid.Column="3" Text="{Binding PunchStrenth, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                     </Grid>
@@ -150,7 +150,7 @@
                         <TextBlock Grid.Column="2" Text="{Binding Duration,  Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0}'}"  Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                         <TextBlock Grid.Column="3" Text="{Binding CaloriesBurned}"  Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                         <TextBlock Grid.Column="4" Text="{Binding Heartrate}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
-                        <TextBlock Grid.Column="5" Text="{Binding Score, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
+                        <TextBlock Grid.Column="5" Text="{Binding Score, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:n0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                         <TextBlock Grid.Column="6" Text="{Binding PunchStrenth, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
                     </Grid>
                 </DataTemplate>
