@@ -40,6 +40,7 @@
     <Compile Include="Gender.cs" />
     <Compile Include="Infrastructure\Metric.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
+    <Compile Include="Models\BandGyroscopeReading.cs" />
     <Compile Include="Recognition\IPunchRecognizer.cs" />
     <Compile Include="Recognition\Neuro\JsonLayer.cs" />
     <Compile Include="Recognition\Neuro\JsonNetwork.cs" />

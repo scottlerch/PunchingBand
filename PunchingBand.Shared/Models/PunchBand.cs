@@ -103,7 +103,7 @@ namespace PunchingBand.Models
         {
             if (!punchDetectionRunning) return;
 
-            PunchInfo = await PunchDetector.GetPunchInfo(bandSensorReadingEventArgs.SensorReading).ConfigureAwait(false);
+            PunchInfo = await PunchDetector.GetPunchInfo(new BandGyroscopeReading(bandSensorReadingEventArgs.SensorReading)).ConfigureAwait(false);
             PunchInfoChanged(this, EventArgs.Empty);
         }
 

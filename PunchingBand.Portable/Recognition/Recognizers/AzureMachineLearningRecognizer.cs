@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using PunchingBand.Models;
 
 namespace PunchingBand.Recognition.Recognizers
 {
@@ -32,7 +33,7 @@ namespace PunchingBand.Recognition.Recognizers
             return Task.FromResult(0);
         }
 
-        public async Task<PunchRecognition> Recognize(IEnumerable<IBandGyroscopeReading> readings)
+        public async Task<PunchRecognition> Recognize(IEnumerable<BandGyroscopeReading> readings)
         {
             var punchVector = readings.ToList();
             var punchVectorSize = punchVector.Count;

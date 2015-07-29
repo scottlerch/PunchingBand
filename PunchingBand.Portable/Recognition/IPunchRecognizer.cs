@@ -1,6 +1,7 @@
 ﻿using Microsoft.Band.Sensors;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PunchingBand.Models;
 
 namespace PunchingBand.Recognition
 {
@@ -8,6 +9,6 @@ namespace PunchingBand.Recognition
     {
         Task Initialize(FistSides fistSide);
 
-        Task<PunchRecognition> Recognize(IEnumerable<IBandGyroscopeReading> readings);
+        Task<PunchRecognition> Recognize(IEnumerable<BandGyroscopeReading> readings);
     }
 }

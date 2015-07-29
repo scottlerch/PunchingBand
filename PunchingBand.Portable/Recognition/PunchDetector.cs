@@ -1,4 +1,5 @@
 ﻿using Microsoft.Band.Sensors;
+using PunchingBand.Models;
 using PunchingBand.Recognition.Recognizers;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace PunchingBand.Recognition
 
         public FistSides FistSide { get { return fistSide; } }
 
-        public async Task<PunchInfo> GetPunchInfo(IBandGyroscopeReading reading)
+        public async Task<PunchInfo> GetPunchInfo(BandGyroscopeReading reading)
         {
             var status = PunchStatus.Unknown;
             double? punchStrength = null;
@@ -109,24 +110,24 @@ namespace PunchingBand.Recognition
             return punchInfo;
         }
 
-        private async Task<PunchRecognition> DeterminePunchType(IEnumerable<IBandGyroscopeReading> readings)
+        private async Task<PunchRecognition> DeterminePunchType(IEnumerable<BandGyroscopeReading> readings)
         {
             return await punchRecognizer.Recognize(readings);
         }
 
-        private bool IsPunchDetected(IBandGyroscopeReading reading, out double? punchStrength)
+        private bool IsPunchDetected(BandGyroscopeReading reading, out double? punchStrength)
         {
             punchStrength = null;
             bool punchDetected = false;
 
             if (readyForPunch)
             {
-                if (reading.AccelerationX > punchThreshold)
+                if (reading.LinearAccelerationX > punchThreshold)
                 {
-                    maxX = Math.Max(maxX, reading.AccelerationX);
+                    maxX = Math.Max(maxX, reading.LinearAccelerationX);
                     punchStrength = ((maxX - punchThreshold) / (MaximumAcceleration - punchThreshold)) * MaximumAcceleration;
 
-                    if (reading.AccelerationX >= MaximumAcceleration || reading.AccelerationX - lastX < 0)
+                    if (reading.LinearAccelerationX >= MaximumAcceleration || reading.LinearAccelerationX - lastX < 0)
                     {
                         LastPunchStrength = punchStrength.Value;
 
@@ -139,14 +140,14 @@ namespace PunchingBand.Recognition
                     }
                 }
             }
-            else if (DateTime.UtcNow > nextPunchTime && reading.AccelerationX < punchResetThreshold)
+            else if (DateTime.UtcNow > nextPunchTime && reading.LinearAccelerationX < punchResetThreshold)
             {
                 punchStarted = false;
                 readyForPunch = true;
                 maxX = double.MinValue;
             }
 
-            lastX = reading.AccelerationX;
+            lastX = reading.LinearAccelerationX;
 
             return punchDetected;
         }
@@ -159,9 +160,9 @@ namespace PunchingBand.Recognition
             readyForPunch = true;
         }
 
-        private bool IsDetectingPunch(IBandGyroscopeReading reading)
+        private bool IsDetectingPunch(BandGyroscopeReading reading)
         {
-            if (!punchStarted && readyForPunch && reading.AccelerationX > punchThreshold)
+            if (!punchStarted && readyForPunch && reading.LinearAccelerationX > punchThreshold)
             {
                 punchStarted = true;
                 return true;

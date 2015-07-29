@@ -2,6 +2,7 @@
 using AForge.Neuro;
 using Microsoft.Band.Sensors;
 using Newtonsoft.Json;
+using PunchingBand.Models;
 using PunchingBand.Recognition.Neuro;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace PunchingBand.Recognition.Recognizers
             }
         }
 
-        public async Task<PunchRecognition> Recognize(IEnumerable<IBandGyroscopeReading> readings)
+        public async Task<PunchRecognition> Recognize(IEnumerable<BandGyroscopeReading> readings)
         {
             if (network == null)
             {
