@@ -1,7 +1,7 @@
-﻿using System;
+﻿using PunchingBand.Utilities;
+using System;
 using System.Collections;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Windows.UI.Xaml.Data;
 
 namespace PunchingBand.Pages.BindingConverters
@@ -10,17 +10,12 @@ namespace PunchingBand.Pages.BindingConverters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return (value as IEnumerable).Cast<Enum>().Select(e => SplitCamelCase(e.ToString())).ToList();
+            return (value as IEnumerable).Cast<Enum>().Select(e => e.ToString().SplitCamelCase()).ToList();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotSupportedException();
-        }
-
-        public static string SplitCamelCase(string input)
-        {
-            return Regex.Replace(input, "([A-Z])", " $1").Trim();
         }
     }
 }

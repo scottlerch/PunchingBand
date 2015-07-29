@@ -29,7 +29,7 @@ namespace PunchingBand.Models
         private long? startStepCount;
         private bool worn;
         private FistSides fistSides = FistSides.Unknown;
-        private FistSides fitnessSensorsSide = FistSides.Unknown;
+        private PunchBand fitnessSensorsPunchBand = null;
 
         private readonly Action<Action> invokeOnUiThread;
 
@@ -208,15 +208,22 @@ namespace PunchingBand.Models
                 Status = Worn ? string.Empty : "Please wear your Band.";
             });
 
-            if (!punchBand.Worn && punchBand.FistSide == fitnessSensorsSide)
+            if (!punchBand.Worn)
             {
+                if (fitnessSensorsPunchBand == punchBand)
+                {
+                    fitnessSensorsPunchBand = null;
+                }
+
                 await StopFitnessSensors(punchBand.BandClient);
-                fitnessSensorsSide = FistSides.Unknown;
             }
-            else if (punchBand.Worn && fitnessSensorsSide == FistSides.Unknown)
+            else
             {
-                await StartFitnessSensors(punchBand.BandClient);
-                fitnessSensorsSide = punchBand.FistSide;
+                if (fitnessSensorsPunchBand == null)
+                {
+                    fitnessSensorsPunchBand = punchBand;
+                    await StartFitnessSensors(punchBand.BandClient);
+                }
             }
         }
 
@@ -284,16 +291,16 @@ namespace PunchingBand.Models
 
             var otherPunchBand = punchBands.FirstOrDefault(p => p != punchBand);
 
+            invokeOnUiThread(() =>
+            {
+                FistSides = punchBand.FistSide;
+            });
+
             if (otherPunchBand != null)
             {
                 await otherPunchBand.ForceFistSide(
                     punchBand.FistSide == FistSides.Left? FistSides.Right : FistSides.Left);
             }
-                    
-            invokeOnUiThread(() =>
-            { 
-                FistSides = punchBand.FistSide;
-            });
         }
 
         public void Disconnect()

@@ -55,6 +55,7 @@
     <Compile Include="Recognition\Recognizers\AccordNeuralNetworkRecognizer.cs" />
     <Compile Include="Recognition\Recognizers\AzureMachineLearningRecognizer.cs" />
     <Compile Include="TemperatureUnit.cs" />
+    <Compile Include="Utilities\StringExtensions.cs" />
     <Compile Include="WeightUnit.cs" />
     <Compile Include="Utilities\CalorieCalculator.cs" />
   </ItemGroup>

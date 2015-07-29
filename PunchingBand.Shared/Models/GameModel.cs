@@ -8,6 +8,7 @@ using System.Linq;
 using Windows.ApplicationModel;
 using Windows.Storage;
 using PunchingBand.Recognition;
+using PunchingBand.Utilities;
 
 namespace PunchingBand.Models
 {
@@ -111,7 +112,7 @@ namespace PunchingBand.Models
         {
             if (e.PunchRecognition != PunchRecognition.Unknown && Running)
             {
-                PunchType = e.PunchRecognition.PunchType.ToString();
+                PunchType = e.PunchRecognition.PunchType.ToString().SplitCamelCase();
                 RaisePropertyChanged("PunchType");
             }
             else

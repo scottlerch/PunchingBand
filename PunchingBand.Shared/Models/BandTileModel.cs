@@ -68,8 +68,7 @@ namespace PunchingBand.Models
                     "Please specify fist.");
             }
 
-            // If user takes off or puts on band make them re-select fist
-            await SetPages(includeFistSelection: true);
+            await SetPages(includeFistSelection: fistSide == FistSides.Unknown);
         }
 
         private async void TileManagerOnTileButtonPressed(object sender, BandTileEventArgs<IBandTileButtonPressedEvent> bandTileEventArgs)
