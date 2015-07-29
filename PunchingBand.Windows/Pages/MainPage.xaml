@@ -15,10 +15,15 @@
     </Page.Transitions>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <MediaElement Source="ms-appx:///Assets/Music/MenuMusic.mp3" IsLooping="True" AutoPlay="True" Volume="0.5"></MediaElement>
+        <Rectangle Margin="0,50,0,0" Width="5000" Height="80" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="#56318e"></SolidColorBrush>
+            </Rectangle.Fill>
+        </Rectangle>
         <Hub>
             <Hub.Header>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>PUNCHING BAND</TextBlock>
+                    <TextBlock FontWeight="Normal">PUNCHING BAND</TextBlock>
                     <Button x:Name="AdminButton" Margin="20,0,0,0" Click="AdminButton_Click">Admin</Button>
                 </StackPanel>
             </Hub.Header>
