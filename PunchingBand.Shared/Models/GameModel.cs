@@ -80,6 +80,9 @@ namespace PunchingBand.Models
             this.PropertyChanged += GameModelOnPropertyChanged;
         }
 
+        public event EventHandler GameEnded = delegate { };
+        public event EventHandler GameAborted = delegate { }; 
+
         private void PunchingModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             switch (propertyChangedEventArgs.PropertyName)
@@ -399,6 +402,7 @@ namespace PunchingBand.Models
 
         internal void StopGame()
         {
+            GameAborted(this, EventArgs.Empty);
             Running = false;
         }
 
@@ -440,6 +444,8 @@ namespace PunchingBand.Models
             TimeLeft = TimeSpan.Zero;
             TimeLeftSeconds = 0;
             Running = false;
+
+            GameEnded(this, EventArgs.Empty);
 
             historyModel.Records.Add(new HistoryInfo
             {

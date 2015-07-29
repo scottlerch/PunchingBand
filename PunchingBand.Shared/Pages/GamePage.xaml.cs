@@ -58,6 +58,7 @@ namespace PunchingBand.Pages
 
             model.PunchingModel.PunchStarted += PunchingModelOnPunchStarted;
             model.GameModel.PropertyChanged += GameModelOnPropertyChanged;
+            model.GameModel.GameEnded += GameModelOnGameEnded;
 
             countDownUserControl.CountDownFinished += CountDownUserControlOnCountDownFinished;
             countDownUserControl.Loaded += CountDownUserControlOnLoaded;
@@ -71,6 +72,22 @@ namespace PunchingBand.Pages
 #endif
 
             model.PunchingModel.StartFight += (sender, args) => Restart();
+        }
+
+        private void GameModelOnGameEnded(object sender, EventArgs eventArgs)
+        {
+            if (model.GameModel.NewHighScore)
+            {
+                highScoreTextBlock.Visibility = Visibility.Visible;
+                highScoreStoryBoard.Begin();
+                highScoreSound.Play(1.0);
+            }
+            else
+            {
+                highScoreTextBlock.Visibility = Visibility.Collapsed;
+                highScoreStoryBoard.Stop();
+                endBuzzer.Play(0.3);
+            }
         }
 
         private void PunchingModelOnPunchStarted(object sender, EventArgs eventArgs)
@@ -104,23 +121,6 @@ namespace PunchingBand.Pages
                     break;
                 case "Running":
                     playButton.Visibility = model.GameModel.Running ? Visibility.Collapsed : Visibility.Visible;
-                    if (!model.GameModel.Running && !model.GameModel.NewHighScore)
-                    {
-                        endBuzzer.Play(0.3);
-                    }
-                    break;
-                case "NewHighScore":
-                    if (model.GameModel.NewHighScore)
-                    {
-                        highScoreTextBlock.Visibility = Visibility.Visible;
-                        highScoreStoryBoard.Begin();
-                        highScoreSound.Play(1.0);
-                    }
-                    else
-                    {
-                        highScoreTextBlock.Visibility = Visibility.Collapsed;
-                        highScoreStoryBoard.Stop();
-                    }
                     break;
                 case "TimeLeftSeconds":
                     if (model.GameModel.TimeLeftSeconds <= 5)
