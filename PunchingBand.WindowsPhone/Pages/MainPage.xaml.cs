@@ -34,7 +34,9 @@ namespace PunchingBand.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(GamePage));
+            Frame.Navigate(App.Current.RootModel.GameModel.GameMode == GameMode.MiniGame
+                ? typeof(GamePage)
+                : typeof(WorkoutPage));
         }
     }
 }

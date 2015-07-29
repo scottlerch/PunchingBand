@@ -46,6 +46,7 @@ namespace PunchingBand.Models
         private Metric skinTemperature = new Metric();
         private Metric heartrate = new Metric();
         private double caloriesBurned;
+        private double? caloriesBurnedStart;
 
         private StorageFile song;
 
@@ -89,6 +90,10 @@ namespace PunchingBand.Models
             {
                 case "FistSides":
                     FistSide = punchingModel.FistSides;
+                    break;
+                case "CalorieCount":
+                    caloriesBurnedStart = caloriesBurnedStart ?? punchingModel.CalorieCount;
+                    CaloriesBurned = punchingModel.CalorieCount - caloriesBurnedStart.Value;
                     break;
             }
         }
@@ -290,10 +295,29 @@ namespace PunchingBand.Models
         }
 
         [JsonIgnore]
+        public double CaloriesBurned
+        {
+            get { return caloriesBurned; }
+            private set { Set("CaloriesBurned", ref caloriesBurned, value); }
+        }
+
+        [JsonIgnore]
+        public TimeSpan Time
+        {
+            get { return duration - timeLeft; }
+        }
+
+        [JsonIgnore]
         public TimeSpan TimeLeft
         {
             get { return timeLeft; }
-            private set { Set("TimeLeft", ref timeLeft, value); }
+            private set
+            {
+                if (Set("TimeLeft", ref timeLeft, value))
+                {
+                    RaisePropertyChanged("Time");
+                }
+            }
         }
 
         [JsonIgnore]
@@ -379,6 +403,8 @@ namespace PunchingBand.Models
 
         internal void StartGame()
         {
+            caloriesBurnedStart = null;
+
             TimeLeft = Duration;
             TimeLeftSeconds = (int)TimeLeft.TotalSeconds;
             Running = true;
@@ -428,8 +454,6 @@ namespace PunchingBand.Models
                     TimeLeft = diff;
                     TimeLeftSeconds = (int)Math.Ceiling(diff.TotalSeconds);
                     
-                    caloriesBurned += punchingModel.CalorieCount;
-
                     if (punchingModel.SkinTemperature.HasValue)
                     {
                         skinTemperature.Update(punchingModel.SkinTemperature.Value);

@@ -335,17 +335,20 @@ namespace PunchingBand.Models
                 HeartRate = bandSensorReadingEventArgs.SensorReading.HeartRate;
                 HeartRateLocked = bandSensorReadingEventArgs.SensorReading.Quality == HeartRateQuality.Locked;
 
-                if (lastCalorieCountUpdate.HasValue && heartRate.HasValue)
+                if (heartRate.HasValue)
                 {
-                    CalorieCount = CalorieCalculator.GetCalories(
+                    lastCalorieCountUpdate = lastCalorieCountUpdate ?? DateTime.UtcNow;
+
+                    var calorieCount = CalorieCalculator.GetCalories(
                         userModel.Gender,
                         heartRate.Value,
                         userModel.Weight,
                         userModel.Age,
                         DateTime.UtcNow - lastCalorieCountUpdate.Value);
-                }
-                else
-                {
+
+                    Debug.WriteLine("Fist:{0}   Calories:{1}", fistSides, calorieCount);
+
+                    CalorieCount += calorieCount;
                     lastCalorieCountUpdate = DateTime.UtcNow;
                 }
             });

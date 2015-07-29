@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="PunchingBand.Pages.GamePage"
+    x:Class="PunchingBand.Pages.WorkoutPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -133,7 +133,7 @@
         <Grid Visibility="Collapsed" x:Name="countDownGrid">
             <userControls:CountDown x:Name="countDownUserControl"></userControls:CountDown>
         </Grid>
-        <Grid x:Name="gameGrid">
+        <Grid x:Name="gameGrid" Margin="0,-12,0,12">
             <Image HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill" Margin="0,0,0,80" Width="200" Height="200" Source="ms-appx:///Assets/Images/Fist.png" Opacity="0.15" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <ScaleTransform x:Name="fistScaleTransform" ScaleX="1" ScaleY="1"  />
@@ -167,13 +167,11 @@
                     <CompositeTransform ScaleX="{Binding GameModel.PunchStrengthMeter}" CenterX="120" />
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Button x:Name="playButton" Content="RESTART" HorizontalAlignment="Center" Margin="0,420,0,0" VerticalAlignment="Center" FontSize="24" Height="72" Width="156" Click="RestartButtonOnClick" FontFamily="Global User Interface"/>
-            <TextBlock HorizontalAlignment="Center" Margin="0,0,210,370" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Center" FontSize="40" Foreground="#FFBDBDBD"/>
-            <TextBlock HorizontalAlignment="Center" Margin="100,0,0,370" TextWrapping="Wrap" Text="{Binding GameModel.Score, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0000,000}'}" VerticalAlignment="Center" FontSize="40" FontFamily="Consolas"/>
-            <TextBlock x:Name="countDownText" HorizontalAlignment="Center" Margin="104,280,145,0" TextWrapping="Wrap" Text="{Binding GameModel.TimeLeft, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:ss}.{0:ff}'}" VerticalAlignment="Center" FontSize="36" Width="151" RenderTransformOrigin="0.232,0.528" TextAlignment="Center"/>
-            <TextBlock HorizontalAlignment="Left" Margin="9,11,0,0" TextWrapping="Wrap" Text="Calories:" VerticalAlignment="Top" FontSize="24" RenderTransformOrigin="0.488,1.805" Foreground="#FF909090"/>
-            <TextBlock HorizontalAlignment="Left" Margin="98,13,0,0" TextWrapping="Wrap" Text="{Binding GameModel.CaloriesBurned, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
-            <TextBlock HorizontalAlignment="Center" Margin="110,280,0,0" TextWrapping="Wrap" Text="sec." VerticalAlignment="Center" FontSize="24" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Center" Margin="0,0,160,370" TextWrapping="Wrap" Text="Calories:" VerticalAlignment="Center" FontSize="40" Foreground="#FFBDBDBD"/>
+            <TextBlock HorizontalAlignment="Center" Margin="120,0,0,370" TextWrapping="Wrap" Text="{Binding GameModel.CaloriesBurned, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0,000.0}'}" VerticalAlignment="Center" FontSize="40"/>
+            <TextBlock x:Name="countDownText" HorizontalAlignment="Center" Margin="0,300,0,0" TextWrapping="Wrap" Text="{Binding GameModel.Time, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:hh\\:mm\\:ss}'}" VerticalAlignment="Center" FontSize="40" Width="200" RenderTransformOrigin="0.232,0.528" TextAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Left" Margin="9,11,0,0" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Top" FontSize="24" RenderTransformOrigin="0.488,1.805" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Left" Margin="75,13,0,0" TextWrapping="Wrap" Text="{Binding GameModel.Score, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:#,##0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
             <TextBlock x:Name="powerComboTextBlock" HorizontalAlignment="Center" Margin="0,0,260,270" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding GameModel.PowerComboText}" Width="150" FontSize="28" Foreground="Gold" FontWeight="Bold" RenderTransformOrigin="1,1">
                 <TextBlock.RenderTransform>
                     <ScaleTransform x:Name="powerComboScaleTransform" ScaleX="1" ScaleY="1"  />
@@ -190,7 +188,7 @@
                 </TextBlock.RenderTransform>
             </TextBlock>
             <Button x:Name="backButton" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Margin="20" Style="{StaticResource CustomBackButtonStyle}" Click="BackButton_Click"></Button>
-            <TextBlock Name="endGameTextBlock" HorizontalAlignment="Center" Margin="0,0,0,450" TextWrapping="Wrap" Text="HIGH SCORE" VerticalAlignment="Center" FontSize="40" Foreground="Yellow" FontWeight="Bold"/>
+            <TextBlock Name="endGameTextBlock" HorizontalAlignment="Center" Margin="0,0,0,450" TextWrapping="Wrap" Text="COMPLETE" VerticalAlignment="Center" FontSize="40" Foreground="Orange" FontWeight="Bold"/>
         </Grid>
     </Grid>
 </Page>
