@@ -196,7 +196,7 @@ namespace PunchingBand.Models
                 switch (GameMode)
                 {
                     case GameMode.MiniGame:
-                        yield return TimeSpan.FromSeconds(15);
+                        yield return TimeSpan.FromSeconds(30);
                         break;
                     case GameMode.FreeformWorkout:
                     case GameMode.GuidedWorkout:
@@ -269,6 +269,7 @@ namespace PunchingBand.Models
             set { Set("FistSide", ref fistSide, value); }
         }
 
+        [JsonIgnore]
         public TimeSpan Duration
         {
             get { return duration; }

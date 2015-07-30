@@ -128,8 +128,7 @@
             </DoubleAnimation>
         </Storyboard>
     </Page.Resources>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <MediaElement x:Name="SongMedia" AudioCategory="ForegroundOnlyMedia"></MediaElement>
+    <Grid Name="MainGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid Visibility="Collapsed" x:Name="countDownGrid">
             <userControls:CountDown x:Name="countDownUserControl"></userControls:CountDown>
         </Grid>

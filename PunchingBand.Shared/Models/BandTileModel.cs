@@ -47,7 +47,7 @@ namespace PunchingBand.Models
             bandClient.TileManager.TileButtonPressed += TileManagerOnTileButtonPressed;
             bandClient.SensorManager.Contact.ReadingChanged  += ContactOnReadingChanged;
 
-            await SetPages(includeFistSelection: true);
+            await SetPages(includeFistSelection: fistSide == FistSides.Unknown);
 
             await bandClient.TileManager.StartReadingsAsync();
         }
@@ -55,7 +55,7 @@ namespace PunchingBand.Models
         public async Task ForceFistSide(FistSides fistSide)
         {
             this.fistSide = fistSide;
-            await SetPages(includeFistSelection: false);
+            await SetPages(includeFistSelection: fistSide == FistSides.Unknown);
         }
 
         private async void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)

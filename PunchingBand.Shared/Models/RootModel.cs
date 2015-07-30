@@ -73,7 +73,7 @@ namespace PunchingBand.Models
                 {
                     GameMode = gameMode,
                     Timestamp = DateTime.UtcNow.AddDays(-1*rand.Next(365)),
-                    Duration = gameMode == GameMode.MiniGame ? TimeSpan.FromSeconds(15) : workoutDurations[rand.Next(workoutDurations.Length)],
+                    Duration = gameMode == GameMode.MiniGame ? TimeSpan.FromSeconds(30) : workoutDurations[rand.Next(workoutDurations.Length)],
                     Name = names[rand.Next(names.Length)],
                     Score = rand.Next(10, 1000),
                     CaloriesBurned = rand.Next(1000),

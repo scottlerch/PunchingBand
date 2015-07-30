@@ -26,6 +26,8 @@ namespace PunchingBand.Pages
         private readonly SoundEffect fightBell;
         private readonly SoundEffect highScoreSound;
 
+        private MediaElement songMedia;
+
         private readonly Random random = new Random();
 
         public GamePage()
@@ -76,10 +78,7 @@ namespace PunchingBand.Pages
 
         private void GameModelOnGameEnded(object sender, EventArgs eventArgs)
         {
-            if (model.GameModel.Song != null)
-            {
-                SongMedia.Stop();
-            }
+            StopMusic();
 
            // punchTypeTextBlock.Visibility = Visibility.Collapsed;
 
@@ -194,8 +193,17 @@ namespace PunchingBand.Pages
             if (model.GameModel.Song != null)
             {
                 var stream = await model.GameModel.Song.OpenAsync(FileAccessMode.Read);
-                SongMedia.SetSource(stream, model.GameModel.Song.ContentType);
-                SongMedia.Play();
+
+                songMedia = new MediaElement { AudioCategory = AudioCategory.ForegroundOnlyMedia };
+                songMedia.Loaded += (o, args) =>
+                {
+                    songMedia.SetSource(stream, model.GameModel.Song.ContentType);
+                    songMedia.IsLooping = true;
+                    songMedia.Volume = 0.3;
+                    songMedia.Play();
+                };
+
+                MainGrid.Children.Add(songMedia);
             }
         }
 
@@ -219,12 +227,20 @@ namespace PunchingBand.Pages
             Restart();
         }
 
+        private void StopMusic()
+        {
+            if (songMedia != null)
+            {
+                songMedia.IsMuted = true;
+                songMedia.Stop();
+                MainGrid.Children.Remove(songMedia);
+                songMedia = null;
+            }
+        }
+
         private void Restart()
         {
-            if (SongMedia.CurrentState == MediaElementState.Playing)
-            {
-                SongMedia.Stop();
-            }
+            StopMusic();
 
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
@@ -245,6 +261,8 @@ namespace PunchingBand.Pages
 
         private void Stop()
         {
+            StopMusic();
+
             countDownUserControl.Stop();
             model.GameModel.AbortGame();
 

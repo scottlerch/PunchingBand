@@ -144,7 +144,10 @@ namespace PunchingBand.Models
 
         private async Task ConnectCore()
         {
+            var sw = Stopwatch.StartNew();
             var bands = await BandClientManager.Instance.GetBandsAsync();
+            sw.Stop();
+            Debug.WriteLine("Get Bands: {0}", sw.Elapsed);
 
             if (bands.Length > 0)
             {
@@ -156,7 +159,9 @@ namespace PunchingBand.Models
 
                     try
                     {
+                        sw.Restart();
                         bandClient = await BandClientManager.Instance.ConnectAsync(bands[i]);
+                        Debug.WriteLine("Connect Band: {0}", sw.Elapsed);
                     }
                     catch (Exception ex)
                     {
@@ -174,7 +179,9 @@ namespace PunchingBand.Models
                     punchBand.WornChanged += PunchBandOnWornChanged;
                     punchBand.StartFight += PunchBandOnStartFight;
 
+                    sw.Restart();
                     await punchBand.Initialize();
+                    Debug.WriteLine("Initialize Band: {0}", sw.Elapsed);
                 }
 
                 // If all connections failed rethrow exception, otherwise 1 band is good enough
@@ -195,6 +202,8 @@ namespace PunchingBand.Models
         {
             var punchBand = sender as PunchBand;
 
+            Debug.WriteLine("Band Worn Changed - Side:{0}  Worn:{1}  TileSide:{2}", punchBand.FistSide, punchBand.Worn, punchBand.BandTile.FistSide);
+
             invokeOnUiThread(() =>
             {
                 // Consider worn if either wrist has band worn
@@ -203,9 +212,15 @@ namespace PunchingBand.Models
                 if (!Worn)
                 {
                     FistSides = FistSides.Unknown;
+                    foreach (var band in punchBands)
+                    {
+                        band.ForceFistSide(FistSides.Unknown);
+                    }
                 }
 
                 Status = Worn ? string.Empty : "Please wear your Band.";
+
+                RaisePropertyChanged("Ready");
             });
 
             if (!punchBand.Worn)
@@ -215,6 +230,7 @@ namespace PunchingBand.Models
                     fitnessSensorsPunchBand = null;
                 }
 
+                Debug.WriteLine("Stopping Fitness Sensors - Side:{0}", punchBand.FistSide);
                 await StopFitnessSensors(punchBand.BandClient);
             }
             else
@@ -222,6 +238,7 @@ namespace PunchingBand.Models
                 if (fitnessSensorsPunchBand == null)
                 {
                     fitnessSensorsPunchBand = punchBand;
+                    Debug.WriteLine("Starting Fitness Sensors - Side:{0}", punchBand.FistSide);
                     await StartFitnessSensors(punchBand.BandClient);
                 }
             }
@@ -345,8 +362,6 @@ namespace PunchingBand.Models
                         userModel.Weight,
                         userModel.Age,
                         DateTime.UtcNow - lastCalorieCountUpdate.Value);
-
-                    Debug.WriteLine("Fist:{0}   Calories:{1}", fistSides, calorieCount);
 
                     CalorieCount += calorieCount;
                     lastCalorieCountUpdate = DateTime.UtcNow;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Band;
 using Microsoft.Band.Sensors;
@@ -131,6 +132,8 @@ namespace PunchingBand.Models
                 return;
             }
 
+            var sw = Stopwatch.StartNew();
+
             BandClient.SensorManager.Gyroscope.ReadingChanged += GyroscopeOnReadingChanged;
 
             BandClient.SensorManager.Gyroscope.ReportingInterval =
@@ -139,6 +142,8 @@ namespace PunchingBand.Models
             await PunchDetector.Initialize(FistSide);
 
             await BandClient.SensorManager.Gyroscope.StartReadingsAsync();
+
+            Debug.WriteLine("Punch Detection Started: {0}", sw.Elapsed);
 
             punchDetectionRunning = true;
         }
