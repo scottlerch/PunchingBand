@@ -4,6 +4,7 @@ using System.ComponentModel;
 #if WINDOWS_PHONE_APP
 using Windows.Phone.UI.Input;
 #endif
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -218,10 +219,20 @@ namespace PunchingBand.Pages
         {
             if (songMedia != null)
             {
-                songMedia.IsMuted = true;
-                songMedia.Stop();
-                MainGrid.Children.Remove(songMedia);
-                songMedia = null;
+                try
+                {
+                    songMedia.IsMuted = true;
+                    songMedia.Stop();
+                    if (MainGrid.Children.Contains(songMedia))
+                    {
+                        MainGrid.Children.Remove(songMedia);
+                    }
+                    songMedia = null;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
         }
 
