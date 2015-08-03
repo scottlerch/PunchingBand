@@ -61,6 +61,8 @@ namespace PunchingBand.Models
             duration = GameDurations.First();
             timeLeft = duration;
             timeLeftSeconds = (int)duration.TotalSeconds;
+
+            PunchType = "Punch Type";
         }
 
         public GameModel(PunchingModel punchingModel, HistoryModel historyModel, UserModel userModel)
@@ -420,11 +422,11 @@ namespace PunchingBand.Models
             PunchCount = 0;
             SpeedComboCount = 0;
             PowerComboCount = 0;
+            CaloriesBurned = 0;
 
             NewHighScore = false;
 
             punchStrength = new Metric(0.001);
-            caloriesBurned = 0;
             skinTemperature = new Metric();
             heartrate = new Metric();
 
