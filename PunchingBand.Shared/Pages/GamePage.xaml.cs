@@ -60,6 +60,7 @@ namespace PunchingBand.Pages
             highScoreSound = new SoundEffect("Assets/Audio/highscore.wav");
 
             model.PunchingModel.PunchStarted += PunchingModelOnPunchStarted;
+            model.PunchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
             model.GameModel.PropertyChanged += GameModelOnPropertyChanged;
             model.GameModel.GameEnded += GameModelOnGameEnded;
 
@@ -75,6 +76,34 @@ namespace PunchingBand.Pages
 #endif
 
             model.PunchingModel.StartFight += (sender, args) => Restart();
+
+            heartScaleXAnimation.Completed += HeartScaleXAnimationOnCompleted;
+        }
+
+        private TimeSpan heartRateAnimationDuration = TimeSpan.MaxValue;
+
+        private void HeartScaleXAnimationOnCompleted(object sender, object e)
+        {
+            heartScaleXAnimation.Duration = heartRateAnimationDuration;
+            heartScaleYAnimation.Duration = heartRateAnimationDuration;
+        }
+
+        private void PunchingModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "HeartRate":
+                    if (!model.PunchingModel.HeartRate.HasValue)
+                    {
+                        heartScaleXAnimation.Duration = TimeSpan.MaxValue;
+                        heartScaleYAnimation.Duration = TimeSpan.MaxValue;
+                    }
+                    else
+                    {
+                        heartRateAnimationDuration = TimeSpan.FromSeconds((60.0 / model.PunchingModel.HeartRate.Value) / 2.0);
+                    }
+                    break;
+            }
         }
 
         private void GameModelOnGameEnded(object sender, EventArgs eventArgs)

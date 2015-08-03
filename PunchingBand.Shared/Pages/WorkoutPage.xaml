@@ -9,7 +9,7 @@
     xmlns:userControls="using:PunchingBand.Pages.UserControls"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=models:RootModel, IsDesignTimeCreatable=True}"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" FontFamily="Global User Interface">
     <Page.Resources>
         <bindingConverters1:StringFormatConverter x:Name="StringFormat"/>
         <Storyboard x:Name="fistStoryboard">
@@ -135,7 +135,7 @@
         <Grid Visibility="Collapsed" x:Name="countDownGrid">
             <userControls:CountDown x:Name="countDownUserControl"></userControls:CountDown>
         </Grid>
-        <Grid x:Name="gameGrid" Margin="0,-12,0,12">
+        <Grid x:Name="gameGrid">
             <Image HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill" Margin="0,0,0,80" Width="200" Height="200" Source="ms-appx:///Assets/Images/Fist.png" Opacity="0.15" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <ScaleTransform x:Name="fistScaleTransform" ScaleX="1" ScaleY="1"  />
@@ -147,9 +147,24 @@
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <TextBlock HorizontalAlignment="Left" Margin="61,20,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="30" Foreground="#FF909090"/>
-            <TextBlock HorizontalAlignment="Left" Margin="9,20,0,0" TextWrapping="Wrap" Text="HR:" VerticalAlignment="Top" FontSize="30" Foreground="#FF909090"/>
-
+            <TextBlock HorizontalAlignment="Left" Margin="61,10,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="30" Foreground="#FF909090"/>
+            <Image Name="heartImage" Source="ms-appx:///Assets/Images/Heart.png" HorizontalAlignment="Left" Margin="6,4,0,0" VerticalAlignment="Top" Height="50" Width="50" Opacity="0.5" RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <ScaleTransform x:Name="heartScaleTransform" ScaleX="1" ScaleY="1"></ScaleTransform>
+                </Image.RenderTransform>
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever">
+                                <DoubleAnimation x:Name="heartScaleXAnimation" Storyboard.TargetName="heartScaleTransform" Storyboard.TargetProperty="ScaleX" To="1.0" From="0.7" Duration="0:0:1" AutoReverse="True">
+                                </DoubleAnimation>
+                                <DoubleAnimation x:Name="heartScaleYAnimation" Storyboard.TargetName="heartScaleTransform" Storyboard.TargetProperty="ScaleY" To="1.0" From="0.7" Duration="0:0:1" AutoReverse="True">
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
             <TextBlock HorizontalAlignment="Right" Margin="0,0,9,10" TextWrapping="Wrap" Text="°" VerticalAlignment="Bottom" FontSize="24" Foreground="#FF616161"/>
             <TextBlock HorizontalAlignment="Right" Margin="0,0,25,10" TextWrapping="Wrap" Text="{Binding PunchingModel.SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Bottom" FontSize="24" Foreground="#FF666666"/>
             <Image Name="powerGlowImage" HorizontalAlignment="Center" Height="60" VerticalAlignment="Center" Width="290" Source="ms-appx:///Assets/Images/PowerbarHalo.png" Margin="0,230,0,0" Opacity="0" Stretch="Fill"/>

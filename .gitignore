@@ -184,3 +184,4 @@ FakesAssemblies/
 /punchdata/PunchesLeftFist.json
 /punchdata/PunchesRightFist.json
 /PunchingBand.Windows/bin
+/PunchingBand.Windows/bin/Debug/AppX/*.exe

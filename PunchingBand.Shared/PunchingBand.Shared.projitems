@@ -116,6 +116,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\punch4.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Audio\worn.wav" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\Fist.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\Heart.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\PowerbarHalo.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconLarge.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Images\TileIconSmall.png" />
