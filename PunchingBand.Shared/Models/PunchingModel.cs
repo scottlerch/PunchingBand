@@ -120,6 +120,7 @@ namespace PunchingBand.Models
 #if MOCK_BAND
             Connected = true;
             Worn = true;
+            FistSides = FistSides.Right;
 #else
             while (true)
             {

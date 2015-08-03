@@ -147,11 +147,11 @@
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <TextBlock HorizontalAlignment="Left" Margin="61,45,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="30" Foreground="#FF909090"/>
-            <TextBlock HorizontalAlignment="Left" Margin="9,45,0,0" TextWrapping="Wrap" Text="HR:" VerticalAlignment="Top" FontSize="30" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Left" Margin="61,20,0,0" TextWrapping="Wrap" Text="{Binding PunchingModel.HeartRate, TargetNullValue=N/A}" VerticalAlignment="Top" FontSize="30" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Left" Margin="9,20,0,0" TextWrapping="Wrap" Text="HR:" VerticalAlignment="Top" FontSize="30" Foreground="#FF909090"/>
 
-            <TextBlock HorizontalAlignment="Right" Margin="0,10,9,0" TextWrapping="Wrap" Text="°" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
-            <TextBlock HorizontalAlignment="Right" Margin="0,10,25,0" TextWrapping="Wrap" Text="{Binding PunchingModel.SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+            <TextBlock HorizontalAlignment="Right" Margin="0,0,9,10" TextWrapping="Wrap" Text="°" VerticalAlignment="Bottom" FontSize="24" Foreground="#FF616161"/>
+            <TextBlock HorizontalAlignment="Right" Margin="0,0,25,10" TextWrapping="Wrap" Text="{Binding PunchingModel.SkinTemperature, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}'}" VerticalAlignment="Bottom" FontSize="24" Foreground="#FF666666"/>
             <Image Name="powerGlowImage" HorizontalAlignment="Center" Height="60" VerticalAlignment="Center" Width="290" Source="ms-appx:///Assets/Images/PowerbarHalo.png" Margin="0,230,0,0" Opacity="0" Stretch="Fill"/>
             <TextBlock Foreground="#FFBDBDBD" HorizontalAlignment="Center" Margin="75,180,210,0" TextWrapping="Wrap" Text="{Binding GameModel.PunchStrength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.0}g'}" VerticalAlignment="Center" FontSize="22" Width="120"/>
 
@@ -169,11 +169,19 @@
                     <CompositeTransform ScaleX="{Binding GameModel.PunchStrengthMeter}" CenterX="120" />
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <TextBlock HorizontalAlignment="Center" Margin="0,0,160,410" TextWrapping="Wrap" Text="Calories:" VerticalAlignment="Center" FontSize="40" Foreground="#FFBDBDBD"/>
-            <TextBlock HorizontalAlignment="Center" Margin="120,0,0,410" TextWrapping="Wrap" Text="{Binding GameModel.CaloriesBurned, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0,000.0}'}" VerticalAlignment="Center" FontSize="40"/>
+
+            <StackPanel Margin="0,0,0,410" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Calories:" VerticalAlignment="Center" FontSize="40" Foreground="#FFBDBDBD"/>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding GameModel.CaloriesBurned, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0,000.0}'}" VerticalAlignment="Center" FontSize="40"/>
+            </StackPanel>
+           
             <TextBlock x:Name="countDownText" HorizontalAlignment="Center" Margin="0,340,0,0" TextWrapping="Wrap" Text="{Binding GameModel.Time, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:hh\\:mm\\:ss}'}" VerticalAlignment="Center" FontSize="40" Width="200" RenderTransformOrigin="0.232,0.528" TextAlignment="Center"/>
-            <TextBlock HorizontalAlignment="Left" Margin="9,11,0,0" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Top" FontSize="24" RenderTransformOrigin="0.488,1.805" Foreground="#FF909090"/>
-            <TextBlock HorizontalAlignment="Left" Margin="75,13,0,0" TextWrapping="Wrap" Text="{Binding GameModel.Score, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:#,##0}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF909090"/>
+
+            <StackPanel Margin="0,0,0,340" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Score:" VerticalAlignment="Top" FontSize="24" Foreground="#FF6A6A6A"/>
+                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding GameModel.Score, TargetNullValue=N/A, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:000,000,000,000}'}" VerticalAlignment="Top" FontSize="24" Foreground="#FF636363"/>
+            </StackPanel>
+            
             <TextBlock x:Name="powerComboTextBlock" HorizontalAlignment="Center" Margin="0,0,240,250" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding GameModel.PowerComboText}" Width="175" FontSize="40" Foreground="Gold" FontWeight="Bold" RenderTransformOrigin="1,1">
                 <TextBlock.RenderTransform>
                     <ScaleTransform x:Name="powerComboScaleTransform" ScaleY="1" ScaleX="1"/>
