@@ -133,10 +133,14 @@ namespace PunchingBand.Pages
                     if (model.GameModel.Running)
                     {
                         punchTypeTextBlock.Visibility = Visibility.Visible;
+                        powerComboTextBlock.Visibility = Visibility.Visible;
+                        speedComboTextBlock.Visibility = Visibility.Visible;
                     }
                     else
                     {
                         punchTypeTextBlock.Visibility = Visibility.Collapsed;
+                        powerComboTextBlock.Visibility = Visibility.Collapsed;
+                        speedComboTextBlock.Visibility = Visibility.Collapsed;
                     }
                     break;
                 case "TimeLeftSeconds":
@@ -169,6 +173,8 @@ namespace PunchingBand.Pages
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            punchCountTextBlock.Opacity = 0;
+
             countDownGrid.Visibility = Visibility.Visible;
             gameGrid.Visibility = Visibility.Collapsed;
             endGameTextBlock.Visibility = Visibility.Collapsed;
