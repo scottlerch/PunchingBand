@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define ADMIN
+using System;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
@@ -17,7 +18,7 @@ namespace PunchingBand.Pages
 
             App.Current.RootModel.PunchingModel.StartFight += (sender, args) => App.NavigatetoGame(Frame);
 
-#if !DEBUG
+#if !ADMIN
             AdminButton.Visibility = Visibility.Collapsed;
 #endif
         }

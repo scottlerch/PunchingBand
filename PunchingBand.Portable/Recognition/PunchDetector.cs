@@ -1,4 +1,5 @@
-﻿using Microsoft.Band.Sensors;
+﻿//#define FULL_LOGGING
+using Microsoft.Band.Sensors;
 using PunchingBand.Recognition.Recognizers;
 using System;
 using System.Collections.Generic;
@@ -62,6 +63,8 @@ namespace PunchingBand.Recognition
         public double LastPunchStrength { get; private set; }
 
         public FistSides FistSide { get { return fistSide; } }
+        
+        public static FistSides PrimaryFistSide { get; set; }
 
         public async Task<PunchInfo> GetPunchInfo(IBandGyroscopeReading reading)
         {
@@ -74,6 +77,20 @@ namespace PunchingBand.Recognition
                 status = PunchStatus.Finish;
 
                 punchRecognition = await DeterminePunchType(currentPunchBuffer).ConfigureAwait(false);
+
+                // HACK: ensure cross is always the opposite of the primary fist
+                if (punchRecognition.PunchType == PunchType.Cross || punchRecognition.PunchType == PunchType.Jab)
+                {
+                    if (FistSide != PrimaryFistSide)
+                    {
+                        punchRecognition = new PunchRecognition(PunchType.Cross, punchRecognition.Confidence, punchRecognition.Delay);
+                    }
+                    else
+                    {
+                        punchRecognition = new PunchRecognition(PunchType.Jab, punchRecognition.Confidence, punchRecognition.Delay);
+                    }
+                }
+              
 #if FULL_LOGGING
                 punchLogger.LogPunchVector(currentPunchBuffer);
 #endif
@@ -109,7 +126,7 @@ namespace PunchingBand.Recognition
             var punchInfo = new PunchInfo(fistSide, status, punchStrength, punchRecognition);
 
 #if FULL_LOGGING
-            punchLogger.LogPunchData(reading, punchInfo);
+            //punchLogger.LogPunchData(reading, punchInfo);
 #endif
 
             return punchInfo;

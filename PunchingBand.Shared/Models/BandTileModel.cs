@@ -3,6 +3,7 @@ using Microsoft.Band.Notifications;
 using Microsoft.Band.Sensors;
 using Microsoft.Band.Tiles;
 using Microsoft.Band.Tiles.Pages;
+using PunchingBand.Recognition;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,11 +78,13 @@ namespace PunchingBand.Models
             {
                 case ElementId.LeftFistButton:
                     FistSide = FistSides.Left;
+                    PunchDetector.PrimaryFistSide = FistSides.Left;
                     await bandClient.NotificationManager.VibrateAsync(VibrationType.OneToneHigh);
                     await SetPages(includeFistSelection: false);
                     break;
                 case ElementId.RightFistButton:
                     FistSide = FistSides.Right;
+                    PunchDetector.PrimaryFistSide = FistSides.Right;
                     await bandClient.NotificationManager.VibrateAsync(VibrationType.OneToneHigh);
                     await SetPages(includeFistSelection: false);
                     break;

@@ -16,7 +16,7 @@ namespace PunchingBand.MachineLearning
         {
             var inputPath = @"C:\Users\Scott\Documents\GitHub\PunchingBand\punchdata\";
             var outputPath = @"C:\Users\Scott\Documents\GitHub\PunchingBand\PunchingBand.Shared\Assets\NeuralNetworks\";
-            var excludedCategories = new[] { PunchType.Unknown, PunchType.Body, PunchType.Cross };
+            var excludedCategories = new[] { PunchType.Unknown, PunchType.Body };
             var sides = new[] { "Right", "Left" };
 
             foreach (var fist in sides)
