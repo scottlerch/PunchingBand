@@ -15,8 +15,6 @@ namespace PunchingBand.Models
         private readonly UserModel userModel;
         private readonly HistoryModel historyModel;
 
-        private readonly Func<string, Task<BandImage>> loadIcon;
-
         public GameModel GameModel { get { return gameModel; } }
 
         public PunchingModel PunchingModel { get { return punchingModel; } }
@@ -38,14 +36,12 @@ namespace PunchingBand.Models
             gameModel = new GameModel(punchingModel, historyModel, userModel, null, null);
         }
 
-        public RootModel(Action<Action> invokeOnUiThread, Func<string,Task<BandImage>> loadIcon, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
+        public RootModel(Action<Action> invokeOnUiThread, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
         {
             historyModel = new HistoryModel(getReadStream, getWriteStream);
             userModel = new UserModel(getReadStream, getWriteStream);
             punchingModel = new PunchingModel(userModel, invokeOnUiThread, getReadStream, getWriteStream);
             gameModel = new GameModel(punchingModel, historyModel, userModel, getReadStream, getWriteStream);
-
-            this.loadIcon = loadIcon;
         }
 
         public async Task Load()

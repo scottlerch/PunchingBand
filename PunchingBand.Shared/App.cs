@@ -51,7 +51,8 @@ namespace PunchingBand
 
             InitializeComponent();
             Suspending += OnSuspending;
-            RootModel = new RootModel(InvokeOnUIThread, IconLoader.Load, 
+            RootModel = new RootModel(
+                InvokeOnUIThread, 
                 async filePath =>
                 {
                     var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///" + filePath));

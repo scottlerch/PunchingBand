@@ -48,7 +48,6 @@
       <DependentUpon>WorkoutPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\DeviceInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\IconLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
