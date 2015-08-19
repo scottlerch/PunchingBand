@@ -1,6 +1,7 @@
-﻿using Microsoft.Band.Sensors;
+﻿using Microsoft.Band.Portable.Sensors;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PunchingBand.Band;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,7 +33,7 @@ namespace PunchingBand.Recognition.Recognizers
             return Task.FromResult(0);
         }
 
-        public async Task<PunchRecognition> Recognize(IEnumerable<IBandGyroscopeReading> readings)
+        public async Task<PunchRecognition> Recognize(IEnumerable<GyroscopeAccelerometerReading> readings)
         {
             var punchVector = readings.ToList();
             var punchVectorSize = punchVector.Count;

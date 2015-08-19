@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.Band;
-using Microsoft.Band.Sensors;
+using Microsoft.Band.Portable;
+using Microsoft.Band.Portable.Sensors;
 using PunchingBand.Recognition;
 using System;
 using System.ComponentModel;
@@ -16,7 +16,7 @@ namespace PunchingBand.Models
     {
         private bool punchDetectionRunning;
 
-        public PunchBand(IBandClient bandClient)
+        public PunchBand(BandClient bandClient)
         {
             BandClient = bandClient;
             FistSide = FistSides.Unknown;
@@ -40,7 +40,7 @@ namespace PunchingBand.Models
                 });
         }
 
-        public IBandClient BandClient { get; private set; }
+        public BandClient BandClient { get; private set; }
 
         public PunchDetector PunchDetector { get; private set; }
 
@@ -66,7 +66,7 @@ namespace PunchingBand.Models
 
             BandClient.SensorManager.Contact.ReadingChanged += ContactOnReadingChanged;
 
-            await BandClient.SensorManager.Contact.StartReadingsAsync();
+            await BandClient.SensorManager.Contact.StartReadingsAsync(BandSensorSampleRate.Ms16);
 
             // Now wait until Band is worn to finish initialization...
         }
@@ -92,20 +92,30 @@ namespace PunchingBand.Models
             }
         }
 
-        private async void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
+        private async void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<BandContactReading> bandSensorReadingEventArgs)
         {
-            Worn = bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn;
+            Worn = bandSensorReadingEventArgs.SensorReading.State == ContactState.Worn;
             WornChanged(this, EventArgs.Empty);
 
             await EnsurePunchDetection();
         }
 
-        private async void GyroscopeOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandGyroscopeReading> bandSensorReadingEventArgs)
+        private async void GyroscopeOnReadingChanged(object sender, BandSensorReadingEventArgs<BandGyroscopeReading> bandSensorReadingEventArgs)
         {
+            var accelerometerReading = lastAccelerometerReading;
+            lastAccelerometerReading = null;
+
             if (!punchDetectionRunning) return;
 
-            PunchInfo = await PunchDetector.GetPunchInfo(bandSensorReadingEventArgs.SensorReading).ConfigureAwait(false);
+            PunchInfo = await PunchDetector.GetPunchInfo(new Band.GyroscopeAccelerometerReading(bandSensorReadingEventArgs.SensorReading, accelerometerReading)).ConfigureAwait(false);
             PunchInfoChanged(this, EventArgs.Empty);
+        }
+
+        private BandAccelerometerReading lastAccelerometerReading = null;
+
+        private async void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<BandAccelerometerReading> bandSensorReadingEventArgs)
+        {
+            lastAccelerometerReading = bandSensorReadingEventArgs.SensorReading;
         }
 
         private async Task EnsurePunchDetection()
@@ -135,13 +145,12 @@ namespace PunchingBand.Models
             var sw = Stopwatch.StartNew();
 
             BandClient.SensorManager.Gyroscope.ReadingChanged += GyroscopeOnReadingChanged;
-
-            BandClient.SensorManager.Gyroscope.ReportingInterval =
-                BandClient.SensorManager.Accelerometer.SupportedReportingIntervals.Min();
+            BandClient.SensorManager.Accelerometer.ReadingChanged += AccelerometerOnReadingChanged;
 
             await PunchDetector.Initialize(FistSide);
-
-            await BandClient.SensorManager.Gyroscope.StartReadingsAsync();
+ 
+            await BandClient.SensorManager.Gyroscope.StartReadingsAsync(BandSensorSampleRate.Ms16);
+            await BandClient.SensorManager.Accelerometer.StartReadingsAsync(BandSensorSampleRate.Ms16);
 
             Debug.WriteLine("Punch Detection Started: {0}", sw.Elapsed);
 
@@ -169,7 +178,7 @@ namespace PunchingBand.Models
 
             if (BandClient != null)
             {
-                BandClient.Dispose();
+                BandClient.DisconnectAsync();
                 BandClient = null;
             }
 

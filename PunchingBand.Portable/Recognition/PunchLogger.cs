@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Microsoft.Band.Sensors;
 using System;
 using System.Collections.Concurrent;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Band.Portable.Sensors;
+using PunchingBand.Band;
 
 namespace PunchingBand.Recognition
 {
@@ -12,13 +13,13 @@ namespace PunchingBand.Recognition
     {
         private class PunchLogData
         {
-            public PunchLogData(IBandGyroscopeReading reading, PunchInfo punchInfo)
+            public PunchLogData(GyroscopeAccelerometerReading reading, PunchInfo punchInfo)
             {
                 AccelerometerReading = reading;
                 PunchInfo = punchInfo;
             }
 
-            public IBandGyroscopeReading AccelerometerReading { get; private set; }
+            public GyroscopeAccelerometerReading AccelerometerReading { get; private set; }
 
             public PunchInfo PunchInfo { get; private set; }
         }
@@ -39,7 +40,7 @@ namespace PunchingBand.Recognition
             this.getWriteStream = getWriteStream;
         }
 
-        public void LogPunchData(IBandGyroscopeReading reading, PunchInfo punchInfo)
+        public void LogPunchData(GyroscopeAccelerometerReading reading, PunchInfo punchInfo)
         {
             if (logData != null)
             {
@@ -47,7 +48,7 @@ namespace PunchingBand.Recognition
             }
         }
 
-        public void LogPunchVector(IEnumerable<IBandGyroscopeReading> punchBuffer)
+        public void LogPunchVector(IEnumerable<GyroscopeAccelerometerReading> punchBuffer)
         {
             if (punchVectors != null)
             {
@@ -55,7 +56,7 @@ namespace PunchingBand.Recognition
             }
         }
 
-        private string GetVectorCsv(IEnumerable<IBandGyroscopeReading> punchBuffer)
+        private string GetVectorCsv(IEnumerable<GyroscopeAccelerometerReading> punchBuffer)
         {
             var stringBuilder = new StringBuilder();
             foreach (var reading in punchBuffer)

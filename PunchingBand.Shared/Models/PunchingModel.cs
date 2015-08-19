@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
-using Microsoft.Band;
-using Microsoft.Band.Sensors;
+using Microsoft.Band.Portable;
+using Microsoft.Band.Portable.Sensors;
 using PunchingBand.Recognition;
 using PunchingBand.Utilities;
 using System;
@@ -146,7 +146,7 @@ namespace PunchingBand.Models
         private async Task ConnectCore()
         {
             var sw = Stopwatch.StartNew();
-            var bands = await BandClientManager.Instance.GetBandsAsync();
+            var bands = (await BandClientManager.Instance.GetPairedBandsAsync()).ToArray();
             sw.Stop();
             Debug.WriteLine("Get Bands: {0}", sw.Elapsed);
 
@@ -156,7 +156,7 @@ namespace PunchingBand.Models
 
                 for (int i = 0; i < Math.Min(bands.Length, 2); i++)
                 {
-                    IBandClient bandClient;
+                    BandClient bandClient;
 
                     try
                     {
@@ -245,23 +245,23 @@ namespace PunchingBand.Models
             }
         }
 
-        private async Task StartFitnessSensors(IBandClient bandClient)
+        private async Task StartFitnessSensors(BandClient bandClient)
         {
             bandClient.SensorManager.Pedometer.ReadingChanged += PedometerOnReadingChanged;
             bandClient.SensorManager.HeartRate.ReadingChanged += HeartRateOnReadingChanged;
             bandClient.SensorManager.SkinTemperature.ReadingChanged += SkinTemperatureOnReadingChanged;
             
-            if (bandClient.SensorManager.HeartRate.GetCurrentUserConsent() != UserConsent.Granted)
+            if (bandClient.SensorManager.HeartRate.UserConsented != UserConsent.Granted)
             {
-                await bandClient.SensorManager.HeartRate.RequestUserConsentAsync();
+                await bandClient.SensorManager.HeartRate.RequestUserConsent();
             }
             
-            await bandClient.SensorManager.HeartRate.StartReadingsAsync();
-            await bandClient.SensorManager.Pedometer.StartReadingsAsync();
-            await bandClient.SensorManager.SkinTemperature.StartReadingsAsync();
+            await bandClient.SensorManager.HeartRate.StartReadingsAsync(BandSensorSampleRate.Ms128);
+            await bandClient.SensorManager.Pedometer.StartReadingsAsync(BandSensorSampleRate.Ms128);
+            await bandClient.SensorManager.SkinTemperature.StartReadingsAsync(BandSensorSampleRate.Ms128);
         }
 
-        private async Task StopFitnessSensors(IBandClient bandClient)
+        private async Task StopFitnessSensors(BandClient bandClient)
         {
             bandClient.SensorManager.Pedometer.ReadingChanged -= PedometerOnReadingChanged;
             bandClient.SensorManager.HeartRate.ReadingChanged -= HeartRateOnReadingChanged;
@@ -341,12 +341,12 @@ namespace PunchingBand.Models
             punchBands.Clear();
         }
 
-        private void SkinTemperatureOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandSkinTemperatureReading> bandSensorReadingEventArgs)
+        private void SkinTemperatureOnReadingChanged(object sender, BandSensorReadingEventArgs<BandSkinTemperatureReading> bandSensorReadingEventArgs)
         {
             invokeOnUiThread(() => SkinTemperature = (bandSensorReadingEventArgs.SensorReading.Temperature * 1.8) + 32.0);
         }
 
-        private void HeartRateOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandHeartRateReading> bandSensorReadingEventArgs)
+        private void HeartRateOnReadingChanged(object sender, BandSensorReadingEventArgs<BandHeartRateReading> bandSensorReadingEventArgs)
         {
             invokeOnUiThread(() =>
             {
@@ -370,7 +370,7 @@ namespace PunchingBand.Models
             });
         }
 
-        private void PedometerOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandPedometerReading> bandSensorReadingEventArgs)
+        private void PedometerOnReadingChanged(object sender, BandSensorReadingEventArgs<BandPedometerReading> bandSensorReadingEventArgs)
         {
             if (startStepCount == null)
             {

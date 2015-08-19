@@ -1,5 +1,6 @@
 ﻿//#define FULL_LOGGING
-using Microsoft.Band.Sensors;
+using Microsoft.Band.Portable.Sensors;
+using PunchingBand.Band;
 using PunchingBand.Recognition.Recognizers;
 using System;
 using System.Collections.Generic;
@@ -66,7 +67,7 @@ namespace PunchingBand.Recognition
         
         public static FistSides PrimaryFistSide { get; set; }
 
-        public async Task<PunchInfo> GetPunchInfo(IBandGyroscopeReading reading)
+        public async Task<PunchInfo> GetPunchInfo(GyroscopeAccelerometerReading reading)
         {
             var status = PunchStatus.Unknown;
             double? punchStrength = null;
@@ -132,12 +133,12 @@ namespace PunchingBand.Recognition
             return punchInfo;
         }
 
-        private async Task<PunchRecognition> DeterminePunchType(IEnumerable<IBandGyroscopeReading> readings)
+        private async Task<PunchRecognition> DeterminePunchType(IEnumerable<GyroscopeAccelerometerReading> readings)
         {
             return await punchRecognizer.Recognize(readings);
         }
 
-        private bool IsPunchDetected(IBandGyroscopeReading reading, out double? punchStrength)
+        private bool IsPunchDetected(GyroscopeAccelerometerReading reading, out double? punchStrength)
         {
             punchStrength = null;
             bool punchDetected = false;
@@ -182,7 +183,7 @@ namespace PunchingBand.Recognition
             readyForPunch = true;
         }
 
-        private bool IsDetectingPunch(IBandGyroscopeReading reading)
+        private bool IsDetectingPunch(GyroscopeAccelerometerReading reading)
         {
             if (!punchStarted && readyForPunch && reading.AccelerationX > punchThreshold)
             {

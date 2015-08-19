@@ -1,8 +1,9 @@
-﻿using Microsoft.Band;
-using Microsoft.Band.Notifications;
-using Microsoft.Band.Sensors;
-using Microsoft.Band.Tiles;
-using Microsoft.Band.Tiles.Pages;
+﻿using Microsoft.Band.Portable;
+using Microsoft.Band.Portable.Notifications;
+using Microsoft.Band.Portable.Sensors;
+using Microsoft.Band.Portable.Tiles;
+using Microsoft.Band.Portable.Tiles.Pages;
+using Microsoft.Band.Portable.Tiles.Pages.Data;
 using PunchingBand.Recognition;
 using System;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace PunchingBand.Models
             FightButton = 5,
         }
 
-        private IBandClient bandClient;
+        private BandClient bandClient;
         private FistSides fistSide = FistSides.Unknown;
 
         public event EventHandler FightButtonClick = delegate { }; 
@@ -39,7 +40,7 @@ namespace PunchingBand.Models
             set { if (!Set("FistSide", ref fistSide, value)) RaisePropertyChanged("FistSide"); } // Always raise event
         }
 
-        public async Task Initialize(IBandClient bandClient)
+        public async Task Initialize(BandClient bandClient)
         {
             this.bandClient = bandClient;
 
@@ -50,7 +51,7 @@ namespace PunchingBand.Models
 
             await SetPages(includeFistSelection: fistSide == FistSides.Unknown);
 
-            await bandClient.TileManager.StartReadingsAsync();
+            await bandClient.TileManager.StartEventListenersAsync();
         }
 
         public async Task ForceFistSide(FistSides fistSide)
@@ -59,9 +60,9 @@ namespace PunchingBand.Models
             await SetPages(includeFistSelection: fistSide == FistSides.Unknown);
         }
 
-        private async void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> bandSensorReadingEventArgs)
+        private async void ContactOnReadingChanged(object sender, BandSensorReadingEventArgs<BandContactReading> bandSensorReadingEventArgs)
         {
-            if (bandSensorReadingEventArgs.SensorReading.State == BandContactState.Worn)
+            if (bandSensorReadingEventArgs.SensorReading.State == ContactState.Worn)
             {
                 await bandClient.NotificationManager.ShowDialogAsync(
                     TileId,
@@ -72,9 +73,9 @@ namespace PunchingBand.Models
             await SetPages(includeFistSelection: fistSide == FistSides.Unknown);
         }
 
-        private async void TileManagerOnTileButtonPressed(object sender, BandTileEventArgs<IBandTileButtonPressedEvent> bandTileEventArgs)
+        private async void TileManagerOnTileButtonPressed(object sender, BandTileButtonPressedEventArgs bandTileEventArgs)
         {
-            switch ((ElementId)bandTileEventArgs.TileEvent.ElementId)
+            switch ((ElementId)bandTileEventArgs.ElementId)
             {
                 case ElementId.LeftFistButton:
                     FistSide = FistSides.Left;
@@ -97,28 +98,38 @@ namespace PunchingBand.Models
 
         private async Task SetPages(bool includeFistSelection)
         {
-            await bandClient.TileManager.RemovePagesAsync(TileId);
+            await bandClient.TileManager.RemoveTilePagesAsync(TileId);
 
-            var fistSelectionPage = new PageData(
-                FistSelectionPageId,
-                0,
-                new TextBlockData((short)ElementId.FistSelectionText, "Which fist is this?"),
-                new TextButtonData((short)ElementId.LeftFistButton, "Left"),
-                new TextButtonData((short)ElementId.RightFistButton, "Right"));
-
-            var titlePage = new PageData(
-                TitlePageId,
-                1,
-                new TextBlockData((short)ElementId.TitleText, "Punching Band"),
-                new TextButtonData((short)ElementId.FightButton, "FIGHT!"));
+            var fistSelectionPage = new PageData()
+            {
+                PageId = FistSelectionPageId,
+                PageLayoutIndex = 0,
+                Data =
+                {
+                     new TextBlockData() { ElementId = (short)ElementId.FistSelectionText, Text = "Which fist is this?" },
+                new TextButtonData() { ElementId = (short)ElementId.LeftFistButton, Text = "Left" },
+                new TextButtonData() { ElementId = (short)ElementId.RightFistButton, Text = "Right" }
+                }
+            };
+             
+            var titlePage = new PageData()
+            {
+                PageId = TitlePageId,
+                PageLayoutIndex = 1,
+                Data =
+                {
+                    new TextBlockData() { ElementId = (short)ElementId.TitleText, Text = "Punching Band" },
+                    new TextButtonData() { ElementId = (short)ElementId.FightButton, Text = "FIGHT!" }
+                }
+            };
 
             if (includeFistSelection)
             {
-                await bandClient.TileManager.SetPagesAsync(TileId, fistSelectionPage);
+                await bandClient.TileManager.SetTilePageDataAsync(TileId, fistSelectionPage);
             }
             else
             {
-                await bandClient.TileManager.SetPagesAsync(TileId, titlePage);
+                await bandClient.TileManager.SetTilePageDataAsync(TileId, titlePage);
             }
         }
 
@@ -129,14 +140,14 @@ namespace PunchingBand.Models
 #endif
 
             var tiles = await bandClient.TileManager.GetTilesAsync();
-            var tile = tiles.FirstOrDefault(t => t.TileId == TileId);
+            var tile = tiles.FirstOrDefault(t => t.Id == TileId);
 
             if (tile == null)
             {
                 tile = new BandTile(TileId)
                 {
                     Name = "Punching Band",
-                    TileIcon = await LoadIcon("ms-appx:///Assets/Images/TileIconLarge.png"),
+                    Icon = await LoadIcon("ms-appx:///Assets/Images/TileIconLarge.png"),
                     SmallIcon = await LoadIcon("ms-appx:///Assets/Images/TileIconSmall.png")
                 };
 
@@ -144,25 +155,28 @@ namespace PunchingBand.Models
 
                 var fightPage =
                     new PageLayout(
-                        new FlowPanel(
-                            new TextBlock
-                            {
-                                ElementId = (short)ElementId.TitleText,
-                                Rect = new PageRect(0, 0, 215, 30),
-                                Margins = new Margins(15, 0, 0, 0),
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                VerticalAlignment = VerticalAlignment.Bottom,
-                            },
-                            new TextButton
-                            {
-                                ElementId = (short)ElementId.FightButton,
-                                Rect = new PageRect(0, 0, 215, 50),
-                                Visible = true,
-                                HorizontalAlignment = HorizontalAlignment.Center,
-                                VerticalAlignment = VerticalAlignment.Bottom,
-                                Margins = new Margins(15, 15, 0, 0),
-                            })
+                        new FlowPanel()
                         {
+                            Elements =
+                            {
+                                new TextBlock
+                                {
+                                    ElementId = (short)ElementId.TitleText,
+                                    Rect = new PageRect(0, 0, 215, 30),
+                                    Margins = new Margins(15, 0, 0, 0),
+                                    HorizontalAlignment = HorizontalAlignment.Left,
+                                    VerticalAlignment = VerticalAlignment.Bottom,
+                                },
+                                new TextButton
+                                {
+                                    ElementId = (short)ElementId.FightButton,
+                                    Rect = new PageRect(0, 0, 215, 50),
+                                    Visible = true,
+                                    HorizontalAlignment = HorizontalAlignment.Center,
+                                    VerticalAlignment = VerticalAlignment.Bottom,
+                                    Margins = new Margins(15, 15, 0, 0),
+                                }
+                            },
                             Orientation = FlowPanelOrientation.Vertical,
                             Rect = new PageRect(0, 0, 245, 100),
                             Margins = new Margins(0, 0, 0, 0),
@@ -171,41 +185,47 @@ namespace PunchingBand.Models
 
                 var fistSelectionPage =
                     new PageLayout(
-                        new FlowPanel(
-                            new TextBlock
-                            {
-                                ElementId = (short)ElementId.FistSelectionText,
-                                Rect = new PageRect(0, 0, 200, 30),
-                                Margins = new Margins(15, 0, 0, 0),
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                VerticalAlignment = VerticalAlignment.Bottom,
-                            },
-                            new FlowPanel(
-                                new TextButton
-                                {
-                                    ElementId = (short)ElementId.LeftFistButton,
-                                    Rect = new PageRect(0, 0, 100, 50),
-                                    Margins = new Margins(15, 0, 0, 0),
-                                    Visible = true,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Bottom,
-                                }, 
-                                new TextButton
-                                {
-                                    ElementId = (short)ElementId.RightFistButton,
-                                    Rect = new PageRect(0, 0, 100, 50),
-                                    Visible = true,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Bottom,
-                                    Margins = new Margins(10, 0, 0, 0),
-                                })
-                            {
-                                Orientation = FlowPanelOrientation.Horizontal,
-                                Rect = new PageRect(0, 0, 245, 50),
-                                VerticalAlignment = VerticalAlignment.Center,
-                                Margins = new Margins(0, 15, 0, 0)
-                            })
+                        new FlowPanel()
                         {
+                            Elements =
+                            {
+                                 new TextBlock
+                                {
+                                    ElementId = (short)ElementId.FistSelectionText,
+                                    Rect = new PageRect(0, 0, 200, 30),
+                                    Margins = new Margins(15, 0, 0, 0),
+                                    HorizontalAlignment = HorizontalAlignment.Left,
+                                    VerticalAlignment = VerticalAlignment.Bottom,
+                                },
+                                new FlowPanel()
+                                {
+                                    Elements =
+                                    {
+                                        new TextButton
+                                        {
+                                            ElementId = (short)ElementId.LeftFistButton,
+                                            Rect = new PageRect(0, 0, 100, 50),
+                                            Margins = new Margins(15, 0, 0, 0),
+                                            Visible = true,
+                                            HorizontalAlignment = HorizontalAlignment.Center,
+                                            VerticalAlignment = VerticalAlignment.Bottom,
+                                        },
+                                        new TextButton
+                                        {
+                                            ElementId = (short)ElementId.RightFistButton,
+                                            Rect = new PageRect(0, 0, 100, 50),
+                                            Visible = true,
+                                            HorizontalAlignment = HorizontalAlignment.Center,
+                                            VerticalAlignment = VerticalAlignment.Bottom,
+                                            Margins = new Margins(10, 0, 0, 0),
+                                        }
+                                    },
+                                    Orientation = FlowPanelOrientation.Horizontal,
+                                    Rect = new PageRect(0, 0, 245, 50),
+                                    VerticalAlignment = VerticalAlignment.Center,
+                                    Margins = new Margins(0, 15, 0, 0)
+                                }
+                            },
                             Orientation = FlowPanelOrientation.Vertical,
                             Rect = new PageRect(0, 0, 245, 100),
                             Margins = new Margins(0, 0, 0, 0),
@@ -220,7 +240,7 @@ namespace PunchingBand.Models
             return tile;
         }
 
-        private static async Task<BandIcon> LoadIcon(string uri)
+        private static async Task<BandImage> LoadIcon(string uri)
         {
             var imageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(uri));
 
@@ -228,7 +248,7 @@ namespace PunchingBand.Models
             {
                 var bitmap = new WriteableBitmap(1, 1);
                 await bitmap.SetSourceAsync(fileStream);
-                return bitmap.ToBandIcon();
+                return BandImage.FromWriteableBitmap(bitmap);
             }
         }
     }

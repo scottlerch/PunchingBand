@@ -1,33 +1,15 @@
 ﻿using System.Linq;
-using Microsoft.Band.Sensors;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Band.Portable.Sensors;
+using PunchingBand.Band;
 
 namespace PunchingBand.Recognition
 {
-    public class PunchBuffer : IEnumerable<IBandGyroscopeReading>
+    public class PunchBuffer : IEnumerable<GyroscopeAccelerometerReading>
     {
-        private class BandGyroscopeReading : IBandGyroscopeReading
-        {
-            public static readonly IBandGyroscopeReading Empty = new BandGyroscopeReading();
-
-            public double AngularVelocityX { get; set; }
-
-            public double AngularVelocityY { get; set; }
-
-            public double AngularVelocityZ { get; set; }
-
-            public double AccelerationX { get; set; }
-
-            public double AccelerationY { get; set; }
-
-            public double AccelerationZ { get; set; }
-
-            public System.DateTimeOffset Timestamp { get; set; }
-        }
-
         // TODO: implement as circular buffer array for performance
-        private readonly LinkedList<IBandGyroscopeReading> buffer = new LinkedList<IBandGyroscopeReading>();
+        private readonly LinkedList<GyroscopeAccelerometerReading> buffer = new LinkedList<GyroscopeAccelerometerReading>();
 
         public PunchBuffer(int size)
         {
@@ -37,7 +19,7 @@ namespace PunchingBand.Recognition
 
         public int Size { get; private set; }
 
-        public void Add(IBandGyroscopeReading reading)
+        public void Add(GyroscopeAccelerometerReading reading)
         {
             if (buffer.Count >= Size)
             {
@@ -47,7 +29,7 @@ namespace PunchingBand.Recognition
             buffer.AddLast(reading);
         }
 
-        public IEnumerator<IBandGyroscopeReading> GetEnumerator()
+        public IEnumerator<GyroscopeAccelerometerReading> GetEnumerator()
         {
             return buffer.GetEnumerator();
         }
@@ -63,7 +45,7 @@ namespace PunchingBand.Recognition
 
             for (int i = 0; i < Size; i++)
             {
-                Add(BandGyroscopeReading.Empty);
+                Add(GyroscopeAccelerometerReading.Empty);
             }
         }
 
