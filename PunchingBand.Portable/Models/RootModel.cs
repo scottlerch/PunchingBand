@@ -1,9 +1,10 @@
 ﻿//#define MOCK_HISTORY
 using System;
 using System.Threading.Tasks;
-using Windows.ApplicationModel;
 using Accord;
 using PunchingBand.Infrastructure;
+using Microsoft.Band.Portable;
+using System.IO;
 
 namespace PunchingBand.Models
 {
@@ -13,6 +14,10 @@ namespace PunchingBand.Models
         private readonly PunchingModel punchingModel;
         private readonly UserModel userModel;
         private readonly HistoryModel historyModel;
+
+        private readonly Func<string, Task<BandImage>> loadIcon;
+        private readonly Func<string, Task<Stream>> getReadStream;
+        private readonly Func<string, Task<Stream>> getWriteStream;
 
         public GameModel GameModel { get { return gameModel; } }
 
@@ -24,7 +29,7 @@ namespace PunchingBand.Models
 
         public RootModel()
         {
-            if (!DesignMode.DesignModeEnabled)
+            if (!PortableDesignMode.DesignModeEnabled)
             {
                 throw new InvalidOperationException("Parameterless constructor can only be called by designer");
             }
@@ -32,15 +37,17 @@ namespace PunchingBand.Models
             historyModel = new HistoryModel();
             userModel = new UserModel();
             punchingModel = new PunchingModel();
-            gameModel = new GameModel(punchingModel, historyModel, userModel);
+            gameModel = new GameModel(punchingModel, historyModel, userModel, null, null);
         }
 
-        public RootModel(Action<Action> invokeOnUiThread)
+        public RootModel(Action<Action> invokeOnUiThread, Func<string,Task<BandImage>> loadIcon, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
         {
-            historyModel = new HistoryModel();
-            userModel = new UserModel();
-            punchingModel = new PunchingModel(userModel, invokeOnUiThread);
-            gameModel = new GameModel(punchingModel, historyModel, userModel);
+            historyModel = new HistoryModel(getReadStream, getWriteStream);
+            userModel = new UserModel(getReadStream, getWriteStream);
+            punchingModel = new PunchingModel(userModel, invokeOnUiThread, loadIcon, getReadStream, getWriteStream);
+            gameModel = new GameModel(punchingModel, historyModel, userModel, getReadStream, getWriteStream);
+
+            this.loadIcon = loadIcon;
         }
 
         public async Task Load()

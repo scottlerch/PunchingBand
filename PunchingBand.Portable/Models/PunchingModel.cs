@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.ApplicationModel;
+using System.IO;
 
 namespace PunchingBand.Models
 {
@@ -32,6 +32,9 @@ namespace PunchingBand.Models
         private PunchBand fitnessSensorsPunchBand = null;
 
         private readonly Action<Action> invokeOnUiThread;
+        private readonly Func<string, Task<BandImage>> loadIcon;
+        private readonly Func<string, Task<Stream>> getReadStream;
+        private readonly Func<string, Task<Stream>> getWriteStream;
 
         public event EventHandler<PunchEventArgs> PunchStarted = delegate { };
         public event EventHandler<PunchEventArgs> Punching = delegate { };
@@ -41,7 +44,7 @@ namespace PunchingBand.Models
 
         public PunchingModel()
         {
-            if (!DesignMode.DesignModeEnabled)
+            if (!PortableDesignMode.DesignModeEnabled)
             {
                 throw new InvalidOperationException("Parameterless constructor can only be called by designer");
             }
@@ -50,10 +53,14 @@ namespace PunchingBand.Models
             invokeOnUiThread = action => action();
         }
 
-        public PunchingModel(UserModel userModel, Action<Action> invokeOnUiThread)
+        public PunchingModel(UserModel userModel, Action<Action> invokeOnUiThread, Func<string,Task<BandImage>> loadIcon, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
         {
+            this.loadIcon = loadIcon;
             this.userModel = userModel;
             this.invokeOnUiThread = invokeOnUiThread;
+
+            this.getReadStream = getReadStream;
+            this.getWriteStream = getWriteStream;
         }
 
         public int? HeartRate
@@ -171,7 +178,7 @@ namespace PunchingBand.Models
                         continue;
                     }
 
-                    var punchBand = new PunchBand(bandClient);
+                    var punchBand = new PunchBand(bandClient, loadIcon, getReadStream, getWriteStream);
 
                     punchBands.Add(punchBand);
 

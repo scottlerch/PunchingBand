@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Windows.ApplicationModel;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace PunchingBand.Models
 {
@@ -18,7 +19,11 @@ namespace PunchingBand.Models
         private BandPosition bandPosition;
         private string name;
 
-        public UserModel()
+        public UserModel(Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream) : base(getReadStream, getWriteStream)
+        {
+        }
+
+        public UserModel() : this(null, null)
         {
             // HACK: hard code user to me for now...
             gender = Gender.Male;
@@ -38,7 +43,7 @@ namespace PunchingBand.Models
                 weightUnit = WeightUnit.Lbs; 
             }
 
-            if (!DesignMode.DesignModeEnabled)
+            if (!PortableDesignMode.DesignModeEnabled)
             {
                 PropertyChanged += async (s, e) => await Save();
             }

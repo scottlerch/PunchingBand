@@ -8,36 +8,22 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
-using Windows.Storage;
 
 namespace PunchingBand.Models
 {
     public sealed class PunchBand : IDisposable
     {
         private bool punchDetectionRunning;
+        private Func<string, Task<BandImage>> loadIcon;
 
-        public PunchBand(BandClient bandClient)
+        public PunchBand(BandClient bandClient, Func<string, Task<BandImage>> loadIcon, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
         {
+            this.loadIcon = loadIcon;
+
             BandClient = bandClient;
             FistSide = FistSides.Unknown;
             Worn = false;
-            PunchDetector = new PunchDetector(
-                async filePath =>
-                {
-                    var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///" + filePath));
-                    return await file.OpenStreamForReadAsync();
-                },
-                async filePath =>
-                {
-                    var folder = Path.GetDirectoryName(filePath);
-                    var fileName = Path.GetFileName(filePath);
-
-                    var local = ApplicationData.Current.LocalFolder;
-                    var dataFolder = await local.CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
-                    var file = await dataFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-
-                    return await file.OpenStreamForWriteAsync();
-                });
+            PunchDetector = new PunchDetector(getReadStream, getWriteStream);
         }
 
         public BandClient BandClient { get; private set; }
@@ -73,7 +59,7 @@ namespace PunchingBand.Models
 
         private async Task SetupBandTile()
         {
-            BandTile = new BandTileModel();
+            BandTile = new BandTileModel(loadIcon);
 
             BandTile.PropertyChanged += TileOnPropertyChanged;
             BandTile.FightButtonClick += (sender, args) => StartFight(this, EventArgs.Empty);

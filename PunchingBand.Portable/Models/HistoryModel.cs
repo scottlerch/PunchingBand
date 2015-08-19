@@ -2,8 +2,9 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
-using Windows.ApplicationModel;
+using System.Threading.Tasks;
 
 namespace PunchingBand.Models
 {
@@ -14,9 +15,9 @@ namespace PunchingBand.Models
 
         private GameMode gameMode = GameMode.MiniGame;
 
-        public HistoryModel()
+        public HistoryModel() : base(null, null)
         {
-            if (DesignMode.DesignModeEnabled)
+            if (PortableDesignMode.DesignModeEnabled)
             {
                 // In designer create some fake data for visualization
                 records = new ObservableCollection<HistoryInfo>
@@ -30,13 +31,14 @@ namespace PunchingBand.Models
                 };
                 Records = new ObservableCollection<HistoryInfo>(records);
             }
-            else
-            {
-                records = new ObservableCollection<HistoryInfo>();
-                Records = new ObservableCollection<HistoryInfo>(records);
+        }
 
-                PropertyChanged += async (s, e) => await Save();
-            }
+        public HistoryModel(Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream) : base(getReadStream, getWriteStream)
+        { 
+            records = new ObservableCollection<HistoryInfo>();
+            Records = new ObservableCollection<HistoryInfo>(records);
+
+            PropertyChanged += async (s, e) => await Save();
         }
 
         public GameMode GameMode
@@ -73,7 +75,7 @@ namespace PunchingBand.Models
         {
             UpdateSortAndFilter();
 
-            if (!DesignMode.DesignModeEnabled)
+            if (!PortableDesignMode.DesignModeEnabled)
             {
                 await Save();     
             }

@@ -1,14 +1,13 @@
-﻿using Windows.UI.Xaml;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PunchingBand.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Windows.ApplicationModel;
-using Windows.Storage;
 using PunchingBand.Recognition;
 using PunchingBand.Utilities;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace PunchingBand.Models
 {
@@ -49,11 +48,11 @@ namespace PunchingBand.Models
         private double caloriesBurned;
         private double? caloriesBurnedStart;
 
-        private StorageFile song;
+        private object song;
 
-        public GameModel()
+        public GameModel() : base(null, null)
         {
-            if (!DesignMode.DesignModeEnabled)
+            if (!PortableDesignMode.DesignModeEnabled)
             {
                 throw new InvalidOperationException("Parameterless constructor can only be called by designer");
             }
@@ -65,7 +64,7 @@ namespace PunchingBand.Models
             PunchType = "Punch Type";
         }
 
-        public GameModel(PunchingModel punchingModel, HistoryModel historyModel, UserModel userModel)
+        public GameModel(PunchingModel punchingModel, HistoryModel historyModel, UserModel userModel, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream) : base(getReadStream, getWriteStream)
         {
             duration = GameDurations.First();
             timeLeft = duration;
@@ -242,7 +241,7 @@ namespace PunchingBand.Models
         }
 
         [JsonIgnore]
-        public StorageFile Song
+        public object Song
         {
             get { return song; }
             set { Set("Song", ref song, value); }
@@ -367,7 +366,7 @@ namespace PunchingBand.Models
         {
             get
             {
-                if (speedComboCount == 1 || DesignMode.DesignModeEnabled)
+                if (speedComboCount == 1 || PortableDesignMode.DesignModeEnabled)
                 {
                     return "speed";
                 }
@@ -397,7 +396,7 @@ namespace PunchingBand.Models
         {
             get
             {
-                if (powerComboCount == 1 || DesignMode.DesignModeEnabled)
+                if (powerComboCount == 1 || PortableDesignMode.DesignModeEnabled)
                 {
                     return "power";
                 }
@@ -411,7 +410,7 @@ namespace PunchingBand.Models
             }
         }
 
-        internal void StartGame()
+        public void StartGame()
         {
             caloriesBurnedStart = null;
 
@@ -436,7 +435,7 @@ namespace PunchingBand.Models
             gameStartTime = DateTime.UtcNow;
         }
 
-        internal void AbortGame()
+        public void AbortGame()
         {
             GameAborted(this, EventArgs.Empty);
             Running = false;

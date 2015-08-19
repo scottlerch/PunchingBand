@@ -10,6 +10,9 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using System.Threading.Tasks;
+using PunchingBand.Utilities;
+using Windows.Storage;
+using System.IO;
 #if WINDOWS_PHONE_APP
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -44,9 +47,28 @@ namespace PunchingBand
         /// </summary>
         public App()
         {
+            PortableDesignMode.DesignModeEnabled = false;
+
             InitializeComponent();
             Suspending += OnSuspending;
-            RootModel = new RootModel(InvokeOnUIThread);
+            RootModel = new RootModel(InvokeOnUIThread, IconLoader.Load, 
+                async filePath =>
+                {
+                    var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///" + filePath));
+                    return await file.OpenStreamForReadAsync();
+                },
+                async filePath =>
+                {
+                    var folder = Path.GetDirectoryName(filePath);
+                    var fileName = Path.GetFileName(filePath);
+
+                    var local = ApplicationData.Current.LocalFolder;
+                    var dataFolder = await local.CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
+                    var file = await dataFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+                    return await file.OpenStreamForWriteAsync();
+                });
+
             RootModel.PunchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
 
             wornSoundEffect = new SoundEffect("Assets/Audio/worn.wav");

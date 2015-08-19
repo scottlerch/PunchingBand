@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Windows.Storage;
 
 namespace PunchingBand.Models
 {
@@ -11,7 +10,16 @@ namespace PunchingBand.Models
         private const string RootFolder = "UserData";
         private readonly JsonSerializer serializer = new JsonSerializer();
 
+        private readonly Func<string, Task<Stream>> getReadStream;
+        private readonly Func<string, Task<Stream>> getWriteStream;
+
         protected bool IsLoading { get; private set; }
+
+        public PersistentModelBase(Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
+        {
+            this.getReadStream = getReadStream;
+            this.getWriteStream = getWriteStream;
+        }
 
         public async Task Save()
         {
@@ -22,10 +30,7 @@ namespace PunchingBand.Models
 
             try
             {
-                var dataFolder = await GetFolder();
-                var file = await dataFolder.CreateFileAsync(GetFileName(), CreationCollisionOption.ReplaceExisting);
-
-                using (var fileStream = await file.OpenStreamForWriteAsync())
+                using (var fileStream = await getWriteStream(Path.Combine(RootFolder, GetFileName())))
                 using (var streamWriter = new StreamWriter(fileStream))
                 {
                     serializer.Serialize(streamWriter, this);
@@ -43,11 +48,7 @@ namespace PunchingBand.Models
             {
                 IsLoading = true;
 
-                var dataFolder = await GetFolder();
-
-                var file = await dataFolder.GetFileAsync(GetFileName());
-
-                using (var fileStream = await file.OpenStreamForReadAsync())
+                using (var fileStream = await getReadStream(Path.Combine(RootFolder, GetFileName())))
                 using (var streamReader = new StreamReader(fileStream))
                 {
                     serializer.Populate(streamReader, this);
@@ -65,12 +66,6 @@ namespace PunchingBand.Models
             {
                 IsLoading = false;
             }
-        }
-
-        private async Task<StorageFolder> GetFolder()
-        {
-            var local = ApplicationData.Current.LocalFolder;
-            return await local.CreateFolderAsync(RootFolder, CreationCollisionOption.OpenIfExists);
         }
 
         private string GetFileName()

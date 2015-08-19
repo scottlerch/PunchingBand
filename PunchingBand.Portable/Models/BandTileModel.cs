@@ -8,9 +8,6 @@ using PunchingBand.Recognition;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.Storage.Streams;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace PunchingBand.Models
 {
@@ -32,12 +29,19 @@ namespace PunchingBand.Models
         private BandClient bandClient;
         private FistSides fistSide = FistSides.Unknown;
 
+        private Func<string, Task<BandImage>> loadIcon;
+
         public event EventHandler FightButtonClick = delegate { }; 
 
         public FistSides FistSide
         {
             get { return fistSide; }
             set { if (!Set("FistSide", ref fistSide, value)) RaisePropertyChanged("FistSide"); } // Always raise event
+        }
+
+        public BandTileModel(Func<string,Task<BandImage>> loadIcon)
+        {
+            this.loadIcon = loadIcon;
         }
 
         public async Task Initialize(BandClient bandClient)
@@ -147,8 +151,8 @@ namespace PunchingBand.Models
                 tile = new BandTile(TileId)
                 {
                     Name = "Punching Band",
-                    Icon = await LoadIcon("ms-appx:///Assets/Images/TileIconLarge.png"),
-                    SmallIcon = await LoadIcon("ms-appx:///Assets/Images/TileIconSmall.png")
+                    Icon = await loadIcon("ms-appx:///Assets/Images/TileIconLarge.png"),
+                    SmallIcon = await loadIcon("ms-appx:///Assets/Images/TileIconSmall.png")
                 };
 
                 // NOTE: Resolution of page area is 245x106, recommended 15px margins on left and right
@@ -238,18 +242,6 @@ namespace PunchingBand.Models
             }
 
             return tile;
-        }
-
-        private static async Task<BandImage> LoadIcon(string uri)
-        {
-            var imageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(uri));
-
-            using (IRandomAccessStream fileStream = await imageFile.OpenAsync(FileAccessMode.Read))
-            {
-                var bitmap = new WriteableBitmap(1, 1);
-                await bitmap.SetSourceAsync(fileStream);
-                return BandImage.FromWriteableBitmap(bitmap);
-            }
         }
     }
 }

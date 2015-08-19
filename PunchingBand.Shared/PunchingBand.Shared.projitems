@@ -17,17 +17,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SoundEffect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\SuspensionManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\BandTileModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\GameModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\HistoryModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\ModelBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\PersistentModelBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\PunchEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\PunchBand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\PunchingModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\RootModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\UserModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\BoolVisibilityTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\EnumerableEnumTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BindingConverters\EnumerableTimeSpanTypeConverter.cs" />
@@ -59,6 +48,7 @@
       <DependentUpon>WorkoutPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\DeviceInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\IconLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">

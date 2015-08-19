@@ -224,12 +224,12 @@ namespace PunchingBand.Pages
 
             if (model.GameModel.Song != null)
             {
-                var stream = await model.GameModel.Song.OpenAsync(FileAccessMode.Read);
+                var stream = await (model.GameModel.Song as StorageFile).OpenAsync(FileAccessMode.Read);
 
                 songMedia = new MediaElement {AudioCategory = AudioCategory.ForegroundOnlyMedia};
                 songMedia.Loaded += (o, args) =>
                 {
-                    songMedia.SetSource(stream, model.GameModel.Song.ContentType);
+                    songMedia.SetSource(stream, (model.GameModel.Song as StorageFile).ContentType);
                     songMedia.IsLooping = true;
                     songMedia.Volume = 0.3;
                     songMedia.Play();
