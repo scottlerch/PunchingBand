@@ -32,7 +32,6 @@ namespace PunchingBand.Models
         private PunchBand fitnessSensorsPunchBand = null;
 
         private readonly Action<Action> invokeOnUiThread;
-        private readonly Func<string, Task<BandImage>> loadIcon;
         private readonly Func<string, Task<Stream>> getReadStream;
         private readonly Func<string, Task<Stream>> getWriteStream;
 
@@ -53,9 +52,8 @@ namespace PunchingBand.Models
             invokeOnUiThread = action => action();
         }
 
-        public PunchingModel(UserModel userModel, Action<Action> invokeOnUiThread, Func<string,Task<BandImage>> loadIcon, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
+        public PunchingModel(UserModel userModel, Action<Action> invokeOnUiThread, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
         {
-            this.loadIcon = loadIcon;
             this.userModel = userModel;
             this.invokeOnUiThread = invokeOnUiThread;
 
@@ -178,7 +176,7 @@ namespace PunchingBand.Models
                         continue;
                     }
 
-                    var punchBand = new PunchBand(bandClient, loadIcon, getReadStream, getWriteStream);
+                    var punchBand = new PunchBand(bandClient, getReadStream, getWriteStream);
 
                     punchBands.Add(punchBand);
 

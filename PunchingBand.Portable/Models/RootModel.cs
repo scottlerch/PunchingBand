@@ -44,7 +44,7 @@ namespace PunchingBand.Models
         {
             historyModel = new HistoryModel(getReadStream, getWriteStream);
             userModel = new UserModel(getReadStream, getWriteStream);
-            punchingModel = new PunchingModel(userModel, invokeOnUiThread, loadIcon, getReadStream, getWriteStream);
+            punchingModel = new PunchingModel(userModel, invokeOnUiThread, getReadStream, getWriteStream);
             gameModel = new GameModel(punchingModel, historyModel, userModel, getReadStream, getWriteStream);
 
             this.loadIcon = loadIcon;

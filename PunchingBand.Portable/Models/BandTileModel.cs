@@ -6,6 +6,7 @@ using Microsoft.Band.Portable.Tiles.Pages;
 using Microsoft.Band.Portable.Tiles.Pages.Data;
 using PunchingBand.Recognition;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace PunchingBand.Models
         private BandClient bandClient;
         private FistSides fistSide = FistSides.Unknown;
 
-        private Func<string, Task<BandImage>> loadIcon;
+        private readonly Func<string, Task<Stream>> getReadStream;
 
         public event EventHandler FightButtonClick = delegate { }; 
 
@@ -39,9 +40,9 @@ namespace PunchingBand.Models
             set { if (!Set("FistSide", ref fistSide, value)) RaisePropertyChanged("FistSide"); } // Always raise event
         }
 
-        public BandTileModel(Func<string,Task<BandImage>> loadIcon)
+        public BandTileModel(Func<string, Task<Stream>> getReadStream)
         {
-            this.loadIcon = loadIcon;
+            this.getReadStream = getReadStream;
         }
 
         public async Task Initialize(BandClient bandClient)
@@ -151,8 +152,8 @@ namespace PunchingBand.Models
                 tile = new BandTile(TileId)
                 {
                     Name = "Punching Band",
-                    Icon = await loadIcon("ms-appx:///Assets/Images/TileIconLarge.png"),
-                    SmallIcon = await loadIcon("ms-appx:///Assets/Images/TileIconSmall.png")
+                    Icon = await Load("Assets/Images/TileIconLarge.png"),
+                    SmallIcon = await Load("Assets/Images/TileIconSmall.png")
                 };
 
                 // NOTE: Resolution of page area is 245x106, recommended 15px margins on left and right
@@ -242,6 +243,11 @@ namespace PunchingBand.Models
             }
 
             return tile;
+        }
+
+        public async Task<BandImage> Load(string path)
+        {
+            return await BandImage.FromStreamAsync(await getReadStream(path));
         }
     }
 }

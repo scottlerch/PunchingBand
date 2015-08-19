@@ -14,11 +14,11 @@ namespace PunchingBand.Models
     public sealed class PunchBand : IDisposable
     {
         private bool punchDetectionRunning;
-        private Func<string, Task<BandImage>> loadIcon;
+        private readonly Func<string, Task<Stream>> getReadStream;
 
-        public PunchBand(BandClient bandClient, Func<string, Task<BandImage>> loadIcon, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
+        public PunchBand(BandClient bandClient, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream)
         {
-            this.loadIcon = loadIcon;
+            this.getReadStream = getReadStream;
 
             BandClient = bandClient;
             FistSide = FistSides.Unknown;
@@ -59,7 +59,7 @@ namespace PunchingBand.Models
 
         private async Task SetupBandTile()
         {
-            BandTile = new BandTileModel(loadIcon);
+            BandTile = new BandTileModel(getReadStream);
 
             BandTile.PropertyChanged += TileOnPropertyChanged;
             BandTile.FightButtonClick += (sender, args) => StartFight(this, EventArgs.Empty);
