@@ -16,8 +16,6 @@ namespace PunchingBand.Models
         private readonly HistoryModel historyModel;
 
         private readonly Func<string, Task<BandImage>> loadIcon;
-        private readonly Func<string, Task<Stream>> getReadStream;
-        private readonly Func<string, Task<Stream>> getWriteStream;
 
         public GameModel GameModel { get { return gameModel; } }
 

@@ -38,7 +38,7 @@ namespace PunchingBand.Models
         private int speedComboCount;
         private int powerComboCount;
         private DateTime lastPunchTime = DateTime.MinValue;
-        private double lastPunchStrength = 0.0;
+        //private double lastPunchStrength = 0.0;
         //private double currentPunchStrength = 0.0;
 
         // Game performance metrics

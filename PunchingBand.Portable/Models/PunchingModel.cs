@@ -210,7 +210,7 @@ namespace PunchingBand.Models
 
             Debug.WriteLine("Band Worn Changed - Side:{0}  Worn:{1}  TileSide:{2}", punchBand.FistSide, punchBand.Worn, punchBand.BandTile.FistSide);
 
-            invokeOnUiThread(() =>
+            invokeOnUiThread(async () =>
             {
                 // Consider worn if either wrist has band worn
                 Worn = punchBands.Any(b => b.Worn);
@@ -220,7 +220,7 @@ namespace PunchingBand.Models
                     FistSides = FistSides.Unknown;
                     foreach (var band in punchBands)
                     {
-                        band.ForceFistSide(FistSides.Unknown);
+                        await band.ForceFistSide(FistSides.Unknown);
                     }
                 }
 

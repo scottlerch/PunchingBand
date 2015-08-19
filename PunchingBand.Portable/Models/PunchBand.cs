@@ -99,7 +99,7 @@ namespace PunchingBand.Models
 
         private BandAccelerometerReading lastAccelerometerReading = null;
 
-        private async void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<BandAccelerometerReading> bandSensorReadingEventArgs)
+        private void AccelerometerOnReadingChanged(object sender, BandSensorReadingEventArgs<BandAccelerometerReading> bandSensorReadingEventArgs)
         {
             lastAccelerometerReading = bandSensorReadingEventArgs.SensorReading;
         }
