@@ -7,12 +7,13 @@
     <ProjectGuid>{E3448DFA-3F66-409B-B5EE-16C33266C16E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PunchingBand.MachineLearning</RootNamespace>
-    <AssemblyName>PunchingBand.MachineLearning</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <RootNamespace>PunchingBand</RootNamespace>
+    <AssemblyName>PunchingBand.Console</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>abcc76bd</NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -89,9 +90,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PunchingBand.Portable\PunchingBand.Portable.csproj">
+    <ProjectReference Include="..\PunchingBand\PunchingBand.csproj">
       <Project>{2be76624-d6a0-458f-9784-bc731728163c}</Project>
-      <Name>PunchingBand.Portable</Name>
+      <Name>PunchingBand</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

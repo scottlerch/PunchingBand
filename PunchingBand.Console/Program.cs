@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using PunchingBand.Recognition.Neuro;
 
-namespace PunchingBand.MachineLearning
+namespace PunchingBand
 {
     internal class Program
     {
