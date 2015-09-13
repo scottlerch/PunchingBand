@@ -31,8 +31,9 @@ namespace PunchingBand
     {
         public event ApplicationActivatedEventHandler Activated;
 
+#if !XAMARIN_APP
         private readonly SoundEffect wornSoundEffect;
-
+#endif
         public RootModel RootModel { get; private set; }
 
         private CoreDispatcher dispatcher;
@@ -51,6 +52,8 @@ namespace PunchingBand
 
             InitializeComponent();
             Suspending += OnSuspending;
+
+#if !XAMARIN_APP
             RootModel = new RootModel(
                 InvokeOnUIThread, 
                 async filePath =>
@@ -73,13 +76,15 @@ namespace PunchingBand
             RootModel.PunchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
 
             wornSoundEffect = new SoundEffect("Assets/Audio/worn.wav");
+#endif
         }
 
+#if !XAMARIN_APP
         private async void UpdateStatus()
         {
             var statusText = RootModel.PunchingModel.Status;
 
-#if WINDOWS_PHONE_APP
+#if WINDOWS_PHONE_APP && !XAMARIN_APP
             var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
 
             if (string.IsNullOrWhiteSpace(statusText))
@@ -114,8 +119,9 @@ namespace PunchingBand
             await Task.Yield();
 #endif
         }
+#endif
 
-#if WINDOWS_PHONE_APP
+#if WINDOWS_PHONE_APP && !XAMARIN_APP
         public FileOpenPickerContinuationEventArgs FilePickerContinuationArgs { get; set; }
 #endif
 
@@ -151,9 +157,11 @@ namespace PunchingBand
             }
 #endif
 
+#if !XAMARIN_APP
             UpdateStatus();
 
             RootModel.PunchingModel.PropertyChanged += PunchingModelOnPropertyChanged;
+#endif
 
             var rootFrame = Window.Current.Content as Frame;
 
@@ -172,6 +180,9 @@ namespace PunchingBand
                 // TODO: change this value to a cache size that is appropriate for your application
                 rootFrame.CacheSize = 1;
 
+#if XAMARIN_APP
+                global::Xamarin.Forms.Forms.Init(e);
+#endif
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     // TODO: Load state from previously suspended application
@@ -201,7 +212,14 @@ namespace PunchingBand
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
+
+#if XAMARIN_APP
+                var mainPageType = typeof(XamarinMainPage);
+#else
+                var mainPageType = typeof(MainPage);
+#endif
+
+                if (!rootFrame.Navigate(mainPageType, e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -212,10 +230,13 @@ namespace PunchingBand
             // Ensure the current window is active
             Window.Current.Activate();
 
+#if !XAMARIN_APP
             await RootModel.Load();
             await RootModel.PunchingModel.Connect();
+#endif
         }
 
+#if !XAMARIN_APP
         private void PunchingModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             switch (propertyChangedEventArgs.PropertyName)
@@ -231,6 +252,7 @@ namespace PunchingBand
                     break;
             }
         }
+#endif
 
 #if WINDOWS_PHONE_APP
         /// <summary>
@@ -258,7 +280,9 @@ namespace PunchingBand
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
+#if !XAMARIN_APP
             RootModel.PunchingModel.Disconnect();
+#endif
 
             var deferral = e.SuspendingOperation.GetDeferral();
 
@@ -268,7 +292,7 @@ namespace PunchingBand
 
         protected async override void OnActivated(IActivatedEventArgs e)
         {
-#if WINDOWS_PHONE_APP
+#if WINDOWS_PHONE_APP && !XAMARIN_APP
             var filePickerContinuationArgs = e as FileOpenPickerContinuationEventArgs;
             if (filePickerContinuationArgs != null)
             {
@@ -286,11 +310,15 @@ namespace PunchingBand
                 Activated(e);
             }
 
+#if !XAMARIN_APP
             await RootModel.PunchingModel.Connect();
+#endif
         }
+
 
         public static void NavigatetoGame(Frame frame)
         {
+#if !XAMARIN_APP
             if (Current.RootModel.GameModel.VrEnabled)
             {
                 frame.Navigate(typeof(VrDemoPage));
@@ -307,6 +335,7 @@ namespace PunchingBand
                     frame.Navigate(typeof (GamePage));
                     break;
             }
+#endif
         }
     }
 }
