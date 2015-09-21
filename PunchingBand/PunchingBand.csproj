@@ -54,6 +54,14 @@
     <Compile Include="Models\PunchingModel.cs" />
     <Compile Include="Models\RootModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Pages\Controls\DurationLabel.cs" />
+    <Compile Include="Pages\Controls\HeartRateLabel.cs" />
+    <Compile Include="Pages\Controls\PunchIndicator.cs" />
+    <Compile Include="Pages\Controls\ScoreLabel.cs" />
+    <Compile Include="Pages\Controls\StrengthMeter.cs" />
+    <Compile Include="Pages\Controls\TemperatureLabel.cs" />
+    <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\MiniGamePage.cs" />
     <Compile Include="PortableDesignMode.cs" />
     <Compile Include="Recognition\IPunchRecognizer.cs" />
     <Compile Include="Recognition\Neuro\JsonLayer.cs" />
@@ -126,7 +134,10 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\Fist.png" />
+    <EmbeddedResource Include="Resources\Images\Heart.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.5.0.6404-pre3\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.5.0.6404-pre3\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
