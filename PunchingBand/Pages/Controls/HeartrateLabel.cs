@@ -42,7 +42,21 @@ namespace PunchingBand.Pages.Controls
                 }
             };
 
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                while (IsVisible)
+                {
+                    await heartImage.ScaleTo(0.8, GetInterval());
+                    await heartImage.ScaleTo(1.0, GetInterval());
+                }
+            });
+
             Value = null;
+        }
+
+        private uint GetInterval()
+        {
+            return this.heartrate.HasValue ? (uint)(((60.0 / this.heartrate.Value) * 1000.0) / 2.0) : uint.MaxValue;
         }
 
         public double? Value
@@ -54,7 +68,7 @@ namespace PunchingBand.Pages.Controls
             set
             {
                 this.heartrate = value;
-                valueLabel.Text = string.Format(" {0}", value.HasValue? value.Value.ToString("0") : "N/A");
+                valueLabel.Text = string.Format("{0}", value.HasValue? value.Value.ToString("0") : "N/A");
             }
         }
     }
