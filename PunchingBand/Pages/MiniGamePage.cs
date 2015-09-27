@@ -19,10 +19,10 @@ namespace PunchingBand.Pages
                 VerticalOptions = LayoutOptions.Center,
             };
             
-            absoluteLayout.Children.Add(new StrengthMeter
+            absoluteLayout.Children.Add(new PunchIndicator
             {
                 WidthRequest = 200,
-                HeightRequest = 50,
+                HeightRequest = 200,
             });
 
             Content = absoluteLayout;
