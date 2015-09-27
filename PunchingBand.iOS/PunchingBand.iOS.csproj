@@ -116,6 +116,22 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="NControl, Version=0.2.5729.24380, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NControl.0.7\lib\Xamarin.iOS10\NControl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NControl.iOS, Version=0.2.5729.24382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NControl.0.7\lib\Xamarin.iOS10\NControl.iOS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NGraphics, Version=0.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NGraphics.0.3.1\lib\Xamarin.iOS10\NGraphics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NGraphics.iOS, Version=1.0.5700.19832, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NGraphics.0.3.1\lib\Xamarin.iOS10\NGraphics.iOS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />

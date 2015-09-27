@@ -19,7 +19,11 @@ namespace PunchingBand.Pages
                 VerticalOptions = LayoutOptions.Center,
             };
             
-            absoluteLayout.Children.Add(new HeartRateLabel());
+            absoluteLayout.Children.Add(new StrengthMeter
+            {
+                WidthRequest = 200,
+                HeightRequest = 50,
+            });
 
             Content = absoluteLayout;
         }
