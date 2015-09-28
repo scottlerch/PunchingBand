@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace PunchingBand.Pages.Controls
+namespace PunchingBand.Pages.Views.Game
 {
     class HeartRateLabel : ContentView
     {

@@ -1,7 +1,7 @@
 ﻿
 using Xamarin.Forms;
 
-namespace PunchingBand.Pages.Controls
+namespace PunchingBand.Pages.Views.Game
 {
     public class StrengthMeter : ContentView
     {

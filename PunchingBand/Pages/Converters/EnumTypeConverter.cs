@@ -11,12 +11,13 @@ namespace PunchingBand.Pages.BindingConverters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return System.Convert.ToInt32(value);
+            enumType = value.GetType();
+            return value.ToString().SplitCamelCase();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Enum.ToObject(targetType, (int)value);
+            return Enum.Parse(enumType, value.ToString().Replace(" ", ""));
         }
     }
 }
