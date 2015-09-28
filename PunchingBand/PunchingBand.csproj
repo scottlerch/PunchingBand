@@ -54,6 +54,7 @@
     <Compile Include="Models\PunchingModel.cs" />
     <Compile Include="Models\RootModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Pages\Controls\CountDownLabel.cs" />
     <Compile Include="Pages\Controls\DurationLabel.cs" />
     <Compile Include="Pages\Controls\HeartRateLabel.cs" />
     <Compile Include="Pages\Controls\PunchIndicator.cs" />

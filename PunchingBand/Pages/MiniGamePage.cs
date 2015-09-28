@@ -18,14 +18,19 @@ namespace PunchingBand.Pages
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
             };
-            
-            absoluteLayout.Children.Add(new PunchIndicator
+
+            var control = new CountDownLabel
             {
-                WidthRequest = 200,
-                HeightRequest = 200,
-            });
+                WidthRequest = 350,
+                HeightRequest = 350,
+            };
+
+            absoluteLayout.Children.Add(control);
 
             Content = absoluteLayout;
+
+            this.Appearing += async (sender, args) => await control.Begin();
         }
+
     }
 }
