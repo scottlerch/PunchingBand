@@ -1,4 +1,5 @@
-﻿using PunchingBand.Pages.Controls;
+﻿using PunchingBand.Models;
+using PunchingBand.Pages.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,14 @@ namespace PunchingBand.Pages
                 VerticalOptions = LayoutOptions.Center,
             };
 
+            var userModel = new UserModel();
             var control = new UserEditor
             {
                 WidthRequest = 350,
                 HeightRequest = 350,
+                BindingContext = userModel,
             };
+
 
             absoluteLayout.Children.Add(control);
 

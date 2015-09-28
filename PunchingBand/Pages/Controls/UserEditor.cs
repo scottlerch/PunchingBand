@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PunchingBand.Pages.BindingConverters;
+using PunchingBand.Utilities;
+using System;
 using Xamarin.Forms;
 
 namespace PunchingBand.Pages.Controls
@@ -14,29 +12,31 @@ namespace PunchingBand.Pages.Controls
             var userName = new Entry
             {
                 Keyboard = Keyboard.Text,
-                Placeholder = "Enter name",
+                Placeholder = "Enter name",      
             };
+            userName.SetBinding(Entry.TextProperty, new Binding("Name", BindingMode.OneWay));
 
             var weight = new Entry
             {
                 Keyboard = Keyboard.Numeric,
                 Placeholder = "Enter weight",
             };
-
+            weight.SetBinding(Entry.TextProperty, new Binding("Weight", BindingMode.OneWay, new WeightConverter(), WeightUnit.Lbs.ToString()));
+     
             var birthdate = new DatePicker
             {
-        
             };
+            birthdate.SetBinding(DatePicker.DateProperty, new Binding("BirthDateTime", BindingMode.OneWay));
 
             var gender = new Picker
             { 
-                Items =
-                {
-                    "Male",
-                    "Female",
-                },
                 SelectedIndex = 0,
             };
+            foreach (var value in (Gender[])Enum.GetValues(typeof(Gender)))
+            {
+                gender.Items.Add(value.ToString().SplitCamelCase());
+            }
+            gender.SetBinding(Picker.SelectedIndexProperty, new Binding("Gender", BindingMode.TwoWay, new EnumTypeConverter()));
 
             Content = new StackLayout
             {

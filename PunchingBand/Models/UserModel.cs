@@ -108,6 +108,16 @@ namespace PunchingBand.Models
             }
         }
 
+        public DateTime BirthDateTime
+        {
+            get { return birthDate.DateTime; }
+            set
+            {
+                BirthDate = new DateTimeOffset(value);
+                RaisePropertyChanged("BirthDateTime");
+            }
+        }
+
         [JsonIgnore]
         public int Age
         {
