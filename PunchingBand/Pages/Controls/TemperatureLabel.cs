@@ -5,7 +5,7 @@ namespace PunchingBand.Pages.Controls
 {
     public class TemperatureLabel : ContentView
     {
-        private double value;
+        private double? value;
         private Label label;
 
         public TemperatureLabel()
@@ -18,16 +18,16 @@ namespace PunchingBand.Pages.Controls
 
             Content = label;
 
-            Value = 98.6;
+            Value = null;
         }
 
-        public double Value
+        public double? Value
         {
             get { return value; }
             set
             {
                 this.value = value;
-                label.Text = string.Format("{0:0.0}°", value);
+                label.Text = value == null ? "N/A" : string.Format("{0:0.0}°", value);
             }
         }
     }

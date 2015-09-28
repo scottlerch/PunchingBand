@@ -19,7 +19,7 @@ namespace PunchingBand.Pages
                 VerticalOptions = LayoutOptions.Center,
             };
 
-            var control = new CountDownLabel
+            var control = new UserEditor
             {
                 WidthRequest = 350,
                 HeightRequest = 350,
@@ -29,7 +29,7 @@ namespace PunchingBand.Pages
 
             Content = absoluteLayout;
 
-            this.Appearing += async (sender, args) => await control.Begin();
+            //this.Appearing += async (sender, args) => await control.Begin();
         }
 
     }
