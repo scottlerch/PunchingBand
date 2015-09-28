@@ -1,11 +1,7 @@
 ﻿using PunchingBand.Models;
 using PunchingBand.Pages.Views;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -24,18 +20,15 @@ namespace PunchingBand.Pages
             Func<string, Task<Stream>> readStream = fileName => Task.FromResult(Stream.Null);
             Func<string, Task<Stream>> writeStream = fileName => Task.FromResult(Stream.Null);
 
-            var historyModel = new HistoryModel(readStream, writeStream);
-            var userModel = new UserModel();
-            var punchingModel = new PunchingModel(userModel, Device.BeginInvokeOnMainThread, readStream, writeStream);
-            var gameModel = new GameModel(punchingModel, historyModel, userModel, readStream, writeStream);
+            var root = new RootModel(Device.BeginInvokeOnMainThread, readStream, writeStream);
+            root.Load();
 
-            var control = new GameEditor
+            var control = new HistoryListView
             {
-                WidthRequest = 350,
-                HeightRequest = 350,
-                BindingContext = gameModel,
+                WidthRequest = 400,
+                HeightRequest = 400,
+                BindingContext = root.HistoryModel,
             };
-
 
             absoluteLayout.Children.Add(control);
 

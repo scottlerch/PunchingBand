@@ -35,6 +35,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28Mock Band%29|AnyCPU'">
+    <OutputPath>bin\Debug %28Mock Band%29\</OutputPath>
+    <DefineConstants>MOCK_HISTORY;MOCK_BAND</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="BandPosition.cs" />
     <Compile Include="Band\GyroscopeAccelerometerReading.cs" />
@@ -65,6 +69,7 @@
     <Compile Include="Pages\Views\Common\Spacer.cs" />
     <Compile Include="Pages\Views\Game\StrengthMeter.cs" />
     <Compile Include="Pages\Views\Game\TemperatureLabel.cs" />
+    <Compile Include="Pages\Views\HistoryListView.cs" />
     <Compile Include="Pages\Views\UserEditor.cs" />
     <Compile Include="Pages\Converters\EnumerableEnumTypeConverter.cs" />
     <Compile Include="Pages\Converters\EnumerableTimeSpanTypeConverter.cs" />
