@@ -25,8 +25,8 @@ namespace PunchingBand.Pages
 
             var control = new HistoryListView
             {
-                WidthRequest = 400,
-                HeightRequest = 400,
+                WidthRequest = 450,
+                HeightRequest = 450,
                 BindingContext = root.HistoryModel,
             };
 

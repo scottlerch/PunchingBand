@@ -6,29 +6,48 @@ namespace PunchingBand.Pages.Views
     {
         public HistoryListView()
         {
-            var header = new StackLayout
+            var header = new Grid
             {
-                Orientation = StackOrientation.Horizontal,
+                RowDefinitions =
+                {
+                    new RowDefinition
+                    {
+                        Height = GridLength.Auto,
+                    }
+                },
                 Children =
                 {
                     new Label
                     {
                         Text = "Name",
+                        FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                        TextColor = Color.FromHex("#FF909090"),
                     },
                     new Label
                     {
                         Text = "Score",
+                        FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                        TextColor = Color.FromHex("#FF909090"),
                     },
                     new Label
                     {
                         Text = "Count",
+                        FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                        TextColor = Color.FromHex("#FF909090"),
                     },
                     new Label
                     {
                         Text = "Strength",
+                        FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                        TextColor = Color.FromHex("#FF909090"),
                     },
-                }
+                },
             };
+
+            for (var i = 0; i < header.Children.Count; i++)
+            {
+                Grid.SetColumn(header.Children[i], i);
+            }
 
             var listView = new ListView
             {
@@ -46,27 +65,28 @@ namespace PunchingBand.Pages.Views
                     var strengthLabel = new Label { FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
                     strengthLabel.SetBinding(Label.TextProperty, new Binding("PunchStrenth", BindingMode.OneWay, stringFormat: "{0}"));
 
+                    Grid.SetColumn(nameLabel, 0);
+                    Grid.SetColumn(scoreLabel, 1);
+                    Grid.SetColumn(countLabel, 2);
+                    Grid.SetColumn(strengthLabel, 3);
+
                     return new ViewCell
                     {
-                        View = new StackLayout
+                        View = new Grid
                         {
-                            Padding = new Thickness(0, 5),
-                            Orientation = StackOrientation.Horizontal,
+                            RowDefinitions =
+                            {
+                                new RowDefinition
+                                {
+                                    Height = GridLength.Auto,
+                                }
+                            },
                             Children =
                             {
-                                new StackLayout
-                                {
-                                    Orientation = StackOrientation.Vertical,
-                                    VerticalOptions = LayoutOptions.Center,
-                                    Spacing = 0,
-                                    Children =
-                                    {
-                                        nameLabel,
-                                        scoreLabel,
-                                        countLabel,
-                                        strengthLabel,
-                                    }
-                                }
+                                nameLabel,
+                                scoreLabel,
+                                countLabel,
+                                strengthLabel,
                             }
                         }
                     };
@@ -76,10 +96,11 @@ namespace PunchingBand.Pages.Views
 
             Content = new StackLayout
             {
+                Orientation = StackOrientation.Vertical,
                 Children =
                 {
                     header,
-                    listView
+                    listView, 
                 }
             };
         }
