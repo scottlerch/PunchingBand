@@ -1,33 +1,28 @@
-﻿using PunchingBand.Pages;
+﻿using PunchingBand.Models;
+using PunchingBand.Pages;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PunchingBand
 {
     public class XamarinApp : Application
     {
+        public static RootModel RootModel { get; private set; }
+
         public XamarinApp()
         {
-            //// The root page of your application
-            //MainPage = new ContentPage
-            //{
-            //    Content = new StackLayout
-            //    {
-            //        VerticalOptions = LayoutOptions.Center,
-            //        Children = {
-            //            new Label {
-            //                XAlign = TextAlignment.Center,
-            //                Text = "Welcome to Xamarin Forms!"
-            //            }
-            //        }
-            //    }
-            //};
+            Func<string, Task<Stream>> readStream = fileName => Task.FromResult(Stream.Null);
+            Func<string, Task<Stream>> writeStream = fileName => Task.FromResult(Stream.Null);
 
-            MainPage = new MiniGamePage();
+            RootModel = new RootModel(Device.BeginInvokeOnMainThread, readStream, writeStream);
+            RootModel.Load();
+
+            MainPage = new HomePage();
         }
 
         protected override void OnStart()

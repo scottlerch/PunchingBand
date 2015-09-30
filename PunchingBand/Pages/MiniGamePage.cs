@@ -17,17 +17,11 @@ namespace PunchingBand.Pages
                 VerticalOptions = LayoutOptions.Center,
             };
 
-            Func<string, Task<Stream>> readStream = fileName => Task.FromResult(Stream.Null);
-            Func<string, Task<Stream>> writeStream = fileName => Task.FromResult(Stream.Null);
-
-            var root = new RootModel(Device.BeginInvokeOnMainThread, readStream, writeStream);
-            root.Load();
-
             var control = new HistoryListView
             {
                 WidthRequest = 450,
                 HeightRequest = 450,
-                BindingContext = root.HistoryModel,
+                BindingContext = XamarinApp.RootModel.HistoryModel,
             };
 
             absoluteLayout.Children.Add(control);

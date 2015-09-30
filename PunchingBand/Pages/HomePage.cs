@@ -1,23 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-
+﻿using PunchingBand.Pages.Views;
 using Xamarin.Forms;
 
 namespace PunchingBand.Pages
 {
-    public class HomePage : ContentPage
+    public class HomePage : TabbedPage
     {
         public HomePage()
         {
-            Content = new StackLayout
-            {
-                Children = {
-                    new Label { Text = "Hello ContentPage" }
-                }
-            };
+            Children.Add(
+                new ContentPage
+                {
+                    Title = "setup",
+                    Content = new GameEditor
+                    {
+                        BindingContext = XamarinApp.RootModel.GameModel,
+                        VerticalOptions = LayoutOptions.CenterAndExpand,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    }
+                });
+
+            Children.Add(
+                new ContentPage
+                {
+                    Title = "user",
+                    Content = new UserEditor
+                    {
+                        BindingContext = XamarinApp.RootModel.UserModel,
+                        VerticalOptions = LayoutOptions.CenterAndExpand,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    }
+                });
+
+            Children.Add(
+                new ContentPage
+                {
+                    Title = "history",
+                    Content = new HistoryListView
+                    {
+                        BindingContext = XamarinApp.RootModel.HistoryModel,
+                        VerticalOptions = LayoutOptions.CenterAndExpand,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    }
+                });
         }
     }
 }
