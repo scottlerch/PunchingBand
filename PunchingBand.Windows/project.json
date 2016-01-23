@@ -1,6 +1,8 @@
 ﻿{
   "dependencies": {
+    "Microsoft.Band": "1.3.20115",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "portable.aforge.neuro": "2.2.5.50504",
     "Xamarin.Forms": "2.1.0.6503-pre2"
   },
   "frameworks": {

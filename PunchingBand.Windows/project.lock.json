@@ -3,6 +3,18 @@
   "version": 1,
   "targets": {
     "UAP,Version=v10.0": {
+      "Microsoft.Band/1.3.20115": {
+        "compile": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -199,6 +211,58 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "portable.aforge.core/2.2.5.50504": {
+        "dependencies": {
+          "shim": "[1.0.1.50427, )"
+        },
+        "compile": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        },
+        "runtime": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        }
+      },
+      "portable.aforge.genetic/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.math": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        }
+      },
+      "portable.aforge.math/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.core": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        }
+      },
+      "portable.aforge.neuro/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.genetic": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        }
+      },
+      "shim/1.0.1.50427": {
+        "compile": {
+          "lib/netcore451/Shim.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Shim.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -1552,6 +1616,18 @@
       }
     },
     "UAP,Version=v10.0/win10-arm": {
+      "Microsoft.Band/1.3.20115": {
+        "compile": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -1791,6 +1867,58 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "portable.aforge.core/2.2.5.50504": {
+        "dependencies": {
+          "shim": "[1.0.1.50427, )"
+        },
+        "compile": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        },
+        "runtime": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        }
+      },
+      "portable.aforge.genetic/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.math": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        }
+      },
+      "portable.aforge.math/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.core": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        }
+      },
+      "portable.aforge.neuro/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.genetic": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        }
+      },
+      "shim/1.0.1.50427": {
+        "compile": {
+          "lib/netcore451/Shim.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Shim.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -3191,6 +3319,18 @@
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
+      "Microsoft.Band/1.3.20115": {
+        "compile": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -3416,6 +3556,58 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "portable.aforge.core/2.2.5.50504": {
+        "dependencies": {
+          "shim": "[1.0.1.50427, )"
+        },
+        "compile": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        },
+        "runtime": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        }
+      },
+      "portable.aforge.genetic/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.math": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        }
+      },
+      "portable.aforge.math/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.core": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        }
+      },
+      "portable.aforge.neuro/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.genetic": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        }
+      },
+      "shim/1.0.1.50427": {
+        "compile": {
+          "lib/netcore451/Shim.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Shim.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -4802,6 +4994,18 @@
       }
     },
     "UAP,Version=v10.0/win10-x64": {
+      "Microsoft.Band/1.3.20115": {
+        "compile": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -5046,6 +5250,58 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "portable.aforge.core/2.2.5.50504": {
+        "dependencies": {
+          "shim": "[1.0.1.50427, )"
+        },
+        "compile": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        },
+        "runtime": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        }
+      },
+      "portable.aforge.genetic/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.math": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        }
+      },
+      "portable.aforge.math/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.core": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        }
+      },
+      "portable.aforge.neuro/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.genetic": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        }
+      },
+      "shim/1.0.1.50427": {
+        "compile": {
+          "lib/netcore451/Shim.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Shim.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -6446,6 +6702,18 @@
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
+      "Microsoft.Band/1.3.20115": {
+        "compile": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -6671,6 +6939,58 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "portable.aforge.core/2.2.5.50504": {
+        "dependencies": {
+          "shim": "[1.0.1.50427, )"
+        },
+        "compile": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        },
+        "runtime": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        }
+      },
+      "portable.aforge.genetic/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.math": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        }
+      },
+      "portable.aforge.math/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.core": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        }
+      },
+      "portable.aforge.neuro/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.genetic": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        }
+      },
+      "shim/1.0.1.50427": {
+        "compile": {
+          "lib/netcore451/Shim.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Shim.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -8057,6 +8377,18 @@
       }
     },
     "UAP,Version=v10.0/win10-x86": {
+      "Microsoft.Band/1.3.20115": {
+        "compile": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -8301,6 +8633,58 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "portable.aforge.core/2.2.5.50504": {
+        "dependencies": {
+          "shim": "[1.0.1.50427, )"
+        },
+        "compile": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        },
+        "runtime": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        }
+      },
+      "portable.aforge.genetic/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.math": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        }
+      },
+      "portable.aforge.math/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.core": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        }
+      },
+      "portable.aforge.neuro/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.genetic": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        }
+      },
+      "shim/1.0.1.50427": {
+        "compile": {
+          "lib/netcore451/Shim.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Shim.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -9701,6 +10085,18 @@
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
+      "Microsoft.Band/1.3.20115": {
+        "compile": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Microsoft.Band.dll": {},
+          "lib/netcore451/Microsoft.Band.Store.dll": {},
+          "lib/netcore451/Microsoft.Band.Windows.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -9926,6 +10322,58 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "portable.aforge.core/2.2.5.50504": {
+        "dependencies": {
+          "shim": "[1.0.1.50427, )"
+        },
+        "compile": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        },
+        "runtime": {
+          "lib/portable-win81+wpa81/AForge.dll": {}
+        }
+      },
+      "portable.aforge.genetic/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.math": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll": {}
+        }
+      },
+      "portable.aforge.math/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.core": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Math.dll": {}
+        }
+      },
+      "portable.aforge.neuro/2.2.5.50504": {
+        "dependencies": {
+          "portable.aforge.genetic": "[2.2.5.50504, )"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll": {}
+        }
+      },
+      "shim/1.0.1.50427": {
+        "compile": {
+          "lib/netcore451/Shim.dll": {}
+        },
+        "runtime": {
+          "lib/netcore451/Shim.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -11313,6 +11761,32 @@
     }
   },
   "libraries": {
+    "Microsoft.Band/1.3.20115": {
+      "sha512": "Z7F/HmR4c+os5hCbbgZBNrKvQozau22CaSD5ikDi3Y3GsPh1idcFvxrIrvgRigrbXphhr3KGoXysGl53sUjk2w==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "content/netcore451/Package.appxmanifest.transform",
+        "content/wpa81/Package.appxmanifest.transform",
+        "lib/netcore451/Microsoft.Band.dll",
+        "lib/netcore451/Microsoft.Band.Store.dll",
+        "lib/netcore451/Microsoft.Band.Store.pri",
+        "lib/netcore451/Microsoft.Band.Windows.dll",
+        "lib/netcore451/Microsoft.Band.Windows.pri",
+        "lib/portable-net45+win+wpa81/Microsoft.Band.dll",
+        "lib/portable-win81+wpa81/Microsoft.Band.dll",
+        "lib/portable-win81+wpa81/Microsoft.Band.Store.dll",
+        "lib/portable-win81+wpa81/Microsoft.Band.Store.pri",
+        "lib/wpa81/Microsoft.Band.dll",
+        "lib/wpa81/Microsoft.Band.Phone.dll",
+        "lib/wpa81/Microsoft.Band.Phone.pri",
+        "lib/wpa81/Microsoft.Band.Store.dll",
+        "lib/wpa81/Microsoft.Band.Store.pri",
+        "Microsoft.Band.nuspec",
+        "package/services/metadata/core-properties/362d07532e5642799f7f6ea717bda3c6.psmdcp"
+      ]
+    },
     "Microsoft.CSharp/4.0.0": {
       "sha512": "oWqeKUxHXdK6dL2CFjgMcaBISbkk+AqEg+yvJHE4DElNzS4QaTsCflgkkqZwVlWby1Dg9zo9n+iCAMFefFdJ/A==",
       "type": "Package",
@@ -11964,6 +12438,108 @@
         "ref/net46/Microsoft.Win32.Primitives.dll",
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._"
+      ]
+    },
+    "portable.aforge.core/2.2.5.50504": {
+      "sha512": "Uugn1aoQjsXYDNeOPD1HOC41a7oTGGcbMTmEcpMui7Y84C9bSYL4Mf0l4+Tdj3Seofiq0Wdy2xaIJcQHzFsPOw==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "lib/net45/AForge.dll",
+        "lib/net45/AForge.pdb",
+        "lib/net45/AForge.XML",
+        "lib/portable-net45+netcore45+wpa81/AForge.dll",
+        "lib/portable-net45+netcore45+wpa81/AForge.pdb",
+        "lib/portable-net45+netcore45+wpa81/AForge.XML",
+        "lib/portable-win81+wpa81/AForge.dll",
+        "lib/portable-win81+wpa81/AForge.pdb",
+        "lib/portable-win81+wpa81/AForge.pri",
+        "lib/portable-win81+wpa81/AForge.XML",
+        "package/services/metadata/core-properties/559f1710c3684ccfb3fa72f6f9d68cd6.psmdcp",
+        "portable.aforge.core.nuspec"
+      ]
+    },
+    "portable.aforge.genetic/2.2.5.50504": {
+      "sha512": "kbVcUlJdLVzcXYYsqWH2dmr4xfrRkqKYT1bKZraz+RK+uWt6EYR3wsTnD5imlMu9Uwk02LtpMBYaNaIQdund9g==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "lib/portable-net45+netcore45+wpa81/AForge.Genetic.dll",
+        "lib/portable-net45+netcore45+wpa81/AForge.Genetic.pdb",
+        "lib/portable-net45+netcore45+wpa81/AForge.Genetic.XML",
+        "package/services/metadata/core-properties/461e683694294a09984d24babba42e28.psmdcp",
+        "portable.aforge.genetic.nuspec"
+      ]
+    },
+    "portable.aforge.math/2.2.5.50504": {
+      "sha512": "snuNPWtapjmCUeaJVusT88wBmAK6w0pe2uApgzv1k0b3x1IuGEqkHy+/vOe/0AbgMIdjLHPo3AV/qSMTm8Z3NA==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "lib/portable-net45+netcore45+wpa81/AForge.Math.dll",
+        "lib/portable-net45+netcore45+wpa81/AForge.Math.pdb",
+        "lib/portable-net45+netcore45+wpa81/AForge.Math.XML",
+        "package/services/metadata/core-properties/140a3a2dc16840b993abedf0e3d028e8.psmdcp",
+        "portable.aforge.math.nuspec"
+      ]
+    },
+    "portable.aforge.neuro/2.2.5.50504": {
+      "sha512": "mHzBbvqWPFQG36hRIWZ8I3/x1teYGXnD4n9W4tmBh1fQG2au8coF1DJIywNNLTU6Po5OlvF/9/3VZQ54lAXl9w==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "lib/portable-net45+netcore45+wpa81/AForge.Neuro.dll",
+        "lib/portable-net45+netcore45+wpa81/AForge.Neuro.pdb",
+        "lib/portable-net45+netcore45+wpa81/AForge.Neuro.XML",
+        "package/services/metadata/core-properties/97c62ace6de64689a076c8e7b2381e9c.psmdcp",
+        "portable.aforge.neuro.nuspec"
+      ]
+    },
+    "shim/1.0.1.50427": {
+      "sha512": "7ckTk7oBmTfAfIHx4FO0hLjngEv9euTdyLZ1v6JpPJiWy7o1TZHfeFc5qaAGS/AGYTl/VLbupheH0f9WXkATIA==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "lib/MonoAndroid1/Shim.dll",
+        "lib/MonoAndroid1/Shim.pdb",
+        "lib/MonoAndroid1/Shim.XML",
+        "lib/MonoTouch1/Shim.dll",
+        "lib/MonoTouch1/Shim.pdb",
+        "lib/MonoTouch1/Shim.XML",
+        "lib/net45/Shim.dll",
+        "lib/net45/Shim.pdb",
+        "lib/net45/Shim.XML",
+        "lib/netcore45/Shim.dll",
+        "lib/netcore45/Shim.pdb",
+        "lib/netcore45/Shim.pri",
+        "lib/netcore45/Shim.XML",
+        "lib/netcore451/Shim.dll",
+        "lib/netcore451/Shim.pdb",
+        "lib/netcore451/Shim.pri",
+        "lib/netcore451/Shim.XML",
+        "lib/portable-net45+netcore45+wpa81/Shim.dll",
+        "lib/portable-net45+netcore45+wpa81/Shim.pdb",
+        "lib/portable-net45+netcore45+wpa81/Shim.XML",
+        "lib/portable-net45+netcore45+wpa81+wp8/Shim.dll",
+        "lib/portable-net45+netcore45+wpa81+wp8/Shim.pdb",
+        "lib/portable-net45+netcore45+wpa81+wp8/Shim.XML",
+        "lib/portable-win81+wpa81/Shim.dll",
+        "lib/portable-win81+wpa81/Shim.pdb",
+        "lib/portable-win81+wpa81/Shim.pri",
+        "lib/portable-win81+wpa81/Shim.XML",
+        "lib/wp8/Shim.dll",
+        "lib/wp8/Shim.pdb",
+        "lib/wp8/Shim.XML",
+        "lib/Xamarin.iOS10/Shim.dll",
+        "lib/Xamarin.iOS10/Shim.pdb",
+        "lib/Xamarin.iOS10/Shim.XML",
+        "package/services/metadata/core-properties/7420253e042d4e69bd245a28fed4b3b7.psmdcp",
+        "shim.nuspec"
       ]
     },
     "System.AppContext/4.0.0": {
@@ -14765,7 +15341,9 @@
   },
   "projectFileDependencyGroups": {
     "": [
+      "Microsoft.Band >= 1.3.20115",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
+      "portable.aforge.neuro >= 2.2.5.50504",
       "Xamarin.Forms >= 2.1.0.6503-pre2"
     ],
     "UAP,Version=v10.0": []
