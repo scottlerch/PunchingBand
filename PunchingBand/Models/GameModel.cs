@@ -57,11 +57,7 @@ namespace PunchingBand.Models
                 throw new InvalidOperationException("Parameterless constructor can only be called by designer");
             }
 
-            duration = GameDurations.First();
-            timeLeft = duration;
-            timeLeftSeconds = (int)duration.TotalSeconds;
-
-            PunchType = "Punch Type";
+            Initialize();
         }
 
         public GameModel(PunchingModel punchingModel, HistoryModel historyModel, UserModel userModel, Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream) : base(getReadStream, getWriteStream)
@@ -81,6 +77,17 @@ namespace PunchingBand.Models
             this.userModel = userModel;
 
             this.PropertyChanged += GameModelOnPropertyChanged;
+
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            duration = GameDurations.First();
+            timeLeft = duration;
+            timeLeftSeconds = (int)duration.TotalSeconds;
+
+            PunchType = "Punch Type";
         }
 
         public event EventHandler GameEnded = delegate { };

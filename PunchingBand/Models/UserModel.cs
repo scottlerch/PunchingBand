@@ -21,9 +21,15 @@ namespace PunchingBand.Models
 
         public UserModel(Func<string, Task<Stream>> getReadStream, Func<string, Task<Stream>> getWriteStream) : base(getReadStream, getWriteStream)
         {
+            Initialize();
         }
 
         public UserModel() : this(null, null)
+        {
+            Initialize();
+        }
+
+        private void Initialize()
         {
             // HACK: hard code user to me for now...
             gender = Gender.Male;
@@ -40,7 +46,7 @@ namespace PunchingBand.Models
             else
             {
                 temperatureUnit = TemperatureUnit.Fahrenheit;
-                weightUnit = WeightUnit.Lbs; 
+                weightUnit = WeightUnit.Lbs;
             }
 
             if (!PortableDesignMode.DesignModeEnabled)

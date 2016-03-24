@@ -26,8 +26,8 @@ namespace PunchingBand.Droid
 		
 		public static void UpdateIdValues()
 		{
-			//global::NControl.Droid.Resource.String.ApplicationName = global::PunchingBand.Droid.Resource.String.ApplicationName;
-			//global::NControl.Droid.Resource.String.Hello = global::PunchingBand.Droid.Resource.String.Hello;
+			global::NControl.Droid.Resource.String.ApplicationName = global::PunchingBand.Droid.Resource.String.ApplicationName;
+			global::NControl.Droid.Resource.String.Hello = global::PunchingBand.Droid.Resource.String.Hello;
 			global::NControl.Droid.Resource.String.library_name = global::PunchingBand.Droid.Resource.String.library_name;
 			global::NGraphics.Android.Resource.String.library_name = global::PunchingBand.Droid.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::PunchingBand.Droid.Resource.Attribute.actionBarSize;

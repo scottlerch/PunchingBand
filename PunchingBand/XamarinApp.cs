@@ -20,7 +20,7 @@ namespace PunchingBand
             Func<string, Task<Stream>> writeStream = fileName => Task.FromResult(Stream.Null);
 
             RootModel = new RootModel(Device.BeginInvokeOnMainThread, readStream, writeStream);
-            RootModel.Load();
+            RootModel.Load().Wait();
 
             MainPage = new HomePage();
         }
