@@ -40,9 +40,8 @@ namespace PunchingBand.Pages.Views
                         Text = "Mode",
                         View = gameMode
                     },
-                    labeledDuration
+                    labeledDuration,
                 }
-
             };
         }
     }

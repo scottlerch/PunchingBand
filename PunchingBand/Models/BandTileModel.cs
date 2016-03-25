@@ -176,7 +176,7 @@ namespace PunchingBand.Models
                                 {
                                     ElementId = (short)ElementId.FightButton,
                                     Rect = new PageRect(0, 0, 215, 50),
-                                    Visible = true,
+                                    //Visible = true,
                                     HorizontalAlignment = HorizontalAlignment.Center,
                                     VerticalAlignment = VerticalAlignment.Bottom,
                                     Margins = new Margins(15, 15, 0, 0),
@@ -211,7 +211,7 @@ namespace PunchingBand.Models
                                             ElementId = (short)ElementId.LeftFistButton,
                                             Rect = new PageRect(0, 0, 100, 50),
                                             Margins = new Margins(15, 0, 0, 0),
-                                            Visible = true,
+                                            //Visible = true,
                                             HorizontalAlignment = HorizontalAlignment.Center,
                                             VerticalAlignment = VerticalAlignment.Bottom,
                                         },
@@ -219,7 +219,7 @@ namespace PunchingBand.Models
                                         {
                                             ElementId = (short)ElementId.RightFistButton,
                                             Rect = new PageRect(0, 0, 100, 50),
-                                            Visible = true,
+                                            //Visible = true,
                                             HorizontalAlignment = HorizontalAlignment.Center,
                                             VerticalAlignment = VerticalAlignment.Bottom,
                                             Margins = new Margins(10, 0, 0, 0),

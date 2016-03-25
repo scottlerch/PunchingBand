@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PunchingBand.Pages.Views.Game
@@ -17,6 +18,7 @@ namespace PunchingBand.Pages.Views.Game
                 XAlign = TextAlignment.Center,
                 YAlign = TextAlignment.Center,
                 Opacity = 1,
+                TextColor = Color.White,
             };
 
             Content = countLabel;
@@ -33,7 +35,7 @@ namespace PunchingBand.Pages.Views.Game
             }
         }
 
-        public async Task Begin()
+        public async Task CountDown()
         {
             for (int i = count; i > 0; i--)
             {

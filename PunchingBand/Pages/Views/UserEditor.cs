@@ -11,7 +11,7 @@ namespace PunchingBand.Pages.Views
             var userName = new Entry
             {
                 Keyboard = Keyboard.Text,
-                Placeholder = "Enter name",      
+                Placeholder = "Enter name",
             };
             userName.SetBinding(Entry.TextProperty, new Binding("Name", BindingMode.OneWay));
 

@@ -26,6 +26,8 @@ namespace PunchingBand.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::Acr.DeviceInfo.Resource.String.ApplicationName = global::PunchingBand.Droid.Resource.String.ApplicationName;
+			global::Acr.DeviceInfo.Resource.String.Hello = global::PunchingBand.Droid.Resource.String.Hello;
 			global::NControl.Droid.Resource.String.ApplicationName = global::PunchingBand.Droid.Resource.String.ApplicationName;
 			global::NControl.Droid.Resource.String.Hello = global::PunchingBand.Droid.Resource.String.Hello;
 			global::NControl.Droid.Resource.String.library_name = global::PunchingBand.Droid.Resource.String.library_name;
@@ -2276,6 +2278,12 @@ namespace PunchingBand.Droid
 		
 		public partial class String
 		{
+			
+			// aapt resource value: 0x7f080015
+			public const int ApplicationName = 2131230741;
+			
+			// aapt resource value: 0x7f080014
+			public const int Hello = 2131230740;
 			
 			// aapt resource value: 0x7f080000
 			public const int abc_action_bar_home_description = 2131230720;

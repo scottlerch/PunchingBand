@@ -19,7 +19,8 @@ namespace PunchingBand.Pages.Views.Game
             valueSpan = new Span
             {
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                FontFamily = Device.OnPlatform("MarkerFelt-Thin", "Droid Sans Mono", "Consolas")
+                FontFamily = Device.OnPlatform("MarkerFelt-Thin", "Droid Sans Mono", "Consolas"),
+                ForegroundColor = Color.White,
             };
 
             Content = new StackLayout

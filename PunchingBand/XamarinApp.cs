@@ -22,7 +22,18 @@ namespace PunchingBand
             RootModel = new RootModel(Device.BeginInvokeOnMainThread, readStream, writeStream);
             RootModel.Load().Wait();
 
-            MainPage = new HomePage();
+            var homePageFactory = new HomePageFactory();
+
+            // TODO: Fix issues with Acr.DeviceInfo on Windows81 and UWP
+            //if (Acr.DeviceInfo.DeviceInfo.Hardware.IsTablet)
+            if (true)
+            {
+                MainPage = homePageFactory.CreateContentPage();
+            }
+            else
+            {
+                MainPage = homePageFactory.CreateTabbedPage();
+            }
         }
 
         protected override void OnStart()

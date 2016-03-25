@@ -20,6 +20,7 @@ namespace PunchingBand.Pages.Views.Game
             valueSpan = new Span
             {
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                ForegroundColor = Color.White,
             };
 
             Content = new StackLayout
