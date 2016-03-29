@@ -60,8 +60,10 @@ namespace PunchingBand.Pages
 
             foreach (var pair in CreateViews(page))
             {
+                pair.Value.VerticalOptions = LayoutOptions.Start;
                 layout.Children.Add(new StackLayout
                 {
+                    Padding = new Thickness(10, 10, 10, 10),
                     Orientation = StackOrientation.Vertical,
                     Children =
                     {
@@ -76,7 +78,31 @@ namespace PunchingBand.Pages
                 });
             }
 
-            page.Content = layout;
+            page.Content = new StackLayout
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Orientation = StackOrientation.Vertical,
+                Children =
+                {
+                    new Frame
+                    {
+                        Padding = new Thickness(10, 2, 10, 2),
+                        Content = new Label
+                        {
+                            Text = "PUNCHING BAND",
+                            FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label))
+                        },
+                    },
+                    new BoxView
+                    {
+                        HeightRequest = 30,
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        BackgroundColor = Color.FromHex("#56318e"),
+                    },
+                    layout
+                }
+            };
 
             return page;
         }

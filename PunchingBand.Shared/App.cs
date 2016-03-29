@@ -53,6 +53,11 @@ namespace PunchingBand
             InitializeComponent();
             Suspending += OnSuspending;
 
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                this.DebugSettings.EnableFrameRateCounter = false;
+            }
+
 #if !XAMARIN_APP
             RootModel = new RootModel(
                 InvokeOnUIThread, 
@@ -153,7 +158,7 @@ namespace PunchingBand
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                DebugSettings.EnableFrameRateCounter = true;
+                DebugSettings.EnableFrameRateCounter = false;
             }
 #endif
 
