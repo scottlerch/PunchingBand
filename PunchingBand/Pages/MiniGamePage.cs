@@ -10,6 +10,8 @@ namespace PunchingBand.Pages
 {
     public class MiniGamePage : ContentPage
     {
+        private RootModel model;
+
         private CountDownLabel countDownLabel = new CountDownLabel();
         private PunchIndicator punchIndicator = new PunchIndicator();
         private DurationLabel durationLabel = new DurationLabel();
@@ -20,6 +22,8 @@ namespace PunchingBand.Pages
 
         public MiniGamePage()
         {
+            model = XamarinApp.RootModel;
+
             BackgroundColor = Color.Black.AddLuminosity(0.1);
 
             Content = countDownLabel;
@@ -74,6 +78,20 @@ namespace PunchingBand.Pages
                         mainScoreboard,
                     }
                 };
+
+                model.GameModel.StartGame();
+
+                Device.StartTimer(TimeSpan.FromMilliseconds(17), () =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        model.GameModel.Update();
+                        durationLabel.Value = model.GameModel.Duration;
+                        punchIndicator.Count = model.GameModel.PunchCount;
+                    });
+
+                    return true;
+                });
             };
         }
     }

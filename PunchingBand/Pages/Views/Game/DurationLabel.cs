@@ -8,6 +8,7 @@ namespace PunchingBand.Pages.Views.Game
         private TimeSpan value;
         private Span labelSpan;
         private Span valueSpan;
+        private Label durationLabel;
 
         public DurationLabel()
         {
@@ -23,18 +24,20 @@ namespace PunchingBand.Pages.Views.Game
                 ForegroundColor = Color.White,
             };
 
+            durationLabel = new Label
+            {
+                FormattedText = new FormattedString
+                {
+                    Spans = { valueSpan, labelSpan }
+                }
+            };
+
             Content = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
                 Children =
                 {
-                    new Label
-                    {
-                        FormattedText = new FormattedString
-                        {
-                            Spans = { valueSpan, labelSpan }
-                        }
-                    }
+                    durationLabel
                 }
             };
 

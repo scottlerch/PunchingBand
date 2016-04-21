@@ -1,10 +1,7 @@
-﻿using PunchingBand.Models;
+﻿using PCLStorage;
+using PunchingBand.Models;
 using PunchingBand.Pages;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -16,11 +13,7 @@ namespace PunchingBand
 
         public XamarinApp()
         {
-            Func<string, Task<Stream>> readStream = fileName => Task.FromResult(Stream.Null);
-            Func<string, Task<Stream>> writeStream = fileName => Task.FromResult(Stream.Null);
-
-            RootModel = new RootModel(Device.BeginInvokeOnMainThread, readStream, writeStream);
-            RootModel.Load().Wait();
+            RootModel = new RootModel(Device.BeginInvokeOnMainThread, GetReadStream, GetWriteStream);
 
             var homePageFactory = new HomePageFactory();
 
@@ -36,19 +29,50 @@ namespace PunchingBand
             }
         }
 
-        protected override void OnStart()
+        private static async Task<Stream> GetReadStream(string relativeFilePath)
         {
+            var directory = Path.GetDirectoryName(relativeFilePath);
+            var fileName = Path.GetFileName(relativeFilePath);
+            var rootFolder = FileSystem.Current.LocalStorage;
+            var folder = await rootFolder.CreateFolderAsync(directory, CreationCollisionOption.OpenIfExists);
+
+            if (await folder.CheckExistsAsync(fileName) == ExistenceCheckResult.FileExists)
+            {
+                var file = await folder.GetFileAsync(fileName);
+                return await file.OpenAsync(PCLStorage.FileAccess.Read);
+            }
+
+            throw new FileNotFoundException(string.Format("Unable to find file '{0}'", relativeFilePath));
+        }
+
+        private static async Task<Stream> GetWriteStream(string relativeFilePath)
+        {
+            var directory = Path.GetDirectoryName(relativeFilePath);
+            var fileName = Path.GetFileName(relativeFilePath);
+            var rootFolder = FileSystem.Current.LocalStorage;
+            var folder = await rootFolder.CreateFolderAsync(directory, CreationCollisionOption.OpenIfExists);
+            var file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+            return await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite);
+        }
+
+        protected override async void OnStart()
+        {
+            await RootModel.Load();
+
             // Handle when your app starts
+            await RootModel.PunchingModel.Connect();
         }
 
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+            RootModel.PunchingModel.Disconnect();
         }
 
-        protected override void OnResume()
+        protected override async void OnResume()
         {
             // Handle when your app resumes
+            await RootModel.PunchingModel.Connect();
         }
     }
 }
